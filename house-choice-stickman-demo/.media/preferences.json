@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "preferences": {
+    "destination": {
+      "value": "tiktok-reels-shorts",
+      "confirmed_in": [
+        "house-choice-stickman-demo"
+      ],
+      "updated_at": "2026-10-04T09:08:07.248Z"
+    },
+    "flow": {
+      "value": "automation",
+      "confirmed_in": [
+        "house-choice-stickman-demo"
+      ],
+      "updated_at": "2026-10-04T09:08:07.378Z"
+    },
+    "storyboard": {
+      "value": "no",
+      "confirmed_in": [
+        "house-choice-stickman-demo"
+      ],
+      "updated_at": "2026-10-04T09:08:07.566Z"
+    },
+    "style_preset.faceless-explainer": {
+      "value": "cartesian",
+      "confirmed_in": [
+        "house-choice-stickman-demo"
+      ],
+      "updated_at": "2026-10-04T09:09:11.629Z"
+    },
+    "aspect": {
+      "value": "1440x1080",
+      "confirmed_in": [
+        "house-choice-stickman-demo"
+      ],
+      "updated_at": "2026-10-04T09:22:44.194Z"
+    }
+  },
+  "sightings": {}
+}

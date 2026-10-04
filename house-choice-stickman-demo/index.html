@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1440, height=1080">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1440px;
+        height: 1080px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1440px;
+        height: 1080px;
+        overflow: hidden;
+        background: #EDE8E0;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-oqx8" id="root" data-composition-id="main" data-start="0" data-duration="118.94" data-width="1440" data-height="1080">
+      <div data-hf-id="hf-zttd" id="el-01-hook" class="scene" data-composition-id="01-hook" data-composition-src="compositions/frames/01-hook.html" data-start="0" data-duration="19.5" data-track-index="0"></div>
+      <audio data-media-start="0.14" data-automation="{&quot;version&quot;:1,&quot;lanes&quot;:[{&quot;target&quot;:&quot;rate&quot;,&quot;points&quot;:[{&quot;t&quot;:0,&quot;v&quot;:0.78},{&quot;t&quot;:19,&quot;v&quot;:0.9204495717531718}]}]}" data-playback-rate="0.78" data-hf-id="hf-r6bn" id="el-01-hook-voice" src=".media/audio/voice/scenes/01.wav" data-start="0" data-duration="19" data-track-index="10" data-volume="1.028016"></audio>
+
+      <div data-hf-id="hf-mdbc" id="el-02-pressure" class="scene" data-composition-id="02-pressure" data-composition-src="compositions/frames/02-pressure.html" data-start="19" data-duration="20.6" data-track-index="1"></div>
+      <audio data-hf-id="hf-4sm1" id="el-02-pressure-voice" src=".media/audio/voice/scenes/02.wav" data-start="19" data-duration="20" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-4f5k" id="el-03-buffett" class="scene" data-composition-id="03-buffett" data-composition-src="compositions/frames/03-buffett.html" data-start="39" data-duration="20.5" data-track-index="0"></div>
+      <audio data-hf-id="hf-bimk" id="el-03-buffett-voice" src=".media/audio/voice/scenes/03.wav" data-start="39" data-duration="20" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-p5e1" id="el-04-not-anti-house" class="scene" data-composition-id="04-not-anti-house" data-composition-src="compositions/frames/04-not-anti-house.html" data-start="60.21" data-duration="19.5" data-track-index="1"></div>
+      <audio data-hf-id="hf-e2xr" id="el-04-not-anti-house-voice" src=".media/audio/voice/scenes/04.wav" data-start="59" data-duration="19" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-bnnh" id="el-05-possibilities" class="scene" data-composition-id="05-possibilities" data-composition-src="compositions/frames/05-possibilities.html" data-start="78" data-duration="22.4" data-track-index="0"></div>
+      <audio data-hf-id="hf-g1eg" id="el-05-possibilities-voice" src=".media/audio/voice/scenes/05.wav" data-start="78" data-duration="22" data-track-index="10" data-volume="1"></audio>
+
+      <div data-hf-id="hf-iimt" id="el-06-choice" class="scene" data-composition-id="06-choice" data-composition-src="compositions/frames/06-choice.html" data-start="100" data-duration="18.944" data-track-index="1"></div>
+      <audio data-hf-id="hf-j84m" id="el-06-choice-voice" src=".media/audio/voice/scenes/06.wav" data-start="100" data-duration="18.944" data-track-index="10" data-volume="1"></audio>
+
+      <!-- captions -->
+      <div data-hf-id="hf-lgm7" id="el-captions" data-track-kind="captions" class="scene" data-composition-id="captions" data-composition-src="compositions/captions.html" data-start="0" data-duration="118.944" data-track-index="2"></div>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-01-hook", { x: -1440, duration: 0.5, ease: "power3.inOut" }, 19);
+        tl.fromTo("#el-02-pressure", { x: 1440, opacity: 1 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.inOut" }, 19);
+        tl.addLabel("hf:transition:01-hook:02-pressure:push-slide", 19);
+        tl.to("#el-02-pressure", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.6, ease: "power2.inOut" }, 39);
+        tl.fromTo("#el-03-buffett", { filter: "blur(10px)", scale: 0.97, opacity: 0 }, { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.6, ease: "power2.inOut" }, 39);
+        tl.addLabel("hf:transition:02-pressure:03-buffett:blur-crossfade", 39);
+        tl.to("#el-03-buffett", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 59);
+        tl.fromTo("#el-04-not-anti-house", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 59);
+        tl.addLabel("hf:transition:03-buffett:04-not-anti-house:crossfade", 59);
+        tl.to("#el-04-not-anti-house", { x: -1440, duration: 0.5, ease: "power3.inOut" }, 78);
+        tl.fromTo("#el-05-possibilities", { x: 1440, opacity: 1 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.inOut" }, 78);
+        tl.addLabel("hf:transition:04-not-anti-house:05-possibilities:push-slide", 78);
+        tl.to("#el-05-possibilities", { scale: 2.5, opacity: 0, filter: "blur(8px)", duration: 0.4, ease: "power3.in" }, 100);
+        tl.fromTo("#el-06-choice", { scale: 0.5, opacity: 0, filter: "blur(8px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 100);
+        tl.addLabel("hf:transition:05-possibilities:06-choice:zoom-through", 100);
+        tl.to({}, { duration: 118.944 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
+    </script>
+  </body>
+</html>

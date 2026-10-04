@@ -1,0 +1,41 @@
+<template>
+  <style>
+    #root{width:100%;height:100%;position:relative;overflow:hidden;color:#1A1A1A;font-family:sans-serif}
+    .f02-bg{position:absolute;inset:0;background:#EDE8E0}
+    .f02-ring{position:absolute;border:2px solid #B8B0A4;border-radius:50%;left:430px;top:110px;width:580px;height:580px;opacity:.42}
+    .f02-ring:nth-child(2){left:530px;top:210px;width:380px;height:380px;border-style:dashed}
+    .f02-kicker{position:absolute;left:64px;top:42px;font-size:18px;letter-spacing:7px;color:#6F6860}
+    #f02-person{position:absolute;left:610px;top:280px;width:220px;height:420px}
+    #f02-person svg{width:100%;height:100%}
+    .f02-bubble{position:absolute;width:300px;padding:24px 28px;border:2px solid #B8B0A4;background:#FFFFFF66;font-family:serif;font-size:38px;line-height:1.15}
+    #f02-b1{left:70px;top:190px} #f02-b2{right:70px;top:190px} #f02-b3{left:110px;top:610px} #f02-b4{right:110px;top:610px}
+    #f02-q1,#f02-q2{position:absolute;left:420px;right:420px;top:70px;font-family:serif;font-size:56px;line-height:1.12;text-align:center}
+    #f02-q2{left:460px;right:460px;top:700px;font-size:62px}
+    #f02-cut{position:absolute;left:480px;right:480px;top:210px;height:4px;background:#1A1A1A;transform-origin:left center}
+    #f02-mark{position:absolute;left:685px;top:205px;font-family:serif;font-size:82px;color:#8A8178}
+  </style>
+  <div data-hf-id="hf-dx9y" id="root" data-composition-id="02-pressure" data-width="1440" data-height="1080" data-duration="20.6">
+    <div data-hf-id="hf-xnvy" id="f02-bg" class="clip f02-bg" data-start="0" data-duration="20.6" data-track-index="0"><div data-hf-id="hf-eevb" class="f02-ring"></div><div data-hf-id="hf-dgpz" class="f02-ring"></div></div>
+    <div data-hf-id="hf-wgwx" id="f02-content" class="clip" data-start="0" data-duration="20.6" data-track-index="1">
+      <div data-hf-id="hf-fh0q" class="f02-kicker">PRESSURE / 02</div><div data-hf-id="hf-ejl3" id="f02-q1">适不适合<br data-hf-id="hf-x5px">现在的我？</div><div data-hf-id="hf-ugic" id="f02-cut"></div>
+      <div data-hf-id="hf-xk97" id="f02-person"><svg data-hf-id="hf-9dzt" viewBox="0 0 300 560"><g data-hf-id="hf-123w" id="f02-person-g" fill="none" stroke="#1A1A1A" stroke-width="10" stroke-linecap="round"><circle data-hf-id="hf-jivs" cx="150" cy="92" r="58" /><line data-hf-id="hf-a2yo" x1="150" y1="150" x2="150" y2="345" /><line data-hf-id="hf-v4eb" x1="150" y1="220" x2="58" y2="295" /><line data-hf-id="hf-otei" x1="150" y1="220" x2="242" y2="295" /><line data-hf-id="hf-ibwc" x1="150" y1="345" x2="82" y2="505" /><line data-hf-id="hf-gqsp" x1="150" y1="345" x2="218" y2="505" /></g></svg></div>
+      <div data-hf-id="hf-eda0" id="f02-mark">？</div><div data-hf-id="hf-izj3" id="f02-b1" class="f02-bubble">早点买。</div><div data-hf-id="hf-ymug" id="f02-b2" class="f02-bubble">迟早要有。</div><div data-hf-id="hf-absr" id="f02-b3" class="f02-bubble">没房怎么结婚？</div><div data-hf-id="hf-qib5" id="f02-b4" class="f02-bubble">以后更买不起。</div><div data-hf-id="hf-ktgh" id="f02-q2">我是不是<br data-hf-id="hf-rsrt"><strong data-hf-id="hf-cu3y">落后了？</strong></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      const tl=gsap.timeline({paused:true});
+      tl.fromTo('#f02-person-g',{opacity:0,y:45},{opacity:1,y:0,duration:.65,ease:'power3.out'},.2)
+        .fromTo('#f02-b1',{opacity:0,x:-180,y:-70},{opacity:1,x:0,y:0,duration:.8,ease:'power4.out'},.7)
+        .fromTo('#f02-b2',{opacity:0,x:180,y:-80},{opacity:1,x:0,y:0,duration:.8,ease:'power3.out'},3.0)
+        .fromTo('#f02-b3',{opacity:0,x:-170,y:90},{opacity:1,x:0,y:0,duration:.8,ease:'power4.out'},5.3)
+        .fromTo('#f02-b4',{opacity:0,x:170,y:90},{opacity:1,x:0,y:0,duration:.8,ease:'power3.out'},7.7)
+        .to('.f02-bubble',{opacity:.36,duration:.7,ease:'power2.inOut'},10.0)
+        .fromTo('#f02-mark',{opacity:0,rotation:-15,scale:.6},{opacity:1,rotation:0,scale:1,duration:.7,ease:'power3.out'},10.4)
+        .fromTo('#f02-q1',{opacity:0,y:25},{opacity:1,y:0,duration:.75,ease:'power3.out'},11.1)
+        .fromTo('#f02-cut',{scaleX:0},{scaleX:1,duration:.6,ease:'power4.out'},14.4)
+        .to('#f02-q1',{opacity:.22,duration:.5,ease:'power2.in'},15.0)
+        .fromTo('#f02-q2',{opacity:0,y:55},{opacity:1,y:0,duration:.9,ease:'power3.out'},15.2);
+      window.__timelines['02-pressure']=tl;
+    </script>
+  </div>
+</template>

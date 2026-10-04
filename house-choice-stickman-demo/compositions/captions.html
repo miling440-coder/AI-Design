@@ -1,0 +1,209 @@
+<template id="captions-template" data-composition-id="captions" data-width="1440" data-height="1080">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+
+<style data-brand-tokens="">
+      :root {
+      --bg-primary: #EDE8E0;
+      --bg-secondary: #E2DBD1;
+      --text-primary: #1A1A1A;
+      --text-secondary: #5A5A5A;
+      --accent: #8A8178;
+      --line: #B8B0A4;
+      --white-overlay: rgba(255,255,255,0.3);
+      --cap-ink: #1A1A1A;
+      --cap-canvas: #EDE8E0;
+      --cap-accent: #B8B0A4;
+      --cap-accent-2: #8A8178;
+      --font-display: "Playfair Display", system-ui, serif;
+      --font-body: "Inter", system-ui, sans-serif;
+      --cap-band-top: 900px;
+      --cap-band-height: 180px;
+      }
+    </style>
+
+<style>
+  #captions-root {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .caption-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+  }
+  /* the keep-out band, from captionBand(H) — frame content stays above it */
+  .caption-stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--cap-band-top, 900px);
+    height: var(--cap-band-height, 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .caption-group {
+    /* every group is absolutely stacked over the SAME band — exactly one shown at a
+       time via opacity. Must be absolute: in-flow groups would lay out side-by-side. */
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+  }
+
+  /* THE stone card — single 1px taupe hairline border (cartesian's universal
+     structural device), SHARP corners, ZERO shadow, ZERO fill beyond the stone canvas */
+  .caption-pill {
+    max-width: 78%;
+    padding: 20px 44px 24px;
+    background: var(--cap-canvas, #ede8e0);
+    border: 1px solid var(--cap-accent-2, #b8b0a4);
+    border-radius: 0;
+  }
+  .caption-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.1em 0.34em;
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(40px, 4.4vw, 58px);
+    line-height: 1.16;
+    letter-spacing: -0.01em;
+  }
+
+  /* upcoming — faint ink, no mark */
+  .caption-word {
+    display: inline-block;
+    padding: 0 0.06em;
+    border-bottom: 1px solid transparent;
+    color: color-mix(in srgb, var(--cap-ink, #1a1a1a) 42%, var(--cap-canvas, #ede8e0));
+  }
+  /* current word — a QUIET marker: a faint warm-stone wash behind solid ink, plus a
+     1px taupe hairline underline (restraint, not a loud block; SHARP, NO shadow) */
+  .caption-word.is-active {
+    color: var(--cap-ink, #1a1a1a);
+    background: color-mix(in srgb, var(--cap-accent, #8a8178) 18%, var(--cap-canvas, #ede8e0));
+    border-bottom: 1px solid var(--cap-accent, #8a8178);
+  }
+  /* already spoken — solid ink, wash + underline cleared */
+  .caption-word.is-spoken {
+    color: var(--cap-ink, #1a1a1a);
+    background: transparent;
+    border-bottom: 1px solid transparent;
+  }
+
+  /* optional per-word accents (dormant until a word-classer tags them) */
+  /* brand / key term — Playfair Display italic, cartesian's only display inflection */
+  .caption-word.cap-brand {
+    font-style: italic;
+  }
+  /* numerals / data — the body sans voice, slightly recessed */
+  .caption-word.cap-num {
+    font-family: "Inter", ui-sans-serif, sans-serif;
+    color: color-mix(in srgb, var(--cap-ink, #1a1a1a) 72%, var(--cap-canvas, #ede8e0));
+  }
+  /* emphasis — a 1px taupe hairline underline (no second color; stone-and-ink only) */
+  .caption-word.cap-cta {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--cap-accent, #8a8178);
+    text-underline-offset: 0.12em;
+  }
+
+  @media (max-aspect-ratio: 9/16) {
+    .caption-pill {
+      max-width: 92%;
+    }
+    .caption-line {
+      font-size: clamp(34px, 5.4vw, 48px);
+    }
+  }
+</style>
+
+<div data-hf-id="hf-lg1q" id="captions-root" data-composition-id="captions" data-timeline-locked="" data-start="0" data-duration="118.944" data-fps="30" data-width="1440" data-height="1080">
+  <div data-hf-id="hf-9flp" class="caption-layer" aria-hidden="true">
+    <div data-hf-id="hf-ajrg" id="caption-stage" class="caption-stage"></div>
+  </div>
+</div>
+
+<script>
+  // captions.mjs injects the engine's scene-aware groups + real duration here.
+  var GROUPS = [{"id":"caption-group-0","frame":1,"start":0.18,"end":1.477,"text":"你有没有发现","words":[{"id":"caption-word-0-0","text":"你有没有发现","start":0.18,"end":1.357}]},{"id":"caption-group-1","frame":1,"start":1.577,"end":3.856,"text":"很多年轻人不是买不起房","words":[{"id":"caption-word-1-0","text":"很多年轻人不是买不起房","start":1.577,"end":3.736}]},{"id":"caption-group-2","frame":1,"start":3.956,"end":5.842,"text":"而是——不敢不买房","words":[{"id":"caption-word-2-0","text":"而是——不敢不买房","start":3.956,"end":5.722}]},{"id":"caption-group-3","frame":1,"start":5.942,"end":7.043,"text":"二十七八岁","words":[{"id":"caption-word-3-0","text":"二十七八岁","start":5.942,"end":6.923}]},{"id":"caption-group-4","frame":1,"start":7.143,"end":8.244,"text":"工作四五年","words":[{"id":"caption-word-4-0","text":"工作四五年","start":7.143,"end":8.124}]},{"id":"caption-group-5","frame":1,"start":8.344,"end":10.034,"text":"自己攒了二三十万","words":[{"id":"caption-word-5-0","text":"自己攒了二三十万","start":8.344,"end":9.914}]},{"id":"caption-group-6","frame":1,"start":10.134,"end":12.02,"text":"父母再拿出一点积蓄","words":[{"id":"caption-word-6-0","text":"父母再拿出一点积蓄","start":10.134,"end":11.9}]},{"id":"caption-group-7","frame":1,"start":12.12,"end":14.792,"text":"差不多就够一套房子的首付了","words":[{"id":"caption-word-7-0","text":"差不多就够一套房子的首付了","start":12.12,"end":14.672}]},{"id":"caption-group-8","frame":1,"start":14.892,"end":16.189,"text":"然后你会发现","words":[{"id":"caption-word-8-0","text":"然后你会发现","start":14.892,"end":16.069}]},{"id":"caption-group-9","frame":1,"start":16.289,"end":18.96,"text":"周围几乎所有人都开始告诉你","words":[{"id":"caption-word-9-0","text":"周围几乎所有人都开始告诉你","start":16.289,"end":18.84}]},{"id":"caption-group-10","frame":2,"start":19.18,"end":20.007,"text":"早点买","words":[{"id":"caption-word-10-0","text":"早点买","start":19.18,"end":19.887}]},{"id":"caption-group-11","frame":2,"start":20.107,"end":21.877,"text":"房子迟早都要有","words":[{"id":"caption-word-11-0","text":"房子迟早都要有","start":20.107,"end":21.757}]},{"id":"caption-group-12","frame":2,"start":21.977,"end":23.983,"text":"没房以后怎么结婚","words":[{"id":"caption-word-12-0","text":"没房以后怎么结婚","start":21.977,"end":23.863}]},{"id":"caption-group-13","frame":2,"start":24.083,"end":27.032,"text":"等以后涨了你就更买不起了","words":[{"id":"caption-word-13-0","text":"等以后涨了你就更买不起了","start":24.083,"end":26.912}]},{"id":"caption-group-14","frame":2,"start":27.132,"end":28.902,"text":"最可怕的是什么","words":[{"id":"caption-word-14-0","text":"最可怕的是什么","start":27.132,"end":28.782}]},{"id":"caption-group-15","frame":2,"start":29.002,"end":30.537,"text":"是听久了以后","words":[{"id":"caption-word-15-0","text":"是听久了以后","start":29.002,"end":30.417}]},{"id":"caption-group-16","frame":2,"start":30.637,"end":32.407,"text":"你自己也开始慌","words":[{"id":"caption-word-16-0","text":"你自己也开始慌","start":30.637,"end":32.287}]},{"id":"caption-group-17","frame":2,"start":32.507,"end":35.455,"text":"这套房子适不适合现在的我","words":[{"id":"caption-word-17-0","text":"这套房子适不适合现在的我","start":32.507,"end":35.335}]},{"id":"caption-group-18","frame":2,"start":35.555,"end":36.854,"text":"如果我不买","words":[{"id":"caption-word-18-0","text":"如果我不买","start":35.555,"end":36.734}]},{"id":"caption-group-19","frame":2,"start":36.954,"end":38.96,"text":"我是不是就落后了","words":[{"id":"caption-word-19-0","text":"我是不是就落后了","start":36.954,"end":38.84}]},{"id":"caption-group-20","frame":3,"start":39.18,"end":39.921,"text":"很多年前","words":[{"id":"caption-word-20-0","text":"很多年前","start":39.18,"end":39.801}]},{"id":"caption-group-21","frame":3,"start":40.021,"end":42.316,"text":"也有一个年轻人面临类似的选择","words":[{"id":"caption-word-21-0","text":"也有一个年轻人面临类似的选择","start":40.021,"end":42.196}]},{"id":"caption-group-22","frame":3,"start":42.416,"end":43.468,"text":"他工作没几年","words":[{"id":"caption-word-22-0","text":"他工作没几年","start":42.416,"end":43.348}]},{"id":"caption-group-23","frame":3,"start":43.568,"end":45.551,"text":"手里刚刚攒下人生第一笔钱","words":[{"id":"caption-word-23-0","text":"手里刚刚攒下人生第一笔钱","start":43.568,"end":45.431}]},{"id":"caption-group-24","frame":3,"start":45.651,"end":47.48,"text":"这笔钱可以拿去买一套房","words":[{"id":"caption-word-24-0","text":"这笔钱可以拿去买一套房","start":45.651,"end":47.36}]},{"id":"caption-group-25","frame":3,"start":47.58,"end":48.632,"text":"但是如果买了","words":[{"id":"caption-word-25-0","text":"但是如果买了","start":47.58,"end":48.512}]},{"id":"caption-group-26","frame":3,"start":48.732,"end":51.026,"text":"自己手里的资本基本也就没有了","words":[{"id":"caption-word-26-0","text":"自己手里的资本基本也就没有了","start":48.732,"end":50.906}]},{"id":"caption-group-27","frame":3,"start":51.126,"end":52.489,"text":"还有另外一个选择","words":[{"id":"caption-word-27-0","text":"还有另外一个选择","start":51.126,"end":52.369}]},{"id":"caption-group-28","frame":3,"start":52.589,"end":53.485,"text":"把钱留下来","words":[{"id":"caption-word-28-0","text":"把钱留下来","start":52.589,"end":53.365}]},{"id":"caption-group-29","frame":3,"start":53.585,"end":55.569,"text":"继续做自己真正擅长的事情","words":[{"id":"caption-word-29-0","text":"继续做自己真正擅长的事情","start":53.585,"end":55.449}]},{"id":"caption-group-30","frame":3,"start":55.669,"end":56.876,"text":"妻子选择了后者","words":[{"id":"caption-word-30-0","text":"妻子选择了后者","start":55.669,"end":56.756}]},{"id":"caption-group-31","frame":3,"start":56.976,"end":58.96,"text":"这个年轻人叫沃伦·巴菲特","words":[{"id":"caption-word-31-0","text":"这个年轻人叫沃伦·巴菲特","start":56.976,"end":58.84}]},{"id":"caption-group-32","frame":4,"start":59.18,"end":60.268,"text":"但我讲这个故事","words":[{"id":"caption-word-32-0","text":"但我讲这个故事","start":59.18,"end":60.148}]},{"id":"caption-group-33","frame":4,"start":60.368,"end":62.563,"text":"不是想告诉你年轻人千万不要买房","words":[{"id":"caption-word-33-0","text":"不是想告诉你年轻人千万不要买房","start":60.368,"end":62.443}]},{"id":"caption-group-34","frame":4,"start":62.663,"end":63.336,"text":"完全不是","words":[{"id":"caption-word-34-0","text":"完全不是","start":62.663,"end":63.216}]},{"id":"caption-group-35","frame":4,"start":63.436,"end":64.939,"text":"有些人需要稳定的住所","words":[{"id":"caption-word-35-0","text":"有些人需要稳定的住所","start":63.436,"end":64.819}]},{"id":"caption-group-36","frame":4,"start":65.039,"end":66.266,"text":"有人有孩子有老人","words":[{"id":"caption-word-36-0","text":"有人有孩子有老人","start":65.039,"end":66.146}]},{"id":"caption-group-37","frame":4,"start":66.366,"end":68.976,"text":"有人就是喜欢拥有一个真正属于自己的家","words":[{"id":"caption-word-37-0","text":"有人就是喜欢拥有一个真正属于自己的家","start":66.366,"end":68.856}]},{"id":"caption-group-38","frame":4,"start":69.076,"end":70.441,"text":"房子当然有它的价值","words":[{"id":"caption-word-38-0","text":"房子当然有它的价值","start":69.076,"end":70.321}]},{"id":"caption-group-39","frame":4,"start":70.541,"end":72.459,"text":"真正值得想的是另外一个问题","words":[{"id":"caption-word-39-0","text":"真正值得想的是另外一个问题","start":70.541,"end":72.339}]},{"id":"caption-group-40","frame":4,"start":72.559,"end":74.892,"text":"当你人生第一次拥有二三十万的时候","words":[{"id":"caption-word-40-0","text":"当你人生第一次拥有二三十万的时候","start":72.559,"end":74.772}]},{"id":"caption-group-41","frame":4,"start":74.992,"end":76.495,"text":"这笔钱对现在的你来说","words":[{"id":"caption-word-41-0","text":"这笔钱对现在的你来说","start":74.992,"end":76.375}]},{"id":"caption-group-42","frame":4,"start":76.595,"end":77.96,"text":"最重要的价值是什么","words":[{"id":"caption-word-42-0","text":"最重要的价值是什么","start":76.595,"end":77.84}]},{"id":"caption-group-43","frame":5,"start":78.18,"end":79.084,"text":"是一套房","words":[{"id":"caption-word-43-0","text":"是一套房","start":78.18,"end":78.964}]},{"id":"caption-group-44","frame":5,"start":79.184,"end":80.285,"text":"是一门技能","words":[{"id":"caption-word-44-0","text":"是一门技能","start":79.184,"end":80.165}]},{"id":"caption-group-45","frame":5,"start":80.385,"end":81.681,"text":"一次创业机会","words":[{"id":"caption-word-45-0","text":"一次创业机会","start":80.385,"end":81.561}]},{"id":"caption-group-46","frame":5,"start":81.781,"end":82.882,"text":"换一座城市","words":[{"id":"caption-word-46-0","text":"换一座城市","start":81.781,"end":82.762}]},{"id":"caption-group-47","frame":5,"start":82.982,"end":84.866,"text":"还是给自己几年时间","words":[{"id":"caption-word-47-0","text":"还是给自己几年时间","start":82.982,"end":84.746}]},{"id":"caption-group-48","frame":5,"start":84.966,"end":87.439,"text":"去成为一个更有选择权的人","words":[{"id":"caption-word-48-0","text":"去成为一个更有选择权的人","start":84.966,"end":87.319}]},{"id":"caption-group-49","frame":5,"start":87.539,"end":88.444,"text":"很多时候","words":[{"id":"caption-word-49-0","text":"很多时候","start":87.539,"end":88.324}]},{"id":"caption-group-50","frame":5,"start":88.544,"end":90.428,"text":"我们花光积蓄购买的","words":[{"id":"caption-word-50-0","text":"我们花光积蓄购买的","start":88.544,"end":90.308}]},{"id":"caption-group-51","frame":5,"start":90.528,"end":92.609,"text":"可能不仅仅是一套房子","words":[{"id":"caption-word-51-0","text":"可能不仅仅是一套房子","start":90.528,"end":92.489}]},{"id":"caption-group-52","frame":5,"start":92.709,"end":94.006,"text":"还有一种感觉","words":[{"id":"caption-word-52-0","text":"还有一种感觉","start":92.709,"end":93.886}]},{"id":"caption-group-53","frame":5,"start":94.106,"end":95.991,"text":"我终于和别人一样了","words":[{"id":"caption-word-53-0","text":"我终于和别人一样了","start":94.106,"end":95.871}]},{"id":"caption-group-54","frame":5,"start":96.091,"end":97.779,"text":"可人生真正危险的","words":[{"id":"caption-word-54-0","text":"可人生真正危险的","start":96.091,"end":97.659}]},{"id":"caption-group-55","frame":5,"start":97.879,"end":99.96,"text":"从来不是和别人不一样","words":[{"id":"caption-word-55-0","text":"从来不是和别人不一样","start":97.879,"end":99.84}]},{"id":"caption-group-56","frame":6,"start":100.18,"end":101.957,"text":"而是有一天你突然发现","words":[{"id":"caption-word-56-0","text":"而是有一天你突然发现","start":100.18,"end":101.837}]},{"id":"caption-group-57","frame":6,"start":102.057,"end":103.834,"text":"你拼命做出的那些选择","words":[{"id":"caption-word-57-0","text":"你拼命做出的那些选择","start":102.057,"end":103.714}]},{"id":"caption-group-58","frame":6,"start":103.934,"end":106.042,"text":"其实从来没有真正问过自己","words":[{"id":"caption-word-58-0","text":"其实从来没有真正问过自己","start":103.934,"end":105.922}]},{"id":"caption-group-59","frame":6,"start":106.142,"end":107.422,"text":"所以买房没有错","words":[{"id":"caption-word-59-0","text":"所以买房没有错","start":106.142,"end":107.302}]},{"id":"caption-group-60","frame":6,"start":107.522,"end":108.636,"text":"不买也没有错","words":[{"id":"caption-word-60-0","text":"不买也没有错","start":107.522,"end":108.516}]},{"id":"caption-group-61","frame":6,"start":108.736,"end":110.182,"text":"真正值得害怕的是","words":[{"id":"caption-word-61-0","text":"真正值得害怕的是","start":108.736,"end":110.062}]},{"id":"caption-group-62","frame":6,"start":110.282,"end":112.556,"text":"你根本不知道自己为什么要买","words":[{"id":"caption-word-62-0","text":"你根本不知道自己为什么要买","start":110.282,"end":112.436}]},{"id":"caption-group-63","frame":6,"start":112.656,"end":114.267,"text":"如果现在给你30万","words":[{"id":"caption-word-63-0","text":"如果现在给你30万","start":112.656,"end":114.147}]},{"id":"caption-group-64","frame":6,"start":114.367,"end":115.813,"text":"一边是房子的首付","words":[{"id":"caption-word-64-0","text":"一边是房子的首付","start":114.367,"end":115.693}]},{"id":"caption-group-65","frame":6,"start":115.913,"end":117.856,"text":"一边是未来五年的可能性","words":[{"id":"caption-word-65-0","text":"一边是未来五年的可能性","start":115.913,"end":117.736}]},{"id":"caption-group-66","frame":6,"start":117.956,"end":118.904,"text":"你会怎么选","words":[{"id":"caption-word-66-0","text":"你会怎么选","start":117.956,"end":118.784}]}];
+  var DURATION = 118.944;
+
+  (function () {
+    var stage = document.getElementById("caption-stage");
+
+    // build DOM: one .caption-group per group, .caption-word per word
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.createElement("div");
+      groupEl.className = "caption-group";
+      groupEl.id = "caption-group-" + g;
+      var pill = document.createElement("div");
+      pill.className = "caption-pill";
+      var line = document.createElement("div");
+      line.className = "caption-line";
+      (group.words || []).forEach(function (w, i) {
+        var span = document.createElement("span");
+        span.className = "caption-word";
+        span.id = "caption-word-" + g + "-" + i;
+        span.textContent = String(w.text);
+        line.appendChild(span);
+      });
+      pill.appendChild(line);
+      groupEl.appendChild(pill);
+      stage.appendChild(groupEl);
+    });
+
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.getElementById("caption-group-" + g);
+      var words = group.words || [];
+      var next = GROUPS[g + 1];
+      var isLast = g === GROUPS.length - 1;
+      var start = Math.max(0, Number(group.start));
+      var end = isLast ? DURATION : Math.min(Number(next.start), Number(group.end) + 0.3);
+      if (end <= start) end = start + 0.01;
+
+      // group on/off — exactly one group visible at a time
+      tl.set(groupEl, { opacity: 1 }, start);
+      tl.set(groupEl, { opacity: 0 }, end);
+
+      // 3-state karaoke via className SETS — seek-safe (gsap.set applies on the
+      // engine's frame-by-frame seek; .call callbacks would NOT fire).
+      words.forEach(function (w, i) {
+        var el = document.getElementById("caption-word-" + g + "-" + i);
+        var at = Math.max(start, Number(w.start));
+        tl.set(el, { className: "caption-word" }, start); // upcoming (also resets on reverse-seek)
+        tl.set(el, { className: "caption-word is-active" }, at); // current
+        tl.fromTo(el, { scale: 0.985 }, { scale: 1, duration: 0.2, ease: "power1.out" }, at);
+        if (i + 1 < words.length) {
+          var nextAt = Math.max(start, Number(words[i + 1].start));
+          tl.set(el, { className: "caption-word is-spoken" }, nextAt); // demote when next activates
+        }
+      });
+      if (words.length) {
+        var lastEl = document.getElementById("caption-word-" + g + "-" + (words.length - 1));
+        var lastSpoken = Math.min(end, Number(words[words.length - 1].end) + 0.1);
+        tl.set(lastEl, { className: "caption-word is-spoken" }, lastSpoken);
+      }
+    });
+
+    // full-span anchor so the sub-comp timeline spans the whole video
+    tl.to({}, { duration: DURATION }, 0);
+    window.__timelines["captions"] = tl;
+  })();
+</script>
+
+<style>
+  .caption-line { line-height: 1.1 !important; }
+</style>
+</template>
