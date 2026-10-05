@@ -1,1 +1,2 @@
 {"id":"voice_001","type":"voice","path":".media/audio/voice/voice_001.mp3","source":"ingested","description":"0567ed29-a3e2-4846-8dda-23f38ef8d51c.mp3","provenance":{"provider":"local","from":"C:\\Users\\miling\\Downloads\\0567ed29-a3e2-4846-8dda-23f38ef8d51c.mp3"}}
+{"id":"bgm_001","type":"bgm","path":".media/audio/bgm/bgm_001.m4a","source":"ingested","description":"audio.m4a","provenance":{"provider":"local","from":"C:\\Users\\miling\\Downloads\\audio.m4a"}}
