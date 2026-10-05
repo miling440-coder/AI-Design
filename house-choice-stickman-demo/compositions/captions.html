@@ -17,8 +17,11 @@
       --cap-accent-2: #8A8178;
       --font-display: "Playfair Display", system-ui, serif;
       --font-body: "Inter", system-ui, sans-serif;
-      --cap-band-top: 900px;
-      --cap-band-height: 180px;
+      --layout-header-height: 128px;
+      --layout-divider-y: 830px;
+      --layout-divider-height: 5px;
+      --cap-band-top: 835px;
+      --cap-band-height: 245px;
       }
     </style>
 
@@ -28,13 +31,95 @@
     inset: 0;
     pointer-events: none;
   }
+  .layout-chrome {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .layout-header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: var(--layout-header-height, 128px);
+    padding: 0 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+    box-sizing: border-box;
+    background: var(--bg-primary, #ede8e0);
+  }
+  .layout-header__identity {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .layout-header__mark {
+    position: relative;
+    width: 62px;
+    height: 62px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border: 3px solid var(--text-primary, #1a1a1a);
+    border-radius: 50%;
+    color: var(--text-primary, #1a1a1a);
+    font: 600 22px/1 var(--font-body, sans-serif);
+    letter-spacing: -0.04em;
+    box-sizing: border-box;
+  }
+  .layout-header__mark::after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 29px;
+    height: 3px;
+    background: var(--text-primary, #1a1a1a);
+    transform: rotate(-18deg);
+    transform-origin: center;
+  }
+  .layout-header__mark span {
+    position: relative;
+    z-index: 1;
+    padding: 2px 4px;
+    background: var(--bg-primary, #ede8e0);
+  }
+  .layout-header__title {
+    overflow: hidden;
+    color: var(--text-primary, #1a1a1a);
+    font: 400 48px/1.5 "Noto Serif SC", "Source Han Serif SC", "Microsoft YaHei", serif;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .layout-header__meta {
+    flex: 0 0 auto;
+    color: var(--text-secondary, #5a5a5a);
+    font: 500 23px/1 var(--font-body, sans-serif);
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+  .layout-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--layout-divider-y, 830px);
+    bottom: 0;
+    box-sizing: border-box;
+    border-top: var(--layout-divider-height, 5px) solid var(--text-primary, #1a1a1a);
+    background: var(--bg-secondary, #e2dbd1);
+  }
   .caption-layer {
     position: absolute;
     inset: 0;
     z-index: 20;
     pointer-events: none;
   }
-  /* the keep-out band, from captionBand(H) — frame content stays above it */
+  /* Fixed subtitle band below the full-width divider. */
   .caption-stage {
     position: absolute;
     left: 0;
@@ -56,13 +141,13 @@
     opacity: 0;
   }
 
-  /* THE stone card — single 1px taupe hairline border (cartesian's universal
-     structural device), SHARP corners, ZERO shadow, ZERO fill beyond the stone canvas */
   .caption-pill {
-    max-width: 78%;
-    padding: 20px 44px 24px;
-    background: var(--cap-canvas, #ede8e0);
-    border: 1px solid var(--cap-accent-2, #b8b0a4);
+    width: 100%;
+    max-width: 1180px;
+    padding: 24px 64px 28px;
+    box-sizing: border-box;
+    background: transparent;
+    border: 0;
     border-radius: 0;
   }
   .caption-line {
@@ -72,8 +157,8 @@
     gap: 0.1em 0.34em;
     font-family: "Playfair Display", Georgia, serif;
     font-weight: 400;
-    font-size: clamp(40px, 4.4vw, 58px);
-    line-height: 1.16;
+    font-size: clamp(42px, 4vw, 56px);
+    line-height: 1.2;
     letter-spacing: -0.01em;
   }
 
@@ -127,6 +212,16 @@
 </style>
 
 <div data-hf-id="hf-lg1q" id="captions-root" data-composition-id="captions" data-timeline-locked="" data-start="0" data-duration="118.944" data-fps="30" data-width="1440" data-height="1080">
+  <div data-hf-id="hf-dc6a" class="layout-chrome" aria-hidden="true">
+    <header data-hf-id="hf-9yxw" class="layout-header">
+      <div data-hf-id="hf-ovts" class="layout-header__identity">
+        <div data-hf-id="hf-dde1" class="layout-header__mark"><span data-hf-id="hf-plea">30</span></div>
+        <div data-hf-id="hf-m4ha" class="layout-header__title">为什么不敢不买房？</div>
+      </div>
+      <div data-hf-id="hf-ay2m" class="layout-header__meta">理性选择 · 独立思考</div>
+    </header>
+    <div data-hf-id="hf-3wwy" class="layout-footer"></div>
+  </div>
   <div data-hf-id="hf-9flp" class="caption-layer" aria-hidden="true">
     <div data-hf-id="hf-ajrg" id="caption-stage" class="caption-stage"></div>
   </div>
