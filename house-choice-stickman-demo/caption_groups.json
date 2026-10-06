@@ -1,1012 +1,1187 @@
-{
-  "total_duration_s": 118.944,
-  "width": 1440,
-  "height": 1080,
-  "groups": [
-    {
-      "id": "caption-group-0",
-      "frame": 1,
-      "start": 0.18,
-      "end": 1.477,
-      "text": "你有没有发现",
-      "words": [
-        {
-          "id": "caption-word-0-0",
-          "text": "你有没有发现",
-          "start": 0.18,
-          "end": 1.357
-        }
-      ]
-    },
-    {
-      "id": "caption-group-1",
-      "frame": 1,
-      "start": 1.577,
-      "end": 3.856,
-      "text": "很多年轻人不是买不起房",
-      "words": [
-        {
-          "id": "caption-word-1-0",
-          "text": "很多年轻人不是买不起房",
-          "start": 1.577,
-          "end": 3.736
-        }
-      ]
-    },
-    {
-      "id": "caption-group-2",
-      "frame": 1,
-      "start": 3.956,
-      "end": 5.842,
-      "text": "而是——不敢不买房",
-      "words": [
-        {
-          "id": "caption-word-2-0",
-          "text": "而是——不敢不买房",
-          "start": 3.956,
-          "end": 5.722
-        }
-      ]
-    },
-    {
-      "id": "caption-group-3",
-      "frame": 1,
-      "start": 5.942,
-      "end": 7.043,
-      "text": "二十七八岁",
-      "words": [
-        {
-          "id": "caption-word-3-0",
-          "text": "二十七八岁",
-          "start": 5.942,
-          "end": 6.923
-        }
-      ]
-    },
-    {
-      "id": "caption-group-4",
-      "frame": 1,
-      "start": 7.143,
-      "end": 8.244,
-      "text": "工作四五年",
-      "words": [
-        {
-          "id": "caption-word-4-0",
-          "text": "工作四五年",
-          "start": 7.143,
-          "end": 8.124
-        }
-      ]
-    },
-    {
-      "id": "caption-group-5",
-      "frame": 1,
-      "start": 8.344,
-      "end": 10.034,
-      "text": "自己攒了二三十万",
-      "words": [
-        {
-          "id": "caption-word-5-0",
-          "text": "自己攒了二三十万",
-          "start": 8.344,
-          "end": 9.914
-        }
-      ]
-    },
-    {
-      "id": "caption-group-6",
-      "frame": 1,
-      "start": 10.134,
-      "end": 12.02,
-      "text": "父母再拿出一点积蓄",
-      "words": [
-        {
-          "id": "caption-word-6-0",
-          "text": "父母再拿出一点积蓄",
-          "start": 10.134,
-          "end": 11.9
-        }
-      ]
-    },
-    {
-      "id": "caption-group-7",
-      "frame": 1,
-      "start": 12.12,
-      "end": 14.792,
-      "text": "差不多就够一套房子的首付了",
-      "words": [
-        {
-          "id": "caption-word-7-0",
-          "text": "差不多就够一套房子的首付了",
-          "start": 12.12,
-          "end": 14.672
-        }
-      ]
-    },
-    {
-      "id": "caption-group-8",
-      "frame": 1,
-      "start": 14.892,
-      "end": 16.189,
-      "text": "然后你会发现",
-      "words": [
-        {
-          "id": "caption-word-8-0",
-          "text": "然后你会发现",
-          "start": 14.892,
-          "end": 16.069
-        }
-      ]
-    },
-    {
-      "id": "caption-group-9",
-      "frame": 1,
-      "start": 16.289,
-      "end": 18.96,
-      "text": "周围几乎所有人都开始告诉你",
-      "words": [
-        {
-          "id": "caption-word-9-0",
-          "text": "周围几乎所有人都开始告诉你",
-          "start": 16.289,
-          "end": 18.84
-        }
-      ]
-    },
-    {
-      "id": "caption-group-10",
-      "frame": 2,
-      "start": 19.18,
-      "end": 20.007,
-      "text": "早点买",
-      "words": [
-        {
-          "id": "caption-word-10-0",
-          "text": "早点买",
-          "start": 19.18,
-          "end": 19.887
-        }
-      ]
-    },
-    {
-      "id": "caption-group-11",
-      "frame": 2,
-      "start": 20.107,
-      "end": 21.877,
-      "text": "房子迟早都要有",
-      "words": [
-        {
-          "id": "caption-word-11-0",
-          "text": "房子迟早都要有",
-          "start": 20.107,
-          "end": 21.757
-        }
-      ]
-    },
-    {
-      "id": "caption-group-12",
-      "frame": 2,
-      "start": 21.977,
-      "end": 23.983,
-      "text": "没房以后怎么结婚",
-      "words": [
-        {
-          "id": "caption-word-12-0",
-          "text": "没房以后怎么结婚",
-          "start": 21.977,
-          "end": 23.863
-        }
-      ]
-    },
-    {
-      "id": "caption-group-13",
-      "frame": 2,
-      "start": 24.083,
-      "end": 27.032,
-      "text": "等以后涨了你就更买不起了",
-      "words": [
-        {
-          "id": "caption-word-13-0",
-          "text": "等以后涨了你就更买不起了",
-          "start": 24.083,
-          "end": 26.912
-        }
-      ]
-    },
-    {
-      "id": "caption-group-14",
-      "frame": 2,
-      "start": 27.132,
-      "end": 28.902,
-      "text": "最可怕的是什么",
-      "words": [
-        {
-          "id": "caption-word-14-0",
-          "text": "最可怕的是什么",
-          "start": 27.132,
-          "end": 28.782
-        }
-      ]
-    },
-    {
-      "id": "caption-group-15",
-      "frame": 2,
-      "start": 29.002,
-      "end": 30.537,
-      "text": "是听久了以后",
-      "words": [
-        {
-          "id": "caption-word-15-0",
-          "text": "是听久了以后",
-          "start": 29.002,
-          "end": 30.417
-        }
-      ]
-    },
-    {
-      "id": "caption-group-16",
-      "frame": 2,
-      "start": 30.637,
-      "end": 32.407,
-      "text": "你自己也开始慌",
-      "words": [
-        {
-          "id": "caption-word-16-0",
-          "text": "你自己也开始慌",
-          "start": 30.637,
-          "end": 32.287
-        }
-      ]
-    },
-    {
-      "id": "caption-group-17",
-      "frame": 2,
-      "start": 32.507,
-      "end": 35.455,
-      "text": "这套房子适不适合现在的我",
-      "words": [
-        {
-          "id": "caption-word-17-0",
-          "text": "这套房子适不适合现在的我",
-          "start": 32.507,
-          "end": 35.335
-        }
-      ]
-    },
-    {
-      "id": "caption-group-18",
-      "frame": 2,
-      "start": 35.555,
-      "end": 36.854,
-      "text": "如果我不买",
-      "words": [
-        {
-          "id": "caption-word-18-0",
-          "text": "如果我不买",
-          "start": 35.555,
-          "end": 36.734
-        }
-      ]
-    },
-    {
-      "id": "caption-group-19",
-      "frame": 2,
-      "start": 36.954,
-      "end": 38.96,
-      "text": "我是不是就落后了",
-      "words": [
-        {
-          "id": "caption-word-19-0",
-          "text": "我是不是就落后了",
-          "start": 36.954,
-          "end": 38.84
-        }
-      ]
-    },
-    {
-      "id": "caption-group-20",
-      "frame": 3,
-      "start": 39.18,
-      "end": 39.921,
-      "text": "很多年前",
-      "words": [
-        {
-          "id": "caption-word-20-0",
-          "text": "很多年前",
-          "start": 39.18,
-          "end": 39.801
-        }
-      ]
-    },
-    {
-      "id": "caption-group-21",
-      "frame": 3,
-      "start": 40.021,
-      "end": 42.316,
-      "text": "也有一个年轻人面临类似的选择",
-      "words": [
-        {
-          "id": "caption-word-21-0",
-          "text": "也有一个年轻人面临类似的选择",
-          "start": 40.021,
-          "end": 42.196
-        }
-      ]
-    },
-    {
-      "id": "caption-group-22",
-      "frame": 3,
-      "start": 42.416,
-      "end": 43.468,
-      "text": "他工作没几年",
-      "words": [
-        {
-          "id": "caption-word-22-0",
-          "text": "他工作没几年",
-          "start": 42.416,
-          "end": 43.348
-        }
-      ]
-    },
-    {
-      "id": "caption-group-23",
-      "frame": 3,
-      "start": 43.568,
-      "end": 45.551,
-      "text": "手里刚刚攒下人生第一笔钱",
-      "words": [
-        {
-          "id": "caption-word-23-0",
-          "text": "手里刚刚攒下人生第一笔钱",
-          "start": 43.568,
-          "end": 45.431
-        }
-      ]
-    },
-    {
-      "id": "caption-group-24",
-      "frame": 3,
-      "start": 45.651,
-      "end": 47.48,
-      "text": "这笔钱可以拿去买一套房",
-      "words": [
-        {
-          "id": "caption-word-24-0",
-          "text": "这笔钱可以拿去买一套房",
-          "start": 45.651,
-          "end": 47.36
-        }
-      ]
-    },
-    {
-      "id": "caption-group-25",
-      "frame": 3,
-      "start": 47.58,
-      "end": 48.632,
-      "text": "但是如果买了",
-      "words": [
-        {
-          "id": "caption-word-25-0",
-          "text": "但是如果买了",
-          "start": 47.58,
-          "end": 48.512
-        }
-      ]
-    },
-    {
-      "id": "caption-group-26",
-      "frame": 3,
-      "start": 48.732,
-      "end": 51.026,
-      "text": "自己手里的资本基本也就没有了",
-      "words": [
-        {
-          "id": "caption-word-26-0",
-          "text": "自己手里的资本基本也就没有了",
-          "start": 48.732,
-          "end": 50.906
-        }
-      ]
-    },
-    {
-      "id": "caption-group-27",
-      "frame": 3,
-      "start": 51.126,
-      "end": 52.489,
-      "text": "还有另外一个选择",
-      "words": [
-        {
-          "id": "caption-word-27-0",
-          "text": "还有另外一个选择",
-          "start": 51.126,
-          "end": 52.369
-        }
-      ]
-    },
-    {
-      "id": "caption-group-28",
-      "frame": 3,
-      "start": 52.589,
-      "end": 53.485,
-      "text": "把钱留下来",
-      "words": [
-        {
-          "id": "caption-word-28-0",
-          "text": "把钱留下来",
-          "start": 52.589,
-          "end": 53.365
-        }
-      ]
-    },
-    {
-      "id": "caption-group-29",
-      "frame": 3,
-      "start": 53.585,
-      "end": 55.569,
-      "text": "继续做自己真正擅长的事情",
-      "words": [
-        {
-          "id": "caption-word-29-0",
-          "text": "继续做自己真正擅长的事情",
-          "start": 53.585,
-          "end": 55.449
-        }
-      ]
-    },
-    {
-      "id": "caption-group-30",
-      "frame": 3,
-      "start": 55.669,
-      "end": 56.876,
-      "text": "妻子选择了后者",
-      "words": [
-        {
-          "id": "caption-word-30-0",
-          "text": "妻子选择了后者",
-          "start": 55.669,
-          "end": 56.756
-        }
-      ]
-    },
-    {
-      "id": "caption-group-31",
-      "frame": 3,
-      "start": 56.976,
-      "end": 58.96,
-      "text": "这个年轻人叫沃伦·巴菲特",
-      "words": [
-        {
-          "id": "caption-word-31-0",
-          "text": "这个年轻人叫沃伦·巴菲特",
-          "start": 56.976,
-          "end": 58.84
-        }
-      ]
-    },
-    {
-      "id": "caption-group-32",
-      "frame": 4,
-      "start": 59.18,
-      "end": 60.268,
-      "text": "但我讲这个故事",
-      "words": [
-        {
-          "id": "caption-word-32-0",
-          "text": "但我讲这个故事",
-          "start": 59.18,
-          "end": 60.148
-        }
-      ]
-    },
-    {
-      "id": "caption-group-33",
-      "frame": 4,
-      "start": 60.368,
-      "end": 62.563,
-      "text": "不是想告诉你年轻人千万不要买房",
-      "words": [
-        {
-          "id": "caption-word-33-0",
-          "text": "不是想告诉你年轻人千万不要买房",
-          "start": 60.368,
-          "end": 62.443
-        }
-      ]
-    },
-    {
-      "id": "caption-group-34",
-      "frame": 4,
-      "start": 62.663,
-      "end": 63.336,
-      "text": "完全不是",
-      "words": [
-        {
-          "id": "caption-word-34-0",
-          "text": "完全不是",
-          "start": 62.663,
-          "end": 63.216
-        }
-      ]
-    },
-    {
-      "id": "caption-group-35",
-      "frame": 4,
-      "start": 63.436,
-      "end": 64.939,
-      "text": "有些人需要稳定的住所",
-      "words": [
-        {
-          "id": "caption-word-35-0",
-          "text": "有些人需要稳定的住所",
-          "start": 63.436,
-          "end": 64.819
-        }
-      ]
-    },
-    {
-      "id": "caption-group-36",
-      "frame": 4,
-      "start": 65.039,
-      "end": 66.266,
-      "text": "有人有孩子有老人",
-      "words": [
-        {
-          "id": "caption-word-36-0",
-          "text": "有人有孩子有老人",
-          "start": 65.039,
-          "end": 66.146
-        }
-      ]
-    },
-    {
-      "id": "caption-group-37",
-      "frame": 4,
-      "start": 66.366,
-      "end": 68.976,
-      "text": "有人就是喜欢拥有一个真正属于自己的家",
-      "words": [
-        {
-          "id": "caption-word-37-0",
-          "text": "有人就是喜欢拥有一个真正属于自己的家",
-          "start": 66.366,
-          "end": 68.856
-        }
-      ]
-    },
-    {
-      "id": "caption-group-38",
-      "frame": 4,
-      "start": 69.076,
-      "end": 70.441,
-      "text": "房子当然有它的价值",
-      "words": [
-        {
-          "id": "caption-word-38-0",
-          "text": "房子当然有它的价值",
-          "start": 69.076,
-          "end": 70.321
-        }
-      ]
-    },
-    {
-      "id": "caption-group-39",
-      "frame": 4,
-      "start": 70.541,
-      "end": 72.459,
-      "text": "真正值得想的是另外一个问题",
-      "words": [
-        {
-          "id": "caption-word-39-0",
-          "text": "真正值得想的是另外一个问题",
-          "start": 70.541,
-          "end": 72.339
-        }
-      ]
-    },
-    {
-      "id": "caption-group-40",
-      "frame": 4,
-      "start": 72.559,
-      "end": 74.892,
-      "text": "当你人生第一次拥有二三十万的时候",
-      "words": [
-        {
-          "id": "caption-word-40-0",
-          "text": "当你人生第一次拥有二三十万的时候",
-          "start": 72.559,
-          "end": 74.772
-        }
-      ]
-    },
-    {
-      "id": "caption-group-41",
-      "frame": 4,
-      "start": 74.992,
-      "end": 76.495,
-      "text": "这笔钱对现在的你来说",
-      "words": [
-        {
-          "id": "caption-word-41-0",
-          "text": "这笔钱对现在的你来说",
-          "start": 74.992,
-          "end": 76.375
-        }
-      ]
-    },
-    {
-      "id": "caption-group-42",
-      "frame": 4,
-      "start": 76.595,
-      "end": 77.96,
-      "text": "最重要的价值是什么",
-      "words": [
-        {
-          "id": "caption-word-42-0",
-          "text": "最重要的价值是什么",
-          "start": 76.595,
-          "end": 77.84
-        }
-      ]
-    },
-    {
-      "id": "caption-group-43",
-      "frame": 5,
-      "start": 78.18,
-      "end": 79.084,
-      "text": "是一套房",
-      "words": [
-        {
-          "id": "caption-word-43-0",
-          "text": "是一套房",
-          "start": 78.18,
-          "end": 78.964
-        }
-      ]
-    },
-    {
-      "id": "caption-group-44",
-      "frame": 5,
-      "start": 79.184,
-      "end": 80.285,
-      "text": "是一门技能",
-      "words": [
-        {
-          "id": "caption-word-44-0",
-          "text": "是一门技能",
-          "start": 79.184,
-          "end": 80.165
-        }
-      ]
-    },
-    {
-      "id": "caption-group-45",
-      "frame": 5,
-      "start": 80.385,
-      "end": 81.681,
-      "text": "一次创业机会",
-      "words": [
-        {
-          "id": "caption-word-45-0",
-          "text": "一次创业机会",
-          "start": 80.385,
-          "end": 81.561
-        }
-      ]
-    },
-    {
-      "id": "caption-group-46",
-      "frame": 5,
-      "start": 81.781,
-      "end": 82.882,
-      "text": "换一座城市",
-      "words": [
-        {
-          "id": "caption-word-46-0",
-          "text": "换一座城市",
-          "start": 81.781,
-          "end": 82.762
-        }
-      ]
-    },
-    {
-      "id": "caption-group-47",
-      "frame": 5,
-      "start": 82.982,
-      "end": 84.866,
-      "text": "还是给自己几年时间",
-      "words": [
-        {
-          "id": "caption-word-47-0",
-          "text": "还是给自己几年时间",
-          "start": 82.982,
-          "end": 84.746
-        }
-      ]
-    },
-    {
-      "id": "caption-group-48",
-      "frame": 5,
-      "start": 84.966,
-      "end": 87.439,
-      "text": "去成为一个更有选择权的人",
-      "words": [
-        {
-          "id": "caption-word-48-0",
-          "text": "去成为一个更有选择权的人",
-          "start": 84.966,
-          "end": 87.319
-        }
-      ]
-    },
-    {
-      "id": "caption-group-49",
-      "frame": 5,
-      "start": 87.539,
-      "end": 88.444,
-      "text": "很多时候",
-      "words": [
-        {
-          "id": "caption-word-49-0",
-          "text": "很多时候",
-          "start": 87.539,
-          "end": 88.324
-        }
-      ]
-    },
-    {
-      "id": "caption-group-50",
-      "frame": 5,
-      "start": 88.544,
-      "end": 90.428,
-      "text": "我们花光积蓄购买的",
-      "words": [
-        {
-          "id": "caption-word-50-0",
-          "text": "我们花光积蓄购买的",
-          "start": 88.544,
-          "end": 90.308
-        }
-      ]
-    },
-    {
-      "id": "caption-group-51",
-      "frame": 5,
-      "start": 90.528,
-      "end": 92.609,
-      "text": "可能不仅仅是一套房子",
-      "words": [
-        {
-          "id": "caption-word-51-0",
-          "text": "可能不仅仅是一套房子",
-          "start": 90.528,
-          "end": 92.489
-        }
-      ]
-    },
-    {
-      "id": "caption-group-52",
-      "frame": 5,
-      "start": 92.709,
-      "end": 94.006,
-      "text": "还有一种感觉",
-      "words": [
-        {
-          "id": "caption-word-52-0",
-          "text": "还有一种感觉",
-          "start": 92.709,
-          "end": 93.886
-        }
-      ]
-    },
-    {
-      "id": "caption-group-53",
-      "frame": 5,
-      "start": 94.106,
-      "end": 95.991,
-      "text": "我终于和别人一样了",
-      "words": [
-        {
-          "id": "caption-word-53-0",
-          "text": "我终于和别人一样了",
-          "start": 94.106,
-          "end": 95.871
-        }
-      ]
-    },
-    {
-      "id": "caption-group-54",
-      "frame": 5,
-      "start": 96.091,
-      "end": 97.779,
-      "text": "可人生真正危险的",
-      "words": [
-        {
-          "id": "caption-word-54-0",
-          "text": "可人生真正危险的",
-          "start": 96.091,
-          "end": 97.659
-        }
-      ]
-    },
-    {
-      "id": "caption-group-55",
-      "frame": 5,
-      "start": 97.879,
-      "end": 99.96,
-      "text": "从来不是和别人不一样",
-      "words": [
-        {
-          "id": "caption-word-55-0",
-          "text": "从来不是和别人不一样",
-          "start": 97.879,
-          "end": 99.84
-        }
-      ]
-    },
-    {
-      "id": "caption-group-56",
-      "frame": 6,
-      "start": 100.18,
-      "end": 101.957,
-      "text": "而是有一天你突然发现",
-      "words": [
-        {
-          "id": "caption-word-56-0",
-          "text": "而是有一天你突然发现",
-          "start": 100.18,
-          "end": 101.837
-        }
-      ]
-    },
-    {
-      "id": "caption-group-57",
-      "frame": 6,
-      "start": 102.057,
-      "end": 103.834,
-      "text": "你拼命做出的那些选择",
-      "words": [
-        {
-          "id": "caption-word-57-0",
-          "text": "你拼命做出的那些选择",
-          "start": 102.057,
-          "end": 103.714
-        }
-      ]
-    },
-    {
-      "id": "caption-group-58",
-      "frame": 6,
-      "start": 103.934,
-      "end": 106.042,
-      "text": "其实从来没有真正问过自己",
-      "words": [
-        {
-          "id": "caption-word-58-0",
-          "text": "其实从来没有真正问过自己",
-          "start": 103.934,
-          "end": 105.922
-        }
-      ]
-    },
-    {
-      "id": "caption-group-59",
-      "frame": 6,
-      "start": 106.142,
-      "end": 107.422,
-      "text": "所以买房没有错",
-      "words": [
-        {
-          "id": "caption-word-59-0",
-          "text": "所以买房没有错",
-          "start": 106.142,
-          "end": 107.302
-        }
-      ]
-    },
-    {
-      "id": "caption-group-60",
-      "frame": 6,
-      "start": 107.522,
-      "end": 108.636,
-      "text": "不买也没有错",
-      "words": [
-        {
-          "id": "caption-word-60-0",
-          "text": "不买也没有错",
-          "start": 107.522,
-          "end": 108.516
-        }
-      ]
-    },
-    {
-      "id": "caption-group-61",
-      "frame": 6,
-      "start": 108.736,
-      "end": 110.182,
-      "text": "真正值得害怕的是",
-      "words": [
-        {
-          "id": "caption-word-61-0",
-          "text": "真正值得害怕的是",
-          "start": 108.736,
-          "end": 110.062
-        }
-      ]
-    },
-    {
-      "id": "caption-group-62",
-      "frame": 6,
-      "start": 110.282,
-      "end": 112.556,
-      "text": "你根本不知道自己为什么要买",
-      "words": [
-        {
-          "id": "caption-word-62-0",
-          "text": "你根本不知道自己为什么要买",
-          "start": 110.282,
-          "end": 112.436
-        }
-      ]
-    },
-    {
-      "id": "caption-group-63",
-      "frame": 6,
-      "start": 112.656,
-      "end": 114.267,
-      "text": "如果现在给你30万",
-      "words": [
-        {
-          "id": "caption-word-63-0",
-          "text": "如果现在给你30万",
-          "start": 112.656,
-          "end": 114.147
-        }
-      ]
-    },
-    {
-      "id": "caption-group-64",
-      "frame": 6,
-      "start": 114.367,
-      "end": 115.813,
-      "text": "一边是房子的首付",
-      "words": [
-        {
-          "id": "caption-word-64-0",
-          "text": "一边是房子的首付",
-          "start": 114.367,
-          "end": 115.693
-        }
-      ]
-    },
-    {
-      "id": "caption-group-65",
-      "frame": 6,
-      "start": 115.913,
-      "end": 117.856,
-      "text": "一边是未来五年的可能性",
-      "words": [
-        {
-          "id": "caption-word-65-0",
-          "text": "一边是未来五年的可能性",
-          "start": 115.913,
-          "end": 117.736
-        }
-      ]
-    },
-    {
-      "id": "caption-group-66",
-      "frame": 6,
-      "start": 117.956,
-      "end": 118.904,
-      "text": "你会怎么选",
-      "words": [
-        {
-          "id": "caption-word-66-0",
-          "text": "你会怎么选",
-          "start": 117.956,
-          "end": 118.784
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": "caption-group-0",
+    "frame": 1,
+    "start": 0,
+    "end": 1.452,
+    "text": "你有没有过这样的感觉，",
+    "words": [
+      {
+        "id": "caption-word-0-0",
+        "text": "你有没有过这样的感觉，",
+        "start": 0,
+        "end": 1.452
+      }
+    ]
+  },
+  {
+    "id": "caption-group-1",
+    "frame": 1,
+    "start": 1.923,
+    "end": 4.306,
+    "text": "自己陷入那种好像什么都有一点可能，",
+    "words": [
+      {
+        "id": "caption-word-1-0",
+        "text": "自己陷入那种好像什么都有一点可能，",
+        "start": 1.923,
+        "end": 4.306
+      }
+    ]
+  },
+  {
+    "id": "caption-group-2",
+    "frame": 1,
+    "start": 4.765,
+    "end": 6.434,
+    "text": "但又什么都做不到的恐惧里。",
+    "words": [
+      {
+        "id": "caption-word-2-0",
+        "text": "但又什么都做不到的恐惧里。",
+        "start": 4.765,
+        "end": 6.434
+      }
+    ]
+  },
+  {
+    "id": "caption-group-3",
+    "frame": 1,
+    "start": 6.854,
+    "end": 8.397,
+    "text": "你突然觉得自己很弱小，",
+    "words": [
+      {
+        "id": "caption-word-3-0",
+        "text": "你突然觉得自己很弱小，",
+        "start": 6.854,
+        "end": 8.397
+      }
+    ]
+  },
+  {
+    "id": "caption-group-4",
+    "frame": 1,
+    "start": 8.867,
+    "end": 10.76,
+    "text": "好像已经经不起任何一次失败。",
+    "words": [
+      {
+        "id": "caption-word-4-0",
+        "text": "好像已经经不起任何一次失败。",
+        "start": 8.867,
+        "end": 10.76
+      }
+    ]
+  },
+  {
+    "id": "caption-group-5",
+    "frame": 1,
+    "start": 11.202,
+    "end": 11.975,
+    "text": "想换工作，",
+    "words": [
+      {
+        "id": "caption-word-5-0",
+        "text": "想换工作，",
+        "start": 11.202,
+        "end": 11.975
+      }
+    ]
+  },
+  {
+    "id": "caption-group-6",
+    "frame": 1,
+    "start": 12.416,
+    "end": 13.615,
+    "text": "又怕找不到更好的。",
+    "words": [
+      {
+        "id": "caption-word-6-0",
+        "text": "又怕找不到更好的。",
+        "start": 12.416,
+        "end": 13.615
+      }
+    ]
+  },
+  {
+    "id": "caption-group-7",
+    "frame": 1,
+    "start": 14.072,
+    "end": 14.899,
+    "text": "想去大城市，",
+    "words": [
+      {
+        "id": "caption-word-7-0",
+        "text": "想去大城市，",
+        "start": 14.072,
+        "end": 14.899
+      }
+    ]
+  },
+  {
+    "id": "caption-group-8",
+    "frame": 1,
+    "start": 15.292,
+    "end": 17.002,
+    "text": "又怕一个人在那里撑不下来。",
+    "words": [
+      {
+        "id": "caption-word-8-0",
+        "text": "又怕一个人在那里撑不下来。",
+        "start": 15.292,
+        "end": 17.002
+      }
+    ]
+  },
+  {
+    "id": "caption-group-9",
+    "frame": 1,
+    "start": 17.427,
+    "end": 18.042,
+    "text": "想考研，",
+    "words": [
+      {
+        "id": "caption-word-9-0",
+        "text": "想考研，",
+        "start": 17.427,
+        "end": 18.042
+      }
+    ]
+  },
+  {
+    "id": "caption-group-10",
+    "frame": 1,
+    "start": 18.495,
+    "end": 20.024,
+    "text": "又怕辛辛苦苦准备一年，",
+    "words": [
+      {
+        "id": "caption-word-10-0",
+        "text": "又怕辛辛苦苦准备一年，",
+        "start": 18.495,
+        "end": 20.024
+      }
+    ]
+  },
+  {
+    "id": "caption-group-11",
+    "frame": 1,
+    "start": 20.442,
+    "end": 21.418,
+    "text": "最后还是失败。",
+    "words": [
+      {
+        "id": "caption-word-11-0",
+        "text": "最后还是失败。",
+        "start": 20.442,
+        "end": 21.418
+      }
+    ]
+  },
+  {
+    "id": "caption-group-12",
+    "frame": 1,
+    "start": 21.816,
+    "end": 22.564,
+    "text": "甚至想过，",
+    "words": [
+      {
+        "id": "caption-word-12-0",
+        "text": "甚至想过，",
+        "start": 21.816,
+        "end": 22.564
+      }
+    ]
+  },
+  {
+    "id": "caption-group-13",
+    "frame": 1,
+    "start": 22.991,
+    "end": 24.2,
+    "text": "要不就找个人结婚，",
+    "words": [
+      {
+        "id": "caption-word-13-0",
+        "text": "要不就找个人结婚，",
+        "start": 22.991,
+        "end": 24.2
+      }
+    ]
+  },
+  {
+    "id": "caption-group-14",
+    "frame": 1,
+    "start": 24.613,
+    "end": 25.993,
+    "text": "安安稳稳过日子算了。",
+    "words": [
+      {
+        "id": "caption-word-14-0",
+        "text": "安安稳稳过日子算了。",
+        "start": 24.613,
+        "end": 25.993
+      }
+    ]
+  },
+  {
+    "id": "caption-group-15",
+    "frame": 1,
+    "start": 26.414,
+    "end": 27.319,
+    "text": "可你又不甘心。",
+    "words": [
+      {
+        "id": "caption-word-15-0",
+        "text": "可你又不甘心。",
+        "start": 26.414,
+        "end": 27.319
+      }
+    ]
+  },
+  {
+    "id": "caption-group-16",
+    "frame": 1,
+    "start": 27.744,
+    "end": 29.396,
+    "text": "你害怕几年以后回过头来，",
+    "words": [
+      {
+        "id": "caption-word-16-0",
+        "text": "你害怕几年以后回过头来，",
+        "start": 27.744,
+        "end": 29.396
+      }
+    ]
+  },
+  {
+    "id": "caption-group-17",
+    "frame": 1,
+    "start": 29.91,
+    "end": 30.844,
+    "text": "发现这一辈子，",
+    "words": [
+      {
+        "id": "caption-word-17-0",
+        "text": "发现这一辈子，",
+        "start": 29.91,
+        "end": 30.844
+      }
+    ]
+  },
+  {
+    "id": "caption-group-18",
+    "frame": 1,
+    "start": 31.333,
+    "end": 32.219,
+    "text": "就这样过去了。",
+    "words": [
+      {
+        "id": "caption-word-18-0",
+        "text": "就这样过去了。",
+        "start": 31.333,
+        "end": 32.219
+      }
+    ]
+  },
+  {
+    "id": "caption-group-19",
+    "frame": 2,
+    "start": 32.596,
+    "end": 34.42,
+    "text": "于是很奇怪的一件事发生了。",
+    "words": [
+      {
+        "id": "caption-word-19-0",
+        "text": "于是很奇怪的一件事发生了。",
+        "start": 32.596,
+        "end": 34.42
+      }
+    ]
+  },
+  {
+    "id": "caption-group-20",
+    "frame": 2,
+    "start": 34.999,
+    "end": 36.2,
+    "text": "你明明有很多选择，",
+    "words": [
+      {
+        "id": "caption-word-20-0",
+        "text": "你明明有很多选择，",
+        "start": 34.999,
+        "end": 36.2
+      }
+    ]
+  },
+  {
+    "id": "caption-group-21",
+    "frame": 2,
+    "start": 36.564,
+    "end": 37.761,
+    "text": "最后却什么都没有选。",
+    "words": [
+      {
+        "id": "caption-word-21-0",
+        "text": "最后却什么都没有选。",
+        "start": 36.564,
+        "end": 37.761
+      }
+    ]
+  },
+  {
+    "id": "caption-group-22",
+    "frame": 2,
+    "start": 38.51,
+    "end": 39.667,
+    "text": "你越来越害怕失败，",
+    "words": [
+      {
+        "id": "caption-word-22-0",
+        "text": "你越来越害怕失败，",
+        "start": 38.51,
+        "end": 39.667
+      }
+    ]
+  },
+  {
+    "id": "caption-group-23",
+    "frame": 2,
+    "start": 40.151,
+    "end": 42.446,
+    "text": "越来越觉得自己经不起任何一次失误。",
+    "words": [
+      {
+        "id": "caption-word-23-0",
+        "text": "越来越觉得自己经不起任何一次失误。",
+        "start": 40.151,
+        "end": 42.446
+      }
+    ]
+  },
+  {
+    "id": "caption-group-24",
+    "frame": 2,
+    "start": 43.365,
+    "end": 44.157,
+    "text": "世界那么大，",
+    "words": [
+      {
+        "id": "caption-word-24-0",
+        "text": "世界那么大，",
+        "start": 43.365,
+        "end": 44.157
+      }
+    ]
+  },
+  {
+    "id": "caption-group-25",
+    "frame": 2,
+    "start": 44.518,
+    "end": 46.155,
+    "text": "你却觉得自己哪里也去不了。",
+    "words": [
+      {
+        "id": "caption-word-25-0",
+        "text": "你却觉得自己哪里也去不了。",
+        "start": 44.518,
+        "end": 46.155
+      }
+    ]
+  },
+  {
+    "id": "caption-group-26",
+    "frame": 2,
+    "start": 46.724,
+    "end": 47.235,
+    "text": "就好像，",
+    "words": [
+      {
+        "id": "caption-word-26-0",
+        "text": "就好像，",
+        "start": 46.724,
+        "end": 47.235
+      }
+    ]
+  },
+  {
+    "id": "caption-group-27",
+    "frame": 2,
+    "start": 47.69,
+    "end": 48.896,
+    "text": "有一堵看不见的墙，",
+    "words": [
+      {
+        "id": "caption-word-27-0",
+        "text": "有一堵看不见的墙，",
+        "start": 47.69,
+        "end": 48.896
+      }
+    ]
+  },
+  {
+    "id": "caption-group-28",
+    "frame": 2,
+    "start": 49.177,
+    "end": 50.232,
+    "text": "把你困在了原地。",
+    "words": [
+      {
+        "id": "caption-word-28-0",
+        "text": "把你困在了原地。",
+        "start": 49.177,
+        "end": 50.232
+      }
+    ]
+  },
+  {
+    "id": "caption-group-29",
+    "frame": 3,
+    "start": 50.609,
+    "end": 51.758,
+    "text": "可后来你会发现，",
+    "words": [
+      {
+        "id": "caption-word-29-0",
+        "text": "可后来你会发现，",
+        "start": 50.609,
+        "end": 51.758
+      }
+    ]
+  },
+  {
+    "id": "caption-group-30",
+    "frame": 3,
+    "start": 52.193,
+    "end": 53.195,
+    "text": "真正困住你的，",
+    "words": [
+      {
+        "id": "caption-word-30-0",
+        "text": "真正困住你的，",
+        "start": 52.193,
+        "end": 53.195
+      }
+    ]
+  },
+  {
+    "id": "caption-group-31",
+    "frame": 3,
+    "start": 53.616,
+    "end": 55.041,
+    "text": "可能从来都不是工作，",
+    "words": [
+      {
+        "id": "caption-word-31-0",
+        "text": "可能从来都不是工作，",
+        "start": 53.616,
+        "end": 55.041
+      }
+    ]
+  },
+  {
+    "id": "caption-group-32",
+    "frame": 3,
+    "start": 55.505,
+    "end": 56.072,
+    "text": "不是城市，",
+    "words": [
+      {
+        "id": "caption-word-32-0",
+        "text": "不是城市，",
+        "start": 55.505,
+        "end": 56.072
+      }
+    ]
+  },
+  {
+    "id": "caption-group-33",
+    "frame": 3,
+    "start": 56.479,
+    "end": 57.116,
+    "text": "不是考研，",
+    "words": [
+      {
+        "id": "caption-word-33-0",
+        "text": "不是考研，",
+        "start": 56.479,
+        "end": 57.116
+      }
+    ]
+  },
+  {
+    "id": "caption-group-34",
+    "frame": 3,
+    "start": 57.57,
+    "end": 58.337,
+    "text": "也不是婚姻。",
+    "words": [
+      {
+        "id": "caption-word-34-0",
+        "text": "也不是婚姻。",
+        "start": 57.57,
+        "end": 58.337
+      }
+    ]
+  },
+  {
+    "id": "caption-group-35",
+    "frame": 3,
+    "start": 58.781,
+    "end": 60.161,
+    "text": "而是你总想找到一条，",
+    "words": [
+      {
+        "id": "caption-word-35-0",
+        "text": "而是你总想找到一条，",
+        "start": 58.781,
+        "end": 60.161
+      }
+    ]
+  },
+  {
+    "id": "caption-group-36",
+    "frame": 3,
+    "start": 60.634,
+    "end": 61.519,
+    "text": "“不会失败的路”。",
+    "words": [
+      {
+        "id": "caption-word-36-0",
+        "text": "“不会失败的路”。",
+        "start": 60.634,
+        "end": 61.519
+      }
+    ]
+  },
+  {
+    "id": "caption-group-37",
+    "frame": 3,
+    "start": 61.941,
+    "end": 62.78,
+    "text": "换工作之前，",
+    "words": [
+      {
+        "id": "caption-word-37-0",
+        "text": "换工作之前，",
+        "start": 61.941,
+        "end": 62.78
+      }
+    ]
+  },
+  {
+    "id": "caption-group-38",
+    "frame": 3,
+    "start": 63.195,
+    "end": 65.389,
+    "text": "你想先确定下一份工作一定更好。",
+    "words": [
+      {
+        "id": "caption-word-38-0",
+        "text": "你想先确定下一份工作一定更好。",
+        "start": 63.195,
+        "end": 65.389
+      }
+    ]
+  },
+  {
+    "id": "caption-group-39",
+    "frame": 3,
+    "start": 65.805,
+    "end": 66.803,
+    "text": "去大城市之前，",
+    "words": [
+      {
+        "id": "caption-word-39-0",
+        "text": "去大城市之前，",
+        "start": 65.805,
+        "end": 66.803
+      }
+    ]
+  },
+  {
+    "id": "caption-group-40",
+    "frame": 3,
+    "start": 67.224,
+    "end": 69.203,
+    "text": "你想先确定自己一定能留下来。",
+    "words": [
+      {
+        "id": "caption-word-40-0",
+        "text": "你想先确定自己一定能留下来。",
+        "start": 67.224,
+        "end": 69.203
+      }
+    ]
+  },
+  {
+    "id": "caption-group-41",
+    "frame": 3,
+    "start": 69.645,
+    "end": 70.341,
+    "text": "考研之前，",
+    "words": [
+      {
+        "id": "caption-word-41-0",
+        "text": "考研之前，",
+        "start": 69.645,
+        "end": 70.341
+      }
+    ]
+  },
+  {
+    "id": "caption-group-42",
+    "frame": 3,
+    "start": 70.746,
+    "end": 72.554,
+    "text": "你想先知道自己一定能考上。",
+    "words": [
+      {
+        "id": "caption-word-42-0",
+        "text": "你想先知道自己一定能考上。",
+        "start": 70.746,
+        "end": 72.554
+      }
+    ]
+  },
+  {
+    "id": "caption-group-43",
+    "frame": 3,
+    "start": 72.912,
+    "end": 73.939,
+    "text": "甚至面对爱情，",
+    "words": [
+      {
+        "id": "caption-word-43-0",
+        "text": "甚至面对爱情，",
+        "start": 72.912,
+        "end": 73.939
+      }
+    ]
+  },
+  {
+    "id": "caption-group-44",
+    "frame": 3,
+    "start": 74.367,
+    "end": 75.475,
+    "text": "你也希望先确定，",
+    "words": [
+      {
+        "id": "caption-word-44-0",
+        "text": "你也希望先确定，",
+        "start": 74.367,
+        "end": 75.475
+      }
+    ]
+  },
+  {
+    "id": "caption-group-45",
+    "frame": 3,
+    "start": 75.948,
+    "end": 77.922,
+    "text": "这个人绝不会影响你未来的人生。",
+    "words": [
+      {
+        "id": "caption-word-45-0",
+        "text": "这个人绝不会影响你未来的人生。",
+        "start": 75.948,
+        "end": 77.922
+      }
+    ]
+  },
+  {
+    "id": "caption-group-46",
+    "frame": 3,
+    "start": 78.283,
+    "end": 79.383,
+    "text": "你不是没有选择。",
+    "words": [
+      {
+        "id": "caption-word-46-0",
+        "text": "你不是没有选择。",
+        "start": 78.283,
+        "end": 79.383
+      }
+    ]
+  },
+  {
+    "id": "caption-group-47",
+    "frame": 3,
+    "start": 79.814,
+    "end": 80.628,
+    "text": "你只是希望，",
+    "words": [
+      {
+        "id": "caption-word-47-0",
+        "text": "你只是希望，",
+        "start": 79.814,
+        "end": 80.628
+      }
+    ]
+  },
+  {
+    "id": "caption-group-48",
+    "frame": 3,
+    "start": 81.057,
+    "end": 82.894,
+    "text": "每一个选择都先给你一个保证。",
+    "words": [
+      {
+        "id": "caption-word-48-0",
+        "text": "每一个选择都先给你一个保证。",
+        "start": 81.057,
+        "end": 82.894
+      }
+    ]
+  },
+  {
+    "id": "caption-group-49",
+    "frame": 4,
+    "start": 83.258,
+    "end": 84.376,
+    "text": "可人生最残酷，",
+    "words": [
+      {
+        "id": "caption-word-49-0",
+        "text": "可人生最残酷，",
+        "start": 83.258,
+        "end": 84.376
+      }
+    ]
+  },
+  {
+    "id": "caption-group-50",
+    "frame": 4,
+    "start": 84.836,
+    "end": 86.584,
+    "text": "也最真实的地方就在这里：",
+    "words": [
+      {
+        "id": "caption-word-50-0",
+        "text": "也最真实的地方就在这里：",
+        "start": 84.836,
+        "end": 86.584
+      }
+    ]
+  },
+  {
+    "id": "caption-group-51",
+    "frame": 4,
+    "start": 87.043,
+    "end": 88.681,
+    "text": "它从来不会先告诉你答案。",
+    "words": [
+      {
+        "id": "caption-word-51-0",
+        "text": "它从来不会先告诉你答案。",
+        "start": 87.043,
+        "end": 88.681
+      }
+    ]
+  },
+  {
+    "id": "caption-group-52",
+    "frame": 4,
+    "start": 89.116,
+    "end": 89.774,
+    "text": "很多时候，",
+    "words": [
+      {
+        "id": "caption-word-52-0",
+        "text": "很多时候，",
+        "start": 89.116,
+        "end": 89.774
+      }
+    ]
+  },
+  {
+    "id": "caption-group-53",
+    "frame": 4,
+    "start": 90.202,
+    "end": 92.095,
+    "text": "我们以为自己是在追求安全感。",
+    "words": [
+      {
+        "id": "caption-word-53-0",
+        "text": "我们以为自己是在追求安全感。",
+        "start": 90.202,
+        "end": 92.095
+      }
+    ]
+  },
+  {
+    "id": "caption-group-54",
+    "frame": 4,
+    "start": 92.536,
+    "end": 94.06,
+    "text": "其实是在用“我不能失败”，",
+    "words": [
+      {
+        "id": "caption-word-54-0",
+        "text": "其实是在用“我不能失败”，",
+        "start": 92.536,
+        "end": 94.06
+      }
+    ]
+  },
+  {
+    "id": "caption-group-55",
+    "frame": 4,
+    "start": 94.542,
+    "end": 96.127,
+    "text": "一点一点缩小自己的人生。",
+    "words": [
+      {
+        "id": "caption-word-55-0",
+        "text": "一点一点缩小自己的人生。",
+        "start": 94.542,
+        "end": 96.127
+      }
+    ]
+  },
+  {
+    "id": "caption-group-56",
+    "frame": 4,
+    "start": 96.529,
+    "end": 97.088,
+    "text": "怕失业，",
+    "words": [
+      {
+        "id": "caption-word-56-0",
+        "text": "怕失业，",
+        "start": 96.529,
+        "end": 97.088
+      }
+    ]
+  },
+  {
+    "id": "caption-group-57",
+    "frame": 4,
+    "start": 97.515,
+    "end": 98.743,
+    "text": "于是你不敢换工作。",
+    "words": [
+      {
+        "id": "caption-word-57-0",
+        "text": "于是你不敢换工作。",
+        "start": 97.515,
+        "end": 98.743
+      }
+    ]
+  },
+  {
+    "id": "caption-group-58",
+    "frame": 4,
+    "start": 99.194,
+    "end": 99.739,
+    "text": "怕失败，",
+    "words": [
+      {
+        "id": "caption-word-58-0",
+        "text": "怕失败，",
+        "start": 99.194,
+        "end": 99.739
+      }
+    ]
+  },
+  {
+    "id": "caption-group-59",
+    "frame": 4,
+    "start": 100.151,
+    "end": 101.246,
+    "text": "于是你不敢开始。",
+    "words": [
+      {
+        "id": "caption-word-59-0",
+        "text": "于是你不敢开始。",
+        "start": 100.151,
+        "end": 101.246
+      }
+    ]
+  },
+  {
+    "id": "caption-group-60",
+    "frame": 4,
+    "start": 101.699,
+    "end": 102.266,
+    "text": "怕选错，",
+    "words": [
+      {
+        "id": "caption-word-60-0",
+        "text": "怕选错，",
+        "start": 101.699,
+        "end": 102.266
+      }
+    ]
+  },
+  {
+    "id": "caption-group-61",
+    "frame": 4,
+    "start": 102.673,
+    "end": 104.018,
+    "text": "于是干脆什么都不选。",
+    "words": [
+      {
+        "id": "caption-word-61-0",
+        "text": "于是干脆什么都不选。",
+        "start": 102.673,
+        "end": 104.018
+      }
+    ]
+  },
+  {
+    "id": "caption-group-62",
+    "frame": 4,
+    "start": 104.476,
+    "end": 105.959,
+    "text": "最后你避开了很多风险，",
+    "words": [
+      {
+        "id": "caption-word-62-0",
+        "text": "最后你避开了很多风险，",
+        "start": 104.476,
+        "end": 105.959
+      }
+    ]
+  },
+  {
+    "id": "caption-group-63",
+    "frame": 4,
+    "start": 106.426,
+    "end": 107.682,
+    "text": "也一起避开了那些，",
+    "words": [
+      {
+        "id": "caption-word-63-0",
+        "text": "也一起避开了那些，",
+        "start": 106.426,
+        "end": 107.682
+      }
+    ]
+  },
+  {
+    "id": "caption-group-64",
+    "frame": 4,
+    "start": 108.12,
+    "end": 109.382,
+    "text": "本来可能发生的人生。",
+    "words": [
+      {
+        "id": "caption-word-64-0",
+        "text": "本来可能发生的人生。",
+        "start": 108.12,
+        "end": 109.382
+      }
+    ]
+  },
+  {
+    "id": "caption-group-65",
+    "frame": 4,
+    "start": 109.737,
+    "end": 110.829,
+    "text": "所以真正的问题，",
+    "words": [
+      {
+        "id": "caption-word-65-0",
+        "text": "所以真正的问题，",
+        "start": 109.737,
+        "end": 110.829
+      }
+    ]
+  },
+  {
+    "id": "caption-group-66",
+    "frame": 4,
+    "start": 111.293,
+    "end": 111.916,
+    "text": "从来不是：",
+    "words": [
+      {
+        "id": "caption-word-66-0",
+        "text": "从来不是：",
+        "start": 111.293,
+        "end": 111.916
+      }
+    ]
+  },
+  {
+    "id": "caption-group-67",
+    "frame": 4,
+    "start": 112.328,
+    "end": 113.364,
+    "text": "“哪条路最安全？”",
+    "words": [
+      {
+        "id": "caption-word-67-0",
+        "text": "“哪条路最安全？”",
+        "start": 112.328,
+        "end": 113.364
+      }
+    ]
+  },
+  {
+    "id": "caption-group-68",
+    "frame": 4,
+    "start": 113.793,
+    "end": 114.167,
+    "text": "而是：",
+    "words": [
+      {
+        "id": "caption-word-68-0",
+        "text": "而是：",
+        "start": 113.793,
+        "end": 114.167
+      }
+    ]
+  },
+  {
+    "id": "caption-group-69",
+    "frame": 4,
+    "start": 114.654,
+    "end": 116.628,
+    "text": "“如果没有任何一条路能保证成功，",
+    "words": [
+      {
+        "id": "caption-word-69-0",
+        "text": "“如果没有任何一条路能保证成功，",
+        "start": 114.654,
+        "end": 116.628
+      }
+    ]
+  },
+  {
+    "id": "caption-group-70",
+    "frame": 4,
+    "start": 117.189,
+    "end": 118.03,
+    "text": "你还愿不愿意，",
+    "words": [
+      {
+        "id": "caption-word-70-0",
+        "text": "你还愿不愿意，",
+        "start": 117.189,
+        "end": 118.03
+      }
+    ]
+  },
+  {
+    "id": "caption-group-71",
+    "frame": 4,
+    "start": 118.362,
+    "end": 119.821,
+    "text": "为自己真正想要的人生，",
+    "words": [
+      {
+        "id": "caption-word-71-0",
+        "text": "为自己真正想要的人生，",
+        "start": 118.362,
+        "end": 119.821
+      }
+    ]
+  },
+  {
+    "id": "caption-group-72",
+    "frame": 4,
+    "start": 120.143,
+    "end": 121.482,
+    "text": "承担一次失败的可能？”",
+    "words": [
+      {
+        "id": "caption-word-72-0",
+        "text": "承担一次失败的可能？”",
+        "start": 120.143,
+        "end": 121.482
+      }
+    ]
+  },
+  {
+    "id": "caption-group-73",
+    "frame": 4,
+    "start": 121.929,
+    "end": 122.868,
+    "text": "真正的安全感，",
+    "words": [
+      {
+        "id": "caption-word-73-0",
+        "text": "真正的安全感，",
+        "start": 121.929,
+        "end": 122.868
+      }
+    ]
+  },
+  {
+    "id": "caption-group-74",
+    "frame": 4,
+    "start": 123.33,
+    "end": 123.951,
+    "text": "从来不是",
+    "words": [
+      {
+        "id": "caption-word-74-0",
+        "text": "从来不是",
+        "start": 123.33,
+        "end": 123.951
+      }
+    ]
+  },
+  {
+    "id": "caption-group-75",
+    "frame": 4,
+    "start": 124.384,
+    "end": 125.421,
+    "text": "“我永远不会失败”。",
+    "words": [
+      {
+        "id": "caption-word-75-0",
+        "text": "“我永远不会失败”。",
+        "start": 124.384,
+        "end": 125.421
+      }
+    ]
+  },
+  {
+    "id": "caption-group-76",
+    "frame": 4,
+    "start": 125.839,
+    "end": 126.236,
+    "text": "而是：",
+    "words": [
+      {
+        "id": "caption-word-76-0",
+        "text": "而是：",
+        "start": 125.839,
+        "end": 126.236
+      }
+    ]
+  },
+  {
+    "id": "caption-group-77",
+    "frame": 4,
+    "start": 126.576,
+    "end": 127.321,
+    "text": "即使失败了，",
+    "words": [
+      {
+        "id": "caption-word-77-0",
+        "text": "即使失败了，",
+        "start": 126.576,
+        "end": 127.321
+      }
+    ]
+  },
+  {
+    "id": "caption-group-78",
+    "frame": 4,
+    "start": 127.737,
+    "end": 129.837,
+    "text": "我也相信自己有重新来过的能力。",
+    "words": [
+      {
+        "id": "caption-word-78-0",
+        "text": "我也相信自己有重新来过的能力。",
+        "start": 127.737,
+        "end": 129.837
+      }
+    ]
+  }
+]
