@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "STSong";
+        src: local("STSong"), local("华文宋体");
+      }
+
+      @font-face {
+        font-family: "SimSun";
+        src: local("SimSun"), local("宋体");
+      }
+
+      :root {
+        --night: #0b1115;
+        --mist: #8fa2ad;
+        --paper: #eee9df;
+        --gold: #c8a76a;
+        --slate: #2a363d;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--night); }
+      body { color: var(--paper); font-family: STSong, SimSun, serif; }
+      #root, #visual { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+
+      #visual {
+        isolation: isolate;
+        background:
+          radial-gradient(circle at 50% 56%, rgba(143, 162, 173, 0.11), transparent 28%),
+          radial-gradient(circle at 15% 10%, rgba(200, 167, 106, 0.06), transparent 24%),
+          var(--night);
+      }
+
+      .grain {
+        position: absolute; inset: 0; z-index: 2; opacity: 0.13; pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+        mix-blend-mode: soft-light;
+      }
+
+      .frame-rule { position: absolute; inset: 54px; z-index: 3; border: 1px solid rgba(143, 162, 173, 0.18); }
+      .frame-rule::before, .frame-rule::after {
+        content: ""; position: absolute; top: -1px; width: 190px; height: 1px;
+        background: var(--gold); opacity: 0.72;
+      }
+      .frame-rule::before { left: 0; }
+      .frame-rule::after { right: 0; }
+
+      .meta {
+        position: absolute; top: 82px; left: 88px; right: 88px; z-index: 12;
+        display: flex; align-items: center; justify-content: space-between;
+        color: rgba(238, 233, 223, 0.68); font-family: Consolas, monospace;
+        font-size: 21px; letter-spacing: 0.18em; text-transform: uppercase;
+      }
+      .meta strong { color: var(--gold); font-weight: 400; }
+
+      .axis-word {
+        position: absolute; top: 454px; z-index: 4; color: rgba(143, 162, 173, 0.13);
+        font-size: 152px; font-weight: 700; letter-spacing: 0.08em; writing-mode: vertical-rl;
+      }
+      #pain { left: 228px; }
+      #boredom { right: 228px; }
+
+      .pendulum-svg { position: absolute; inset: 0; z-index: 7; width: 100%; height: 100%; overflow: visible; }
+      .pendulum-line { stroke: var(--gold); stroke-width: 3; opacity: 0.76; }
+      .pendulum-ring { fill: none; stroke: rgba(200, 167, 106, 0.3); stroke-width: 2; }
+      .pendulum-bob { fill: var(--gold); }
+      .pivot { fill: var(--paper); }
+      .orbit { fill: none; stroke: rgba(143, 162, 173, 0.17); stroke-width: 1; stroke-dasharray: 5 13; }
+
+      .crowd { position: absolute; inset: 0; z-index: 5; filter: blur(1.5px); }
+      .spark {
+        position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s);
+        border-radius: 999px; background: var(--c);
+        box-shadow: 0 0 34px color-mix(in srgb, var(--c) 68%, transparent); opacity: 0.52;
+      }
+
+      .quote {
+        position: absolute; left: 150px; bottom: 112px; z-index: 14; max-width: 1320px;
+        font-size: 72px; font-weight: 700; line-height: 1.28; letter-spacing: 0.01em;
+        text-wrap: balance; text-shadow: 0 6px 32px rgba(11, 17, 21, 0.62);
+      }
+      .quote em { color: var(--gold); font-style: normal; }
+      #quote-two { left: auto; right: 150px; max-width: 1020px; text-align: right; font-size: 68px; font-weight: 400; }
+      .source-tag {
+        display: block; margin-bottom: 18px; color: rgba(143, 162, 173, 0.84);
+        font-family: Consolas, monospace; font-size: 19px; font-weight: 400; letter-spacing: 0.2em;
+      }
+
+      .freedom-field {
+        position: absolute; left: 50%; top: 62%; z-index: 20; width: 180px; height: 180px;
+        margin: -90px 0 0 -90px; border-radius: 999px; background: var(--paper);
+        box-shadow: 0 0 120px rgba(238, 233, 223, 0.26);
+      }
+      .final-card {
+        position: absolute; inset: 0; z-index: 24; display: flex; flex-direction: column;
+        align-items: flex-start; justify-content: center; padding: 110px 170px; color: var(--night);
+      }
+      .final-kicker {
+        margin-bottom: 28px; color: #51616a; font-family: Consolas, monospace;
+        font-size: 22px; letter-spacing: 0.18em;
+      }
+      .final-line { max-width: 1650px; font-size: 82px; font-weight: 700; line-height: 1.2; letter-spacing: -0.015em; }
+      .final-line span { color: #9b733e; font-size: 108px; white-space: nowrap; }
+      .final-rule { width: 540px; height: 2px; margin-top: 44px; background: #9b733e; transform-origin: left center; }
+    </style>
+  </head>
+  <body>
+    <main data-hf-id="hf-q286" id="root" data-composition-id="quiet-pendulum" data-width="1920" data-height="1080">
+      <section data-hf-id="hf-uap1" id="visual">
+        <div data-hf-id="hf-ryn8" class="grain" data-layout-ignore=""></div>
+        <div data-hf-id="hf-9iav" class="frame-rule" data-layout-ignore=""></div>
+
+        <header data-hf-id="hf-enyv" class="meta">
+          <span data-hf-id="hf-hphq"><strong data-hf-id="hf-id42">VIBE / 01</strong> · 悲观主义</span>
+          <span data-hf-id="hf-c7s4">ARTHUR SCHOPENHAUER</span>
+        </header>
+
+        <div data-hf-id="hf-4s3a" id="pain" class="axis-word" data-layout-ignore="">痛苦</div>
+        <div data-hf-id="hf-tijt" id="boredom" class="axis-word" data-layout-ignore="">无聊</div>
+
+        <div data-hf-id="hf-krgq" class="crowd" data-layout-ignore="">
+          <i data-hf-id="hf-5cow" class="spark" style="--x: 18%; --y: 34%; --s: 13px; --c: #8fa2ad"></i>
+          <i data-hf-id="hf-5xsb" class="spark" style="--x: 25%; --y: 62%; --s: 8px; --c: #c8a76a"></i>
+          <i data-hf-id="hf-t2t8" class="spark" style="--x: 31%; --y: 48%; --s: 11px; --c: #8fa2ad"></i>
+          <i data-hf-id="hf-ja2v" class="spark" style="--x: 38%; --y: 72%; --s: 7px; --c: #eee9df"></i>
+          <i data-hf-id="hf-lwdd" class="spark" style="--x: 43%; --y: 38%; --s: 9px; --c: #c8a76a"></i>
+          <i data-hf-id="hf-3e10" class="spark" style="--x: 50%; --y: 79%; --s: 12px; --c: #8fa2ad"></i>
+          <i data-hf-id="hf-jsos" class="spark" style="--x: 56%; --y: 42%; --s: 7px; --c: #eee9df"></i>
+          <i data-hf-id="hf-qas8" class="spark" style="--x: 62%; --y: 69%; --s: 10px; --c: #c8a76a"></i>
+          <i data-hf-id="hf-9nuo" class="spark" style="--x: 68%; --y: 51%; --s: 8px; --c: #8fa2ad"></i>
+          <i data-hf-id="hf-pves" class="spark" style="--x: 76%; --y: 64%; --s: 12px; --c: #eee9df"></i>
+          <i data-hf-id="hf-8d2g" class="spark" style="--x: 83%; --y: 37%; --s: 9px; --c: #c8a76a"></i>
+        </div>
+
+        <svg data-hf-id="hf-4ecm" class="pendulum-svg" viewBox="0 0 1920 1080" aria-hidden="true" data-layout-ignore="">
+          <path data-hf-id="hf-ye3d" class="orbit" d="M 612 646 A 500 500 0 0 1 1308 646" />
+          <g data-hf-id="hf-asu5" id="pendulum">
+            <circle data-hf-id="hf-xjvk" class="pivot" cx="960" cy="170" r="6" />
+            <line data-hf-id="hf-7ggi" class="pendulum-line" x1="960" y1="170" x2="960" y2="622" />
+            <circle data-hf-id="hf-u366" class="pendulum-ring" cx="960" cy="674" r="68" />
+            <circle data-hf-id="hf-ohwb" class="pendulum-bob" cx="960" cy="674" r="46" />
+          </g>
+        </svg>
+
+        <p data-hf-id="hf-b9d3" id="quote-one" class="quote">
+          <small data-hf-id="hf-y2x1" class="source-tag">SCHOPENHAUER · THE PENDULUM</small>
+          人生，在<em data-hf-id="hf-b0di">痛苦</em>与<em data-hf-id="hf-f5al">无聊</em>之间摆荡。
+        </p>
+        <p data-hf-id="hf-pv3c" id="quote-two" class="quote">热闹，填不满心里的<em data-hf-id="hf-zefr">空</em>。</p>
+
+        <div data-hf-id="hf-0e28" class="freedom-field" data-layout-ignore=""></div>
+        <div data-hf-id="hf-i4nn" class="final-card">
+          <div data-hf-id="hf-14nx" class="final-kicker">AFTER THE NOISE · 创作者转译</div>
+          <p data-hf-id="hf-3bq9" class="final-line">散场后的空，不是失落，<span data-hf-id="hf-4spf">是自由。</span></p>
+          <div data-hf-id="hf-gpzf" class="final-rule"></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.from(".frame-rule", { opacity: 0, scaleX: 0.86, duration: 0.9, ease: "power3.out" }, 0.12)
+        .from(".meta span:first-child", { x: -34, opacity: 0, duration: 0.62, ease: "expo.out" }, 0.18)
+        .from(".meta span:last-child", { x: 30, opacity: 0, duration: 0.72, ease: "power2.out" }, 0.22)
+        .from("#pain", { x: -28, opacity: 0, duration: 0.82, ease: "sine.out" }, 0.28)
+        .from("#boredom", { x: 28, opacity: 0, duration: 0.92, ease: "power1.out" }, 0.34)
+        .from(".orbit", { opacity: 0, duration: 1.1, ease: "sine.out" }, 0.2)
+        .from("#pendulum", { opacity: 0, y: -36, duration: 0.76, ease: "power3.out" }, 0.18)
+        .from("#quote-one", { y: 38, opacity: 0, duration: 0.74, ease: "power4.out" }, 0.34)
+        .fromTo("#pendulum", { rotation: -24, svgOrigin: "960 170" }, { rotation: 23, duration: 1.02, ease: "sine.inOut", immediateRender: false }, 0.24)
+        .to("#pendulum", { rotation: -17, duration: 0.96, ease: "sine.inOut" }, 1.26)
+        .to("#pain", { color: "rgba(200,167,106,0.48)", scale: 1.035, duration: 0.38, ease: "power1.out" }, 1.32)
+        .to("#pendulum", { rotation: 11, duration: 0.86, ease: "sine.inOut" }, 2.22)
+        .to("#boredom", { color: "rgba(200,167,106,0.48)", scale: 1.035, duration: 0.38, ease: "power2.out" }, 2.28)
+        .from(".spark", { opacity: 0, scale: 0.35, duration: 0.42, stagger: 0.035, ease: "back.out(1.35)" }, 1.48)
+        .from("#quote-two", { x: 42, opacity: 0, duration: 0.66, ease: "expo.out" }, 1.72)
+        .to("#quote-one", { y: -22, opacity: 0, duration: 0.26, ease: "power3.in" }, 1.42)
+        .to(".spark", { y: -92, x: 20, opacity: 0, scale: 0.22, duration: 1.02, stagger: 0.028, ease: "power2.in" }, 2.52)
+        .to("#pendulum", { rotation: 0, duration: 1.02, ease: "sine.inOut" }, 3.08)
+        .to("#quote-two", { y: -18, opacity: 0, duration: 0.38, ease: "power3.in" }, 3.22)
+        .to(".meta, .axis-word, .frame-rule, .orbit", { opacity: 0, duration: 0.42, ease: "power2.in" }, 3.28)
+        .fromTo(".freedom-field", { scale: 0.04 }, { scale: 15, duration: 1.12, ease: "power3.inOut" }, 3.34)
+        .to("#pendulum", { opacity: 0, scale: 0.9, duration: 0.46, ease: "power2.in" }, 3.55)
+        .from(".final-kicker", { x: -42, opacity: 0, duration: 0.48, ease: "expo.out" }, 3.72)
+        .from(".final-line", { y: 48, opacity: 0, duration: 0.68, ease: "power4.out" }, 3.78)
+        .from(".final-rule", { scaleX: 0, duration: 0.72, ease: "sine.out" }, 4.02);
+
+      window.__timelines["quiet-pendulum"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
