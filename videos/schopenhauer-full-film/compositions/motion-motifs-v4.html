@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"></head><body><template>
+<style>
+@font-face{font-family:STSong;src:local("STSong"),local("华文宋体")}
+#motion-motifs-v4{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none}
+#m4-dim{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(6,13,18,.85),rgba(6,13,18,.3));opacity:0}
+#m4-svg{position:absolute;inset:0;width:100%;height:100%;font-family:STSong,serif}
+.m4-motif{opacity:0;will-change:transform,opacity}
+.m4-copy{paint-order:stroke;stroke:#0b1720;stroke-width:2px}
+</style>
+<div data-hf-id="hf-4hwy" id="motion-motifs-v4" data-composition-id="motion-motifs-v4" data-width="1920" data-height="1080" data-duration="104">
+<div data-hf-id="hf-t5z2" id="m4-dim" data-layout-ignore=""></div><svg data-hf-id="hf-f2tp" id="m4-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-allow-overflow="" aria-label="欲望、填满与独处的叙事动画" />
+</div>
+<script>
+(function(){
+const svg=document.getElementById('m4-svg'),tl=gsap.timeline({paused:true});
+const R=(x,y,w,h,f,rx=0,e='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${f}" ${e}/>`;
+const P=(d,f,e='')=>`<path d="${d}" fill="${f}" ${e}/>`;
+const C=(x,y,r,f,e='')=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" ${e}/>`;
+const E=(x,y,rx,ry,f,e='')=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" ${e}/>`;
+const T=(x,y,size,s,f='#f3e7cd',e='')=>`<text x="${x}" y="${y}" font-size="${size}" fill="${f}" ${e.includes('text-anchor=')?'':'text-anchor="middle"'} ${e}>${s}</text>`;
+const G=(id,x,y,s)=>`<g id="${id}" class="m4-motif"><g transform="translate(${x} ${y})">${s}</g></g>`;
+const gold='url(#m4-gold)',edge='stroke="#e9d3a7" stroke-width="3"';
+const key=()=>C(-58,0,48,gold)+C(-58,0,25,'#13232b')+R(-14,-10,126,20,gold,5)+R(73,3,18,31,gold,2)+R(104,3,18,23,gold,2);
+const home=()=>P('M-104 -15 L0 -108 L104 -15 L85 5 L0 -72 L-85 5 Z',gold)+R(-75,-8,150,127,'#798c82',5,edge)+R(-23,42,47,77,'#263c43',4)+R(-56,18,29,31,'#d8b87d',3)+R(31,18,29,31,'#d8b87d',3)+R(-91,119,181,11,gold,3);
+const medal=()=>P('M-64 -106 L-13 -128 L24 -38 L-31 -16 Z','#92634d')+P('M64 -106 L13 -128 L-24 -38 L31 -16 Z','#b99661')+C(0,28,76,gold)+C(0,28,59,'#a38750',edge)+P('M0 -11 L12 15 L40 18 L19 37 L24 65 L0 52 L-24 65 L-19 37 L-40 18 L-12 15 Z','#f5dfab');
+let s=`<defs>
+<linearGradient id="m4-gold" x2="1" y2="1"><stop stop-color="#fff0bf"/><stop offset=".38" stop-color="#dcc28c"/><stop offset=".7" stop-color="#99733b"/><stop offset="1" stop-color="#e8cf9a"/></linearGradient>
+<radialGradient id="m4-warm"><stop stop-color="#ffe3a4" stop-opacity=".64"/><stop offset=".38" stop-color="#dcad66" stop-opacity=".25"/><stop offset="1" stop-color="#d8ac65" stop-opacity="0"/></radialGradient>
+<radialGradient id="m4-cool"><stop stop-color="#cbe5e4" stop-opacity=".4"/><stop offset="1" stop-color="#8cacb7" stop-opacity="0"/></radialGradient>
+<clipPath id="m4-feed-clip">${R(-127,-244,254,488,'#fff',22)}</clipPath></defs>`;
+function door(id,x){return G(id,x,480,C(0,0,400,'url(#m4-warm)')+R(-157,-252,314,501,'#d8be8a',3)+R(-143,-239,286,478,'#efd9a4',1)+`<g id="${id}-leaf">${R(-139,-236,278,472,'#405353',2,'stroke="#9a8b69" stroke-width="3"')}${R(-109,-202,218,190,'none',4,'stroke="#788578" stroke-width="3"')}${R(-109,24,218,178,'none',4,'stroke="#788578" stroke-width="3"')}${C(112,3,8,'#e2c38c')}</g>`+P('M-143 240 L-375 372 H375 L143 240 Z','url(#m4-warm)'));}
+function walker(id,x){return G(id,x,505,
+ E(0,230,90,12,'#060d14','opacity=".55"')+
+ `<g id="${id}-leg-l">${P('M-24 73 L-37 148 L-25 224 H-5 L-12 147 L9 82 Z','#263b42','stroke="#a5b3a5" stroke-width="2"')}${P('M-25 221 H-5 L13 233 H-26 Z','#1a2c33')}</g>`+
+ `<g id="${id}-leg-r">${P('M10 72 L35 151 L21 224 H40 L58 146 L31 66 Z','#21373f','stroke="#a5b3a5" stroke-width="2"')}${P('M21 221 H40 L62 233 H21 Z','#1a2c33')}</g>`+
+ P('M-16 -87 Q-48 -74 -47 -35 L-34 80 Q0 99 40 75 L42 -34 Q39 -74 17 -84 Z','#263d45','stroke="#b7c1ad" stroke-width="2"')+
+ `<g id="${id}-arm">${P('M29 -54 Q61 -10 82 31','none','stroke="#273f47" stroke-width="23" stroke-linecap="round"')}${P('M31 -52 Q61 -10 82 31','none','stroke="#9aaa9e" stroke-width="2"')}${E(84,36,10,13,'#bba986')}</g>`+
+ E(2,-130,30,37,'#ad9d80','stroke="#d2c3a6" stroke-width="2"')+P('M-27 -129 Q-34 -168 3 -171 Q35 -174 36 -134 L23 -140 Q9 -151 -8 -138 Z','#1c3139'));}
+s+=door('m4-opening-door',1130)+walker('m4-opening-walker',600);
+function goal(id,icon,label,n){return G(id,960,420,R(-230,-205,460,410,'#152a33',24,'stroke="#d6b77f" stroke-width="3"')+R(-213,-188,426,376,'none',17,'stroke="#69817e" stroke-width="1" opacity=".6"')+T(-174,-137,32,n,'#d4b782')+`<g id="${id}-glow">${C(0,-3,180,'url(#m4-warm)')}</g><g id="${id}-icon">${icon}</g>`+T(0,157,42,label));}
+s+=goal('m4-goal-1',key(),'得到了','01')+goal('m4-goal-2',home(),'下一个','02');
+s+=G('m4-question',960,440,T(0,80,172,'然后呢？','#f1dfb6','class="m4-copy"'));
+s+=G('m4-pain',425,300,C(0,0,205,'url(#m4-warm)')+T(0,50,112,'痛苦','#e8c17d','class="m4-copy"'));
+s+=G('m4-boredom',1490,300,C(0,0,205,'url(#m4-cool)')+T(0,50,112,'无聊','#d4e1df','class="m4-copy"'));
+const hand=P('M-42 500 L-34 106 Q-65 72 -72 37 Q-76 24 -65 20 Q-54 20 -50 38 L-29 65 L-29 -19 Q-28 -40 -17 -39 Q-7 -37 -8 -19 L-7 48 L1 -37 Q4 -58 15 -54 Q25 -52 22 -31 L17 45 L34 -26 Q40 -44 49 -39 Q57 -35 52 -18 L34 61 L52 18 Q62 4 70 11 Q78 16 70 33 L48 89 Q39 113 28 132 L37 500 Z','#09131b','stroke="#a18b69" stroke-width="1.8"');
+s+=G('m4-hand-left',650,540,`<g transform="rotate(22) scale(1.18)">${hand}</g>`)+G('m4-hand-right',1300,540,`<g transform="rotate(-22) scale(-1.18 1.18)">${hand}</g>`);
+s+=G('m4-satisfaction',979,609,C(0,0,165,'url(#m4-warm)'));
+s+=G('m4-targets',960,430,`<g id="m4-target-1" transform="translate(-390 0) scale(.8)">${key()}</g><g id="m4-target-2" transform="scale(.8)">${home()}</g><g id="m4-target-3" transform="translate(390 0) scale(.8)">${medal()}</g>`);
+function notice(id,x,y,mark,title){return G(id,x,y,R(-255,-72,510,144,'#17313b',22,'stroke="#819790" stroke-width="2"')+R(-232,-48,91,91,'#91774e',20)+T(-186,14,43,mark,'#fae9c4')+T(-95,-14,37,title,'#f4ead5','text-anchor="start"')+R(-95,22,205,9,'#a8bdb5',4,'opacity=".55"')+R(-95,42,140,7,'#a8bdb5',3,'opacity=".35"'));}
+s+=notice('m4-notice-0',600,215,'✓','待办')+notice('m4-notice-1',1290,350,'…','新消息')+notice('m4-notice-2',650,505,'＋','日程')+notice('m4-notice-3',1260,655,'99+','未读');
+let feed='';for(let i=0;i<3;i++){let y=-243+i*500;feed+=`<g transform="translate(0 ${y})">${R(-125,0,250,488,['#4c696c','#736f54','#273d51'][i],18)}${i===0?C(43,119,58,'#d9c59a')+P('M-126 342 L-28 220 L24 320 L108 251 L126 352 V488 H-126 Z','#304950'):i===1?R(-102,147,88,305,'#29464f',3)+R(4,90,102,362,'#425c5e',3)+R(-91,174,22,28,'#e2bc77',2)+R(20,140,21,31,'#d9bc89',2)+R(57,222,21,31,'#d9bc89',2):C(35,145,66,'#d7ded0')+P('M-126 315 Q-20 277 126 326 V488 H-126 Z','#152c3c')+P('M-126 368 Q0 341 126 382 M-126 401 Q0 365 126 406','none','stroke="#7296a1" stroke-width="3"')}${R(-98,405,129,10,'#eee8d2',5)}${R(-98,427,96,8,'#eee8d2',4,'opacity=".6"')}${C(88,375,12,'#efd6a0')}${C(88,417,12,'#efd6a0')}</g>`;}
+s+=G('m4-phone',960,390,R(-155,-290,310,590,'#0d1b25',35,'stroke="#c3b28e" stroke-width="5"')+R(-52,-271,104,13,'#718782',7)+`<g clip-path="url(#m4-feed-clip)"><g id="m4-feed-scroll">${feed}</g></g>`+R(-46,275,92,6,'#d5cfb5',3));
+s+=G('m4-headphones',475,400,P('M-123 25 C-123 -170 123 -170 123 25','none','stroke="#172a32" stroke-width="38"')+P('M-118 20 C-118 -151 118 -151 118 20','none','stroke="#d5b780" stroke-width="9"')+R(-149,7,67,155,'#263e47',25,'stroke="#ad9972" stroke-width="4"')+R(82,7,67,155,'#263e47',25,'stroke="#ad9972" stroke-width="4"'));
+let bars='';for(let i=0;i<13;i++)bars+=R(1300+i*18,315,8,120,'#cfb580',4,`id="m4-bar-${i}"`);s+=`<g id="m4-music" class="m4-motif">${bars}</g>`;
+const quietPerson=E(0,-133,32,40,'#293e43','stroke="#c5ccb6" stroke-width="2"')+P('M-29 -138 Q-34 -181 8 -180 Q42 -178 38 -134 L23 -143 Q9 -153 -9 -138 Z','#20353c')+P('M-23 -85 Q-70 -64 -59 -6 L-50 133 Q0 160 55 132 L63 -9 Q62 -63 23 -85 Z','#263b42','stroke="#a9b9ac" stroke-width="2"')+P('M-38 -36 Q-71 39 -28 89 M40 -36 Q74 39 28 89','none','stroke="#9caaa1" stroke-width="11" stroke-linecap="round"');
+s+=G('m4-quiet-person',960,560,quietPerson+C(0,-15,75,'url(#m4-warm)')+C(0,-15,9,'#e7d49e','opacity=".6"'));
+function bubble(id,x,y){return G(id,x,y,P('M-88 -45 H88 Q113 -45 113 -20 V28 Q113 53 88 53 H-23 L-50 80 L-46 53 H-88 Q-113 53 -113 28 V-20 Q-113 -45 -88 -45 Z','#203741','stroke="#ccb990" stroke-width="2" opacity=".8"')+C(-38,5,7,'#dac698')+C(0,5,7,'#dac698')+C(38,5,7,'#dac698'));}
+s+=bubble('m4-bubble-0',560,330)+bubble('m4-bubble-1',1360,300)+bubble('m4-bubble-2',1400,540);
+s+=door('m4-future-door',1130)+walker('m4-future-walker',600);
+const self=P('M-16 -7 Q-55 -4 -58 43 L-54 126 L-14 128 L24 98 L51 56 Q59 14 29 1 Z','#263b42','stroke="#c5ccb6" stroke-width="2"')+E(4,-48,32,40,'#293e43','stroke="#c5ccb6" stroke-width="2"')+P('M-28 -51 Q-35 -98 6 -94 Q43 -96 42 -52 L29 -55 Q16 -74 -4 -65 Z','#20353c')+P('M-50 120 Q-73 149 -121 143 L-148 153 L-142 170 L-95 166 L-16 158 Q17 149 22 111 Z','#293d43','stroke="#9dafaa" stroke-width="2"')+P('M-7 130 L43 147 L34 224 L12 224 L15 165 L-28 157 Z','#263b42','stroke="#9dafaa" stroke-width="2"')+P('M12 223 L36 223 L57 235 L12 235 Z','#20353c')+P('M-42 33 Q-52 82 -14 92 L26 90 M35 31 Q61 72 26 91','none','stroke="#9fafa6" stroke-width="12" stroke-linecap="round"');
+const wallClock=R(-72,-125,144,270,'#705b42',16,'stroke="#b59b6c" stroke-width="3"')+R(-59,-111,118,243,'#293737',8)+C(0,-47,49,'#d7c49b')+C(0,-47,42,'none','stroke="#786447" stroke-width="2"')+P('M0 -47 L-18 -72 M0 -47 L27 -52','none','stroke="#39433c" stroke-width="4"')+C(0,-47,4,'#6d593a')+`<g id="m4-last-pendulum">${P('M0 9 V89','none','stroke="#cfb57a" stroke-width="4"')}${C(0,98,24,gold)}</g>`;
+s+=`<g id="m4-self-camera">${G('m4-wall-clock',1360,272,wallClock)}${G('m4-self',1530,571,self)}${G('m4-inner-light',1525,612,C(0,0,72,'url(#m4-warm)')+C(0,0,10,'#efdaa3','opacity=".65"'))}</g>`;
+svg.innerHTML=s;
+const show=(id,at,d=.6,opacity=1)=>tl.to(id,{opacity,duration:d,ease:'sine.inOut'},at);
+const hide=(id,at,d=.5)=>tl.to(id,{opacity:0,duration:d,ease:'sine.inOut'},at);
+function steps(id,at,count){
+ ['leg-l','leg-r'].forEach((part,i)=>tl.fromTo(`#${id}-${part}`,{rotation:i?8:-8,svgOrigin:'0 80'},{rotation:i?-8:8,duration:.28,repeat:count-1,yoyo:true,ease:'sine.inOut',immediateRender:false},at));
+ tl.fromTo(`#${id}-arm`,{rotation:-7,svgOrigin:'29 -54'},{rotation:8,duration:.28,repeat:count-1,yoyo:true,ease:'sine.inOut',immediateRender:false},at);
+ tl.set([`#${id}-leg-l`,`#${id}-leg-r`,`#${id}-arm`],{rotation:0},at+count*.28);
+}
+// 1. A future that recedes. Read -> approach -> recede; this motif returns later.
+show('#m4-dim',0,.45,.85);show(['#m4-opening-door','#m4-opening-walker'],0,.45);
+tl.set('#m4-opening-door-leaf',{scaleX:.12,svgOrigin:'-139 0'},0);
+steps('m4-opening-walker',1.25,10);
+tl.to('#m4-opening-walker',{x:270,duration:1.6,ease:'sine.inOut'},1.25).to('#m4-opening-walker',{x:450,duration:1.15,ease:'sine.inOut'},2.85);
+tl.to('#m4-opening-door',{x:280,duration:1.15,ease:'sine.inOut'},2.9);
+hide(['#m4-opening-door','#m4-opening-walker'],4.15,.5);
+// 2. Achievement remains; its excitement drains, rather than another arbitrary object arriving.
+tl.fromTo('#m4-goal-1',{x:500,scale:.75,opacity:0,svgOrigin:'960 420'},{x:0,scale:1,opacity:1,duration:.65,ease:'power3.out',immediateRender:false},5.2);
+tl.to('#m4-goal-1',{x:-545,y:-30,scale:.55,opacity:.35,duration:.7,ease:'power2.inOut'},6.3);
+tl.fromTo('#m4-goal-2',{x:530,scale:.75,opacity:0,svgOrigin:'960 420'},{x:0,scale:1,opacity:1,duration:.7,ease:'power3.out',immediateRender:false},6.65);
+tl.to('#m4-goal-2-glow',{opacity:1,duration:.35},9.1).to('#m4-goal-2-glow',{opacity:0,duration:2,ease:'sine.inOut'},9.75);
+tl.to('#m4-goal-2-icon',{opacity:.28,duration:2,ease:'sine.inOut'},9.75);
+hide(['#m4-goal-1','#m4-goal-2'],12.25,.65);show('#m4-dim',12.3,.6,.4);
+tl.fromTo('#m4-question',{y:22,opacity:0},{y:0,opacity:.88,duration:.75,ease:'sine.out',immediateRender:false},14.3);hide('#m4-question',17.1,.6);
+show('#m4-dim',18.4,.8,.42);
+// 3. Reaching, a brief satisfaction, and withdrawn hands make the pendulum's meaning concrete.
+tl.fromTo('#m4-pain',{x:-80,opacity:0},{x:0,opacity:1,duration:.7,ease:'power2.out',immediateRender:false},23.3);
+tl.fromTo('#m4-boredom',{x:80,opacity:0},{x:0,opacity:.55,duration:.7,ease:'power2.out',immediateRender:false},24.1);
+tl.fromTo('#m4-hand-left',{y:310,opacity:0,rotation:-15,svgOrigin:'650 780'},{y:0,rotation:0,opacity:1,duration:.9,ease:'sine.out',immediateRender:false},27.6);
+tl.fromTo('#m4-hand-right',{y:310,opacity:0,rotation:15,svgOrigin:'1300 780'},{y:0,rotation:0,opacity:1,duration:.9,ease:'sine.out',immediateRender:false},27.95);
+tl.to('#m4-hand-left',{x:240,y:90,rotation:7,duration:1.3,ease:'sine.inOut'},28.9).to('#m4-hand-right',{x:-240,y:90,rotation:-7,duration:1.3,ease:'sine.inOut'},29.05);
+tl.fromTo('#m4-satisfaction',{scale:.35,opacity:0,svgOrigin:'979 609'},{scale:1,opacity:.9,duration:.55,ease:'sine.out',immediateRender:false},31.55);hide('#m4-satisfaction',32.3,1);
+tl.to('#m4-hand-left',{y:420,opacity:0,duration:1.2,ease:'sine.in'},32).to('#m4-hand-right',{y:420,opacity:0,duration:1.2,ease:'sine.in'},32.25);
+show('#m4-pain',33.1,.8,.15);show('#m4-boredom',33.1,.8,1);hide(['#m4-pain','#m4-boredom'],35.8,.6);
+show('#m4-targets',37.25,.45);
+['#m4-target-1','#m4-target-2','#m4-target-3'].forEach((id,i)=>tl.fromTo(id,{scale:.55,opacity:0},{scale:.8,opacity:1,duration:.6,ease:'power2.out',immediateRender:false},37.3+i));
+hide('#m4-targets',41,.5);
+// 4. Short labels and bars avoid creating a second competing reading task.
+show('#m4-dim',42.25,.7,.87);
+function springNotice(id,at){const drive={t:0},omega=15,zeta=.74,wd=omega*Math.sqrt(1-zeta*zeta);
+ tl.set(id,{opacity:1,y:-1000},at);tl.to(drive,{t:.9,duration:.9,ease:'none',onUpdate:()=>{const v=Math.exp(-zeta*omega*drive.t)*(Math.cos(wd*drive.t)+(zeta*omega/wd)*Math.sin(wd*drive.t));gsap.set(id,{y:-1000*v});}},at);tl.set(id,{y:0},at+.9);}
+['#m4-notice-0','#m4-notice-1','#m4-notice-2','#m4-notice-3'].forEach((id,i)=>springNotice(id,43.4+i*1.4));
+tl.to('#m4-notice-0',{y:-42,duration:.5},45).to('#m4-notice-1',{y:-42,duration:.5},46.4).to('#m4-notice-2',{y:-35,duration:.5},47.8);
+hide(['#m4-notice-0','#m4-notice-1','#m4-notice-2','#m4-notice-3'],50.1,.65);
+// 5. Finite scrolling and music stop before the sentence about being unable to bear stillness.
+tl.fromTo('#m4-headphones',{x:-260,opacity:0},{x:0,opacity:1,duration:.7,ease:'power2.out',immediateRender:false},51.55);
+tl.fromTo('#m4-phone',{y:110,opacity:0},{y:0,opacity:1,duration:.75,ease:'power2.out',immediateRender:false},52.05);show('#m4-music',51.7,.6,.85);
+for(let i=0;i<13;i++){tl.fromTo(`#m4-bar-${i}`,{scaleY:.2,svgOrigin:`${1304+i*18} 375`},{scaleY:.45+(i%5)*.25,duration:.24+(i%4)*.06,repeat:5,yoyo:true,ease:'sine.inOut',immediateRender:false},51.9+i*.03);tl.to(`#m4-bar-${i}`,{scaleY:.2,duration:.4},55.05);}
+tl.to('#m4-feed-scroll',{y:-500,duration:.55,ease:'power2.inOut'},52.95).to('#m4-feed-scroll',{y:-1000,duration:.55,ease:'power2.inOut'},54.15);
+hide(['#m4-phone','#m4-headphones','#m4-music'],57.1,1.2);show('#m4-dim',57.15,1.3,.22);
+// 6. Outer chatter moves; the person's small inner light does not.
+show('#m4-quiet-person',60.3,.7);
+['#m4-bubble-0','#m4-bubble-1','#m4-bubble-2'].forEach((id,i)=>{show(id,60.55+i*.4,.45);tl.to(id,{y:-8,duration:.65,repeat:3,yoyo:true,ease:'sine.inOut'},61+i*.3);});
+hide(['#m4-bubble-0','#m4-bubble-1','#m4-bubble-2'],64.4,.7);hide('#m4-quiet-person',64.9,.8);
+// 7. Empty-room hold, 69.5–73: deliberately no new motif, ring, burst or transition.
+// 8. The opening door returns, but now the walker stops while the future still recedes.
+show('#m4-dim',73.4,.7,.85);show(['#m4-future-door','#m4-future-walker'],74.2,.8);
+tl.to('#m4-future-door-leaf',{scaleX:.12,svgOrigin:'-139 0',duration:1.1,ease:'sine.inOut'},75.35);
+steps('m4-future-walker',76.8,8);tl.to('#m4-future-walker',{x:270,duration:2.2,ease:'sine.inOut'},76.8);
+tl.to('#m4-future-door',{x:240,duration:1.6,ease:'sine.inOut'},77.4).to('#m4-future-door',{x:780,opacity:0,duration:1.4,ease:'sine.in'},79.8);
+hide('#m4-future-walker',83.65,.6);show('#m4-dim',83.65,1.5,0);
+// 9. The wall pendulum continues; the seated person stays. One breath of light resolves the film.
+tl.fromTo('#m4-self-camera',{scale:1.08,svgOrigin:'960 540'},{scale:1,duration:20,ease:'sine.inOut',immediateRender:false},84);
+show('#m4-wall-clock',84,.8);show('#m4-self',85.4,1.4);show('#m4-inner-light',85.5,1.4,.35);
+tl.fromTo('#m4-last-pendulum',{rotation:-10,svgOrigin:'0 9'},{rotation:10,duration:1.03,repeat:18,yoyo:true,ease:'sine.inOut',immediateRender:false},84.2);
+tl.to('#m4-inner-light',{scale:1.2,opacity:.85,svgOrigin:'1525 612',duration:2.6,ease:'sine.inOut'},96.2).to('#m4-inner-light',{scale:1,opacity:.65,duration:2.4,ease:'sine.inOut'},98.8);
+tl.seek(0);window.__timelines['motion-motifs-v4']=tl;
+})();
+</script></template></body></html>

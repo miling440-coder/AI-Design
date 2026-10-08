@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"></head>
+<body>
+<template>
+  <style>
+    #bw5-root{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none;background:transparent}
+    #bw5-root .bw5-scene{position:absolute;inset:0;width:100%;height:100%;opacity:0;overflow:hidden}
+    #bw5-root #bw5-street{opacity:1}
+    #bw5-root svg{width:100%;height:100%;display:block;overflow:hidden}
+    #bw5-root .bw5-shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(7,17,23,.8),rgba(7,17,23,.3) 15%,transparent 30%);pointer-events:none}
+  </style>
+  <div data-hf-id="hf-i6fd" id="bw5-root" data-composition-id="background-worlds-v5" data-width="1920" data-height="1080" data-duration="104">
+    <div data-hf-id="hf-ipr9" id="bw5-street" class="bw5-scene"><svg data-hf-id="hf-ugke" id="bw5-street-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-allow-overflow="" /><div data-hf-id="hf-tgur" class="bw5-shade" data-layout-ignore=""></div></div>
+    <div data-hf-id="hf-1yt0" id="bw5-station" class="bw5-scene"><svg data-hf-id="hf-83xh" id="bw5-station-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-allow-overflow="" /><div data-hf-id="hf-nh0z" class="bw5-shade" data-layout-ignore=""></div></div>
+    <div data-hf-id="hf-w33s" id="bw5-park" class="bw5-scene"><svg data-hf-id="hf-zda9" id="bw5-park-svg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" data-layout-allow-overflow="" /><div data-hf-id="hf-n2py" class="bw5-shade" data-layout-ignore=""></div></div>
+  </div>
+  <script>
+  (function(){
+    const R=(x,y,w,h,fill,rx=0,extra='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${fill}" ${extra}/>`;
+    const P=(d,fill,extra='')=>`<path d="${d}" fill="${fill}" ${extra}/>`;
+    const E=(x,y,rx,ry,fill,extra='')=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${fill}" ${extra}/>`;
+    const C=(x,y,r,fill,extra='')=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" ${extra}/>`;
+    const L=(x1,y1,x2,y2,stroke,width=2,extra='')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="${width}" ${extra}/>`;
+    const G=(id,x,y,art,extra='')=>`<g transform="translate(${x} ${y})"><g id="${id}" ${extra}>${art}</g></g>`;
+    const palette={ink:'#17272f',shadow:'#1b3039',blue:'#3c515c',stone:'#657174',warm:'#bea17b',light:'#e8ce9c',green:'#496459'};
+    function defs(p,skyTop,skyBottom){return `<defs>
+      <linearGradient id="${p}-sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="${skyTop}"/><stop offset="1" stop-color="${skyBottom}"/></linearGradient>
+      <linearGradient id="${p}-paving" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#505c5a"/><stop offset="1" stop-color="#243638"/></linearGradient>
+      <linearGradient id="${p}-glass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#9bacaa" stop-opacity=".52"/><stop offset="1" stop-color="#283e4a" stop-opacity=".9"/></linearGradient>
+      <linearGradient id="${p}-wood" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ad916b"/><stop offset="1" stop-color="#5e5c49"/></linearGradient>
+      <radialGradient id="${p}-light"><stop stop-color="#edc994" stop-opacity=".22"/><stop offset="1" stop-color="#edc994" stop-opacity="0"/></radialGradient>
+      <linearGradient id="${p}-vignette" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#102027" stop-opacity=".28"/><stop offset=".45" stop-color="#102027" stop-opacity="0"/><stop offset="1" stop-color="#102027" stop-opacity=".2"/></linearGradient>
+    </defs>`;}
+    // A repeated architectural grammar keeps the exterior and interior worlds in one film.
+    function building(p,x,y,w,h,color,cols=5,rows=9,lit=true){
+      let a=R(x,y,w,h,color)+R(x-5,y,w+10,8,'#73817d',0,'opacity=".38"')+R(x+w-10,y+8,10,h-8,'#102733',0,'opacity=".32"');
+      const cw=(w-26)/cols,rh=(h-32)/rows;
+      for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+        const warm=lit&&(r*7+c*11+Math.floor(x))%9<3;
+        a+=R(x+12+c*cw,y+18+r*rh,cw*.54,rh*.57,warm?'#bdac87':'#243e4b',1,`opacity="${warm?.7:.66}"`);
+        if(cw>20)a+=L(x+12+c*cw+cw*.27,y+18+r*rh,x+12+c*cw+cw*.27,y+18+r*rh+rh*.57,'#526669',1,'opacity=".4"');
+      }
+      return a;
+    }
+    function distantCity(p,baseline,day=false){
+      let a='';
+      const blocks=[[50,215,74],[137,160,90],[245,242,76],[349,175,130],[503,291,70],[598,211,87],[713,170,82],[829,244,125],[986,159,99],[1102,193,83],[1207,269,114],[1347,201,79],[1450,251,107],[1581,164,92],[1695,232,83],[1801,278,105]];
+      blocks.forEach(([x,h,w],i)=>a+=building(p,x,baseline-h,w,h,day?'#778681':['#45606b','#4d6770','#536a72'][i%3],Math.max(2,Math.floor(w/23)),Math.max(4,Math.floor(h/28)),!day));
+      return a;
+    }
+    function lamp(p,id,x,y,h=444){
+      return G(id,x,y,E(0,6,39,12,'#11212a','opacity=".42"')+R(-7,-h,14,h,'#263a42',4)+P(`M-7 ${-h+22} Q-7 ${-h-20} 42 ${-h-20} H84`,'none','stroke="#344a50" stroke-width="9"')+P(`M64 ${-h-18} L104 ${-h-18} L116 ${-h+10} H53 Z`,'#657065')+E(85,-h+10,31,6,'#dbc59b')+E(85,-h+28,115,97,`url(#${p}-light)`)+L(-4,-h+32,-4,-12,'#6c7970',2,'opacity=".35"'));
+    }
+    function pedestrian(p,id,x,y,coat,scale=.38){
+      const art=E(0,4,24,5,'#152930','opacity=".55"')+C(0,-122,14,'#b7a28b')+P('M-15 -119 Q-20 -146 3 -145 Q19 -143 14 -120 Z','#26383c')+P('M-14 -103 Q-29 -101 -26 -74 L-22 -28 L23 -28 L28 -76 Q25 -99 15 -103 Z',coat)+P('M-22 -29 L-8 -29 L-8 0 L-25 0 Z','#23343b',`id="${id}-leg-l"`)+P('M5 -29 L21 -29 L27 0 L10 0 Z','#23343b',`id="${id}-leg-r"`)+P('M-24 -93 L-35 -54 L-32 -40 M23 -94 L35 -57 L30 -45','none','stroke="#9b9e8a" stroke-width="9" stroke-linecap="round"')+R(29,-59,22,32,'#aa956f',4);
+      return `<g transform="translate(${x} ${y}) scale(${scale})"><g id="${id}">${art}</g></g>`;
+    }
+    function car(p,id,x,y,color,scale=.85){
+      const art=E(137,50,143,11,'#172c34','opacity=".42"')+P('M-2 17 L35 10 L73 -36 Q81 -44 98 -44 H166 Q179 -44 192 -31 L225 5 L269 13 Q286 18 284 33 L274 46 H1 Z',color)+P('M85 -35 H129 V3 H59 Z',`url(#${p}-glass)`)+P('M138 -35 H162 Q170 -34 183 -21 L204 3 H138 Z',`url(#${p}-glass)`)+L(137,-39,137,42,'#263e47',3)+L(73,11,206,11,'#b2b5a5',2,'opacity=".38"')+R(145,10,14,4,'#c6c3ab',2)+R(12,21,28,9,'#d6cbb2',2)+R(264,20,14,11,'#e7cd9a',2)+P('M0 38 H281 L274 46 H1 Z','#263c44')+C(65,41,28,'#15262e')+C(218,41,28,'#15262e')+C(65,41,16,'#617073')+C(218,41,16,'#617073')+C(65,41,7,'#2a414a')+C(218,41,7,'#2a414a');
+      return `<g transform="translate(${x} ${y}) scale(${scale})"><g id="${id}" data-layout-allow-overflow="">${art}</g></g>`;
+    }
+    function street(){
+      const p='bw5-a';let a=defs(p,'#172d3e','#859084')+R(0,0,1920,1080,`url(#${p}-sky)`)+E(1055,325,780,470,`url(#${p}-light)`);
+      // The empty sky above the vanishing point leaves room for the door and the question.
+      a+=`<g id="bw5-street-far" opacity=".67">${distantCity(p,612)}${R(0,596,1920,50,'#6f827f',0,'opacity=".35"')}</g>`;
+      a+=`<g id="bw5-street-middle">${building(p,0,64,346,615,'#384c56',8,15)}${building(p,341,224,182,456,'#5a686c',5,12)}${building(p,1515,104,252,574,'#43545b',6,14)}${building(p,1770,32,150,645,'#354a54',4,16)}`;
+      // Shops are recognizable places, not typographic billboards.
+      a+=R(20,493,302,26,'#8c8e79')+P('M13 515 H329 L310 548 H22 Z','#a98d69')+R(24,549,294,129,'#233c43')+R(37,562,92,93,'#b8a27b',3,'opacity=".53"')+R(145,562,67,115,'#3c5257',2)+R(220,562,82,93,'#b4a47e',2,'opacity=".5"')+L(43,569,121,648,'#e4d5b2',2,'opacity=".17"')+L(229,568,296,650,'#e4d5b2',2,'opacity=".16"');
+      a+=R(1551,544,189,137,'#243d46')+R(1565,557,82,96,'#a9a385',2,'opacity=".43"')+R(1660,555,63,124,'#304953',2)+R(1780,549,140,23,'#8e957f')+R(1800,585,117,89,'#b1a989',2,'opacity=".37"');
+      a+=R(0,680,1920,4,'#9caa99',0,'opacity=".38"')+P('M0 640 L960 625 L1920 640 V713 L960 691 L0 712 Z','#2c444c')+L(0,668,1920,668,'#849184',2,'opacity=".28"');
+      for(let i=0;i<12;i++)a+=R(55+i*169,687,80,3,'#9f9c83',1,'opacity=".5"');
+      a+=car(p,'bw5-car-one',390,646,'#8a907f',.7)+car(p,'bw5-car-two',760,654,'#536f7a',.56);
+      a+=pedestrian(p,'bw5-pedestrian-one',1245,655,'#607771',.39)+pedestrian(p,'bw5-pedestrian-two',600,662,'#8b7864',.37);
+      a+='</g>';
+      a+=`<g id="bw5-street-near">${P('M0 713 L960 691 L1920 713 V1080 H0 Z',`url(#${p}-paving)`)}${P('M0 714 L960 692 L1920 714 V740 L960 731 L0 740 Z','#879086')}${L(0,740,1920,740,'#afb1a0',3,'opacity=".44"')}`;
+      for(let i=-5;i<10;i++)a+=L(960+i*57,733,960+i*305,1080,'#b5ac94',2,'opacity=".12"');
+      [780,844,935,1072].forEach((y,i)=>a+=L(0,y,1920,y,'#b5ac94',2,`opacity="${.1+i*.015}"`));
+      a+=lamp(p,'bw5-street-lamp-left',355,741,430)+lamp(p,'bw5-street-lamp-right',1685,741,470);
+      // A steady traffic signal is ambient evidence of city time; it never flashes for effect.
+      a+=R(1431,368,9,361,'#334952',3)+R(1404,337,65,137,'#233640',14)+C(1436,365,16,'#36534b')+C(1436,405,16,'#665d42')+C(1436,445,16,'#a8ad78')+C(1436,445,9,'#c6cca2')+R(1401,350,5,109,'#68766a',2,'opacity=".6"');
+      // Planters and bicycles ground the broad foreground without occupying the hero's route.
+      a+=R(31,723,135,53,'#5d6b60',6)+P('M44 723 Q37 669 53 654 Q71 668 71 718 Q76 658 96 645 Q108 666 102 718 Q129 661 148 662 Q151 690 132 723 Z','#476758')+L(78,722,82,667,'#81927b',2)+L(111,722,132,679,'#81927b',2);
+      a+=`<g transform="translate(1780 703) scale(.86)">${C(-42,15,32,'none','stroke="#1e3640" stroke-width="5"')}${C(52,15,32,'none','stroke="#1e3640" stroke-width="5"')}${P('M-42 15 L-9 -32 L16 15 H-42 L9 -32 L52 15 M9 -32 L7 -49 M-16 -33 H8 M49 11 L33 -50 H45','none','stroke="#929787" stroke-width="4" stroke-linejoin="round"')}${R(0,-53,20,5,'#30454a',2)}</g>`;
+      a+='</g>'+R(0,0,1920,1080,`url(#${p}-vignette)`);
+      return a;
+    }
+    function train(p){
+      let a=R(-700,397,3400,230,'#b1b7a5',24)+R(-700,528,3400,48,'#5d7881')+R(-700,599,3400,28,'#415964')+L(-700,572,2700,572,'#d2c5a6',3);
+      for(let i=0;i<14;i++){
+        const x=-600+i*244;
+        a+=R(x,415,152,94,`url(#${p}-glass)`,9)+P(`M${x+7} 421 L${x+69} 421 L${x+135} 501 L${x+80} 501 Z`,'#dce0c7','opacity=".13"')+R(x+166,410,61,201,'#8fa5a2',6)+R(x+174,421,45,81,'#354f5d',4)+L(x+196,510,x+196,598,'#dde0cc',1,'opacity=".3"')+R(x+174,541,6,30,'#d4ccab',3)+L(x+164,414,x+164,608,'#516d76',2);
+        if(i%3===1)a+=pedestrian(p,`bw5-train-rider-${i}`,x+72,508,'#566d6c',.45);
+      }
+      return a;
+    }
+    function station(){
+      const p='bw5-b';let a=defs(p,'#1a3141','#91a093')+R(0,0,1920,1080,`url(#${p}-sky)`)+`<g opacity=".6">${distantCity(p,573)}</g>`+R(0,563,1920,63,'#5b7477');
+      a+=`<g id="bw5-train" data-layout-allow-overflow="">${train(p)}</g>`;
+      a+=R(0,635,1920,10,'#1e343e')+L(0,649,1920,649,'#90a39d',4)+L(0,670,1920,670,'#2d4650',8)+L(0,683,1920,683,'#a1b2a5',3)+P('M0 697 H1920 V1080 H0 Z',`url(#${p}-paving)`)+R(0,697,1920,25,'#b7ad84')+L(0,724,1920,724,'#d1c8a5',3,'opacity=".55"');
+      for(let x=0;x<1920;x+=17)a+=C(x+7,708,2,'#777c65','opacity=".7"');
+      for(let i=-3;i<9;i++)a+=L(960+i*130,726,960+i*440,1080,'#8f9a8e',2,'opacity=".15"');
+      [771,850,970].forEach(y=>a+=L(0,y,1920,y,'#97a396',2,'opacity=".1"'));
+      // Roof, columns and waiting seats establish a station; the center stays open for desire icons.
+      a+=P('M0 0 H1920 V126 L0 178 Z','#253b45')+P('M0 166 L1920 114 V160 L0 210 Z','#586b6c')+L(0,201,1920,151,'#a7ac92',4,'opacity=".6"');
+      [257,1645].forEach((x,i)=>{a+=R(x,162-i*38,22,597+i*38,'#4a6267',3)+R(x-12,731,46,29,'#687c77',2)+R(x+3,162-i*38,3,565,'#8fa098',1,'opacity=".45"');});
+      for(let i=0;i<8;i++)a+=R(80+i*244,121-i*5,115,7,'#d9ceb0',3,'opacity=".55"');
+      a+=G('bw5-station-bench',286,686,R(0,-93,242,68,`url(#${p}-wood)`,7)+R(-4,-16,250,17,`url(#${p}-wood)`,4)+P('M19 0 L13 57 H28 L35 0 M207 0 L213 57 H229 L222 0','#344f58')+L(7,-69,232,-69,'#cebc93',2,'opacity=".28"')+L(7,-47,232,-47,'#cebc93',2,'opacity=".28"'));
+      a+=pedestrian(p,'bw5-station-waiter',1675,735,'#7d897c',.9)+R(1740,696,36,51,'#8e8067',5)+L(1759,696,1759,678,'#a4ac99',3)+L(1759,678,1770,678,'#a4ac99',3);
+      a+=R(0,0,1920,1080,`url(#${p}-vignette)`);return a;
+    }
+    function tree(p,id,x,y,scale=1,light=false){
+      const leaves=light?'#687e69':'#385747';
+      let crown=E(-17,-256,85,88,leaves)+E(40,-237,75,80,leaves)+E(-61,-202,86,77,leaves)+E(36,-182,94,74,leaves)+E(7,-293,55,58,leaves);
+      crown+=E(-35,-292,39,45,'#83957a','opacity=".18"')+E(-70,-224,36,51,'#83957a','opacity=".14"')+P('M-53 -205 Q-65 -248 -27 -265 M16 -294 Q51 -276 49 -245','none','stroke="#9da987" stroke-width="2" opacity=".14"');
+      return `<g transform="translate(${x} ${y}) scale(${scale})">${P('M-15 0 L-8 -118 L-23 -207 L-11 -211 L5 -147 L16 -215 L27 -210 L12 -111 L23 0 Z','#58644e')}${L(-4,-4,1,-127,'#899076',3,'opacity=".35"')}<g id="${id}-crown">${crown}</g></g>`;
+    }
+    function park(){
+      const p='bw5-c';let a=defs(p,'#67878b','#d0c5a7')+R(0,0,1920,1080,`url(#${p}-sky)`)+E(521,243,535,460,`url(#${p}-light)`)+C(509,222,39,'#ead9ad','opacity=".82"');
+      a+=`<g id="bw5-park-skyline" opacity=".32">${distantCity(p,582,true)}</g>`;
+      a+=P('M0 553 Q190 523 334 557 Q515 520 674 553 Q870 538 1060 561 Q1258 516 1488 555 Q1700 522 1920 555 V671 H0 Z','#789184')+P('M0 613 Q289 582 510 624 Q794 596 985 628 Q1227 580 1480 612 Q1690 592 1920 626 V814 H0 Z','#6c8570');
+      a+=P('M0 782 Q405 660 685 706 Q1006 739 1172 673 Q1434 579 1920 652 V1080 H0 Z','#748367')+P('M0 1080 L0 868 Q386 734 613 743 Q890 754 1102 723 Q1451 676 1920 727 V1080 Z','#b0a98d')+P('M0 1080 L0 926 Q397 782 612 795 Q843 808 1112 756 Q1460 701 1920 764 V1080 Z','#a59e82');
+      a+=P('M0 868 Q387 734 613 743 Q890 754 1102 723 Q1451 676 1920 727','none','stroke="#d0c3a1" stroke-width="6" opacity=".38"')+P('M72 1080 Q490 866 823 873 Q1260 787 1920 899','none','stroke="#716f5c" stroke-width="2" opacity=".17"');
+      // A low retaining wall and distant trees supply depth without closing the central space.
+      a+=P('M0 716 Q280 670 528 714 L528 729 Q246 687 0 735 Z','#929681')+P('M0 735 Q246 687 528 729 V754 Q237 710 0 758 Z','#657a69');
+      a+=tree(p,'bw5-park-tree-left',159,765,1.72)+tree(p,'bw5-park-tree-right',1803,702,1.45)+tree(p,'bw5-park-tree-mid',470,660,.77,true)+tree(p,'bw5-park-tree-far',1142,633,.46,true)+tree(p,'bw5-park-tree-far-two',1330,627,.52,true);
+      a+=`<g id="bw5-park-shadows" opacity=".18">${P('M123 765 Q220 802 572 846 L708 900 Q318 870 84 807 Z','#375945')}${P('M1782 705 Q1630 757 1308 784 L1129 820 Q1559 823 1876 754 Z','#375945')}${E(1521,806,223,34,'#475844')}</g>`;
+      // Seat top at 697: the existing seated figure at (1530,571) has hips at approximately 697.
+      a+=G('bw5-park-bench',1371,697,R(0,-127,357,92,`url(#${p}-wood)`,9)+R(-13,-11,381,19,`url(#${p}-wood)`,6)+P('M18 8 L7 108 H26 L47 8 M312 8 L336 108 H355 L343 8','#435e59')+P('M18 -28 L2 -15 L-15 -15 M336 -28 L361 -15 H381','none','stroke="#516d61" stroke-width="9" stroke-linecap="round"')+L(17,-98,340,-98,'#d2c29a',3,'opacity=".28"')+L(17,-68,340,-68,'#d2c29a',3,'opacity=".28"')+L(17,-41,340,-41,'#625f49',2,'opacity=".4"'));
+      // Small planted edges frame the path; no floating particles or decorative fireworks.
+      for(let i=0;i<27;i++){
+        const x=12+i*22,y=841+(i%5)*4;
+        a+=P(`M${x} ${y} Q${x-8} ${y-22} ${x-5} ${y-32} M${x} ${y} Q${x+10} ${y-19} ${x+14} ${y-23}`,'none','stroke="#687d5f" stroke-width="3" stroke-linecap="round"');
+      }
+      a+=G('bw5-park-birds',891,284,P('M-40 0 Q-26 -12 -12 0 Q2 -12 16 0 M54 27 Q65 18 76 27 Q89 17 100 27','none','stroke="#567774" stroke-width="3" stroke-linecap="round"'),'opacity=".5"');
+      a+=R(0,0,1920,1080,`url(#${p}-vignette)`);return a;
+    }
+    document.getElementById('bw5-street-svg').innerHTML=street();
+    document.getElementById('bw5-station-svg').innerHTML=station();
+    document.getElementById('bw5-park-svg').innerHTML=park();
+    const tl=gsap.timeline({paused:true});
+    tl.addLabel('city-and-deferred-happiness',0);
+    // The main metaphor owns attention. Parallax stays below 12 pixels over the entire opening.
+    tl.fromTo('#bw5-street-far',{x:0},{x:-5,duration:17.8,ease:'none'},0);
+    tl.fromTo('#bw5-street-middle',{x:0},{x:-9,duration:17.8,ease:'none'},0);
+    tl.fromTo('#bw5-car-one',{x:-930},{x:2350,duration:7.1,ease:'none'},5.1);
+    tl.fromTo('#bw5-car-two',{x:1700},{x:-1850,duration:8.4,ease:'none'},4.8);
+    tl.fromTo('#bw5-pedestrian-one',{x:0},{x:-62,duration:12.8,ease:'none'},.8);
+    tl.fromTo('#bw5-pedestrian-two',{x:0},{x:74,duration:11.5,ease:'none'},1.7);
+    [['bw5-pedestrian-one',.8],['bw5-pedestrian-two',1.7]].forEach(([id,at])=>{
+      tl.fromTo(`#${id}-leg-l`,{rotation:-8,svgOrigin:'-16 -29'},{rotation:8,duration:.53,yoyo:true,repeat:19,ease:'sine.inOut',immediateRender:false},at);
+      tl.fromTo(`#${id}-leg-r`,{rotation:8,svgOrigin:'13 -29'},{rotation:-8,duration:.53,yoyo:true,repeat:19,ease:'sine.inOut',immediateRender:false},at);
+    });
+    // The exterior thins away while the already-present pendulum room is revealed underneath.
+    tl.fromTo('#bw5-street',{opacity:1},{opacity:0,duration:1,ease:'sine.inOut',immediateRender:false},17.8);
+    tl.addLabel('goals-as-a-continuing-commute',36.7);
+    tl.fromTo('#bw5-station',{opacity:0},{opacity:1,duration:.8,ease:'sine.inOut',immediateRender:false},36.7);
+    tl.fromTo('#bw5-train',{x:360},{x:-1150,duration:5.05,ease:'none',immediateRender:false},36.7);
+    tl.fromTo('#bw5-station',{opacity:1},{opacity:0,duration:.85,ease:'sine.inOut',immediateRender:false},40.9);
+    tl.addLabel('quiet-open-air',95.5);
+    tl.fromTo('#bw5-park',{opacity:0},{opacity:1,duration:1.3,ease:'sine.inOut',immediateRender:false},95.5);
+    // One distant pair of birds traverses open sky. They finish before the final silent hold.
+    tl.fromTo('#bw5-park-birds',{x:0,y:0},{x:110,y:-14,duration:6.2,ease:'none',immediateRender:false},95.5);
+    tl.fromTo('#bw5-park-tree-left-crown',{rotation:0,svgOrigin:'0 -195'},{rotation:.35,duration:2.1,yoyo:true,repeat:2,ease:'sine.inOut',immediateRender:false},95.5);
+    tl.fromTo('#bw5-park-tree-right-crown',{rotation:0,svgOrigin:'0 -190'},{rotation:-.27,duration:2.3,yoyo:true,repeat:2,ease:'sine.inOut',immediateRender:false},95.5);
+    tl.seek(0);
+    window.__timelines['background-worlds-v5']=tl;
+  })();
+  </script>
+</template>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"></head><body><template>
+<style>
+@font-face { font-family: STSong; src: local("STSong"), local("华文宋体"); }
+@font-face { font-family: SimSun; src: local("SimSun"), local("宋体"); }
+#quiet-captions-v2-root { position:absolute; inset:0; width:100%; height:100%; overflow:hidden; font-family:STSong,SimSun,serif; }
+#quiet-captions-v2-root::before { content:""; position:absolute; inset:69% 0 0; background:linear-gradient(0deg,rgba(4,9,12,.84),rgba(4,9,12,0)); }
+#quiet-captions-v2-root .line { position:absolute; width:1540px; left:190px; bottom:115px; margin:0; color:#f3ede2; font-size:63px; line-height:1.4; font-weight:500; text-align:center; letter-spacing:.025em; text-shadow:0 4px 16px rgba(3,9,13,.86); opacity:0; }
+#quiet-captions-v2-root .line em { font-style:normal; color:#e4ba75; font-weight:700; }
+#quiet-captions-v2-root .line.long { font-size:55px; }
+#quiet-captions-v2-root .line.short { font-size:72px; }
+</style>
+<div data-hf-id="hf-yl61" id="quiet-captions-v2-root" data-composition-id="quiet-captions-v2" data-width="1920" data-height="1080" data-duration="104">
+  <p data-hf-id="hf-e3ay" id="v2-line-01" class="line">我们总以为，再往前一点，生活就会好起来。</p>
+  <p data-hf-id="hf-u62l" id="v2-line-02" class="line">得到一个，又等待下一个。</p>
+  <p data-hf-id="hf-nb16" id="v2-line-03" class="line long">真正拥有以后，兴奋却比想象中消失得更快。</p>
+  <p data-hf-id="hf-tpir" id="v2-line-04" class="line short">一个问题悄悄出现——<em data-hf-id="hf-3uhs">然后呢？</em></p>
+  <p data-hf-id="hf-p7at" id="v2-line-05" class="line">两百年前，叔本华把人生比作一只钟摆。</p>
+  <p data-hf-id="hf-j4n1" id="v2-line-06" class="line short">一边是<em data-hf-id="hf-b0di">痛苦</em>，另一边是<em data-hf-id="hf-f5al">无聊</em>。</p>
+  <p data-hf-id="hf-o9ev" id="v2-line-07" class="line">欲望未满足时，人因缺少而痛苦。</p>
+  <p data-hf-id="hf-0z9d" id="v2-line-08" class="line">满足以后，快乐很短，无聊又重新出现。</p>
+  <p data-hf-id="hf-iw0f" id="v2-line-09" class="line">钟摆再次摆动。新的目标，新的期待，新的欲望。</p>
+  <p data-hf-id="hf-2x4n" id="v2-line-10" class="line">我们不停往生活里增加东西，想盖住那阵空。</p>
+  <p data-hf-id="hf-ps0y" id="v2-line-11" class="line">工作填满白天，消息填满间隙。</p>
+  <p data-hf-id="hf-pmfl" id="v2-line-12" class="line">音乐填满房间，短视频填满深夜。</p>
+  <p data-hf-id="hf-1rkn" id="v2-line-13" class="line">我们越来越不习惯，什么都不发生。</p>
+  <p data-hf-id="hf-og8p" id="v2-line-14" class="line">外面的声音再多，也盖不住里面的安静。</p>
+  <p data-hf-id="hf-f63d" id="v2-line-15" class="line">人群离开，音乐停止，灯一盏盏熄灭。</p>
+  <p data-hf-id="hf-xc82" id="v2-line-16" class="line short">那阵<em data-hf-id="hf-zefr">空</em>，还是会回来。</p>
+  <p data-hf-id="hf-m2g3" id="v2-line-17" class="line">幸福若总在下一个欲望里，此刻就只是等待。</p>
+  <p data-hf-id="hf-7jss" id="v2-line-18" class="line long">难的不是得到更多，而是不再立刻寻找下一样东西。</p>
+  <p data-hf-id="hf-yymw" id="v2-line-19" class="line">不急着逃离，不急着填满。只是安静地，待在那里。</p>
+  <p data-hf-id="hf-d4tl" id="v2-line-20" class="line">钟摆仍会摆动，但你不必追着它走。</p>
+  <p data-hf-id="hf-vvw6" id="v2-line-21" class="line short">当所有声音退去，你终于，<em data-hf-id="hf-7bdn">听见了自己。</em></p>
+</div>
+<script>
+(function(){
+  const tl=gsap.timeline({paused:true});
+  const cues=[
+    [.5,4.5],[4.7,8.3],[8.5,13.1],[13.3,17.5],[17.7,22.4],
+    [22.6,26.1],[26.3,30.6],[30.8,35.8],[36,41.5],[41.8,46.2],
+    [46.4,50.6],[50.8,55.3],[55.5,59],[59.2,64.2],[64.4,69.3],
+    [69.5,73],[73.2,79],[79.2,83.7],[84,89.4],[89.6,94.4],[94.6,104]
+  ];
+  cues.forEach(([start,end],i)=>{
+    const el=document.getElementById(`v2-line-${String(i+1).padStart(2,'0')}`);
+    tl.fromTo(el,{opacity:0,y:18},{opacity:1,y:0,duration:.48,ease:'power2.out',immediateRender:false},start);
+    if(i<cues.length-1)tl.to(el,{opacity:0,y:-7,duration:.34,ease:'sine.inOut'},end-.34);
+  });
+  window.__timelines['quiet-captions-v2']=tl;
+})();
+</script>
+</template></body></html>

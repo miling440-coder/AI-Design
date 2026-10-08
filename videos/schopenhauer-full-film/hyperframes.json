@@ -1,0 +1,30 @@
+{
+  "$schema": "https://hyperframes.heygen.com/schema/hyperframes.json",
+  "registry": "https://raw.githubusercontent.com/heygen-com/hyperframes/main/registry",
+  "paths": {
+    "blocks": "compositions",
+    "components": "compositions/components",
+    "assets": "assets"
+  },
+  "media": {
+    "autoProxy": true
+  },
+  "authoringSkill": "general-video",
+  "registryItems": [
+    {
+      "name": "organic-light-leak-overlay",
+      "type": "hyperframes:block",
+      "target": "compositions/organic-light-leak-overlay.html"
+    },
+    {
+      "name": "native-notification-pop",
+      "type": "hyperframes:component",
+      "target": "compositions/components/native-notification-pop.html"
+    },
+    {
+      "name": "fade-through",
+      "type": "hyperframes:component",
+      "target": "compositions/components/fade-through.html"
+    }
+  ]
+}

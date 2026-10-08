@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #10191e; }
+      #root { width: 100%; height: 100%; position: relative; overflow: hidden; }
+      .clip { position: absolute; inset: 0; width: 100%; height: 100%; }
+      #picture { z-index: 0; }
+      #worlds { z-index: 1; pointer-events: none; }
+      #warm-leak { z-index: 1; pointer-events: none; }
+      #motifs { z-index: 2; pointer-events: none; }
+      #captions { z-index: 3; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <main data-hf-id="hf-114z" id="root" data-composition-id="main" data-start="0" data-duration="104" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-7kwy" id="picture" class="clip" data-composition-id="life-film-v5" data-composition-src="compositions/life-film-v5.html" data-start="0" data-duration="104" data-track-index="0" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-dp1o" id="worlds" class="clip" data-composition-id="background-worlds-v5" data-composition-src="compositions/background-worlds-v5.html" data-start="0" data-duration="104" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-vd40" id="motifs" class="clip" data-composition-id="motion-motifs-v5" data-composition-src="compositions/motion-motifs-v5.html" data-start="0" data-duration="104" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-o25a" id="captions" class="clip" data-composition-id="quiet-captions-v2" data-composition-src="compositions/captions-v2.html" data-start="0" data-duration="104" data-track-index="3" data-track-kind="captions" data-width="1920" data-height="1080"></div>
+    </main>
+    <script>
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>
