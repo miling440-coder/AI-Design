@@ -24,10 +24,12 @@ SUBJECT_GLOW_GAIN = 0.22
 GROUND_GLOW_SIGMA = 1.2
 GROUND_GLOW_GAIN = 0.05
 # 银河
-GAL_LIGHT = 380.0          # 银河粒子亮度
+GAL_LIGHT = 520.0          # 星野亮度
 GAL_GLOW = 0.30            # 小光晕
-GAL_HAZE = 1.1             # 星云柔光（大半径）
+GAL_HAZE = 0.25            # 柔光（银河已移除，只给星点一点氛围）
 GAL_HAZE_SIGMA = 22.0
+# 背景：去掉巨型旋臂银河，只保留向左缓慢流动的三层视差星野
+STAR_N = 13000             # 星点数量
 # 拖尾（运动模糊）：时间偏移与权重
 TRAIL = [(0.0, 0.46), (0.033, 0.24), (0.066, 0.17), (0.10, 0.13)]
 # 字幕：比第二期更小、更靠下，把画面让给粒子
@@ -109,7 +111,11 @@ def merge(n, *arrs):
         pts.append(a[:, :2])
     return spread(np.concatenate(pts), n, 0.18)
 
-def polys_n(polys, n, sp=6.0): return sample_polys(polys, n, max(2.8, sp * 0.6), jitter=0.18)
+def poly_pts(polys, sp=1.2):
+    """按固定间距沿线稿取点，返回 (m,2)，点数随线长变化"""
+    L = sum(float(np.hypot(*np.diff(np.asarray(p, np.float32), axis=0).T).sum()) for p in polys if len(p) >= 2)
+    m = max(1, int(L / sp)); return sample_polys(polys, m, sp, jitter=0.0)[:, :2]
+def polys_n(polys, n, sp=6.0): return sample_polys(polys, n, max(1.6, sp * 0.4), jitter=0.12)
 def dust_ground(n, seed=3, x0=100, x1=1340):
     r = np.random.default_rng(seed); return spread(np.stack([r.uniform(x0, x1, n), GY - np.abs(r.normal(0, 3, n))], 1).astype(np.float32), n)
 def point(n, x, y, s=2.5):
@@ -131,12 +137,12 @@ _dtc = {}
 def text_pts_dense(text, w, sz, spacing):
     k = (text, w, sz, spacing)
     if k in _dtc: return _dtc[k]
-    outline = _orig_text_pts(text, w, sz, 1.6)
+    outline = _orig_text_pts(text, w, sz, 1.0)
     f = font(w, sz); d0 = ImageDraw.Draw(Image.new("L", (8, 8)))
     bb = d0.textbbox((0, 0), text, font=f); tw, th = bb[2] - bb[0] + 20, bb[3] - bb[1] + 20
     im = Image.new("L", (tw, th), 0); ImageDraw.Draw(im).text((10 - bb[0], 10 - bb[1]), text, font=f, fill=255)
     a = cv2.erode((np.array(im) > 128).astype(np.uint8), np.ones((2, 2), np.uint8))
-    g = max(2.6, sz / 52.0)
+    g = max(1.7, sz / 80.0) if sz >= 40 else 1.5   # 填充网格更细，小字也能看清
     gy, gx = np.mgrid[0:th:g, 0:tw:g]; gx = gx + (np.round(gy / g) % 2) * g / 2
     gx = gx.ravel(); gy = gy.ravel(); ok = (gx < tw - 1) & (gy < th - 1)
     gx, gy = gx[ok], gy[ok]; inside = a[gy.astype(int), gx.astype(int)] > 0
@@ -150,12 +156,16 @@ def text_polys_pts(text, cx, cy, sz):
     return text_pts_dense(text, "L", sz, 2) + [cx, cy]
 
 # ------------------------------------------------------------ actors
-HERO = Actor("hero", 620, 1); OBJ = Actor("obj", 2800, 2); OBJ2 = Actor("obj2", 1400, 3)
-CROWD = Actor("crowd", 3600, 4); TXT = Actor("txt", 4600, 5); KW = Actor("kw", 3200, 7)
-MIR = Actor("mir", 620, 8)     # 倒影 / 另一个自己
-SET = Actor("set", 3000, 9)    # 场景环境（窗、灯、书架、树…）
-FAR = Actor("far", 1800, 10)   # 远景天际线 / 山
-BUB = Actor("bub", 2000, 11)   # 漂浮物（弹幕、金币、消息气泡）
+HERO = Actor("hero", 1000, 1); OBJ = Actor("obj", 6000, 2); OBJ2 = Actor("obj2", 3000, 3)
+CROWD = Actor("crowd", 6000, 4); TXT = Actor("txt", 14000, 5); KW = Actor("kw", 10000, 7)
+MIR = Actor("mir", 1000, 8)    # 倒影 / 另一个自己
+SET = Actor("set", 8000, 9)    # 场景环境（窗、灯、书架、树…）
+FAR = Actor("far", 4000, 10)   # 远景天际线 / 山
+BUB = Actor("bub", 14000, 11)  # 漂浮物（弹幕、金币、消息气泡）
+# 粒子变密后整体会变亮，按演员压一点增益；字类演员略压，保证笔画清楚不糊成一片
+for _ac, _g in ((TXT, 0.62), (KW, 0.62), (BUB, 0.7), (OBJ, 0.8), (SET, 0.8), (FAR, 0.85), (CROWD, 0.85)): _ac.br *= _g
+# 会快速移动的漂浮物不做拖尾，否则字会出现重影
+BUB.trail = [(0.0, 1.0)]
 ACTORS = [FAR, SET, BUB, CROWD, OBJ, OBJ2, MIR, KW, TXT, HERO]
 
 def crowd_people(n, specs):
@@ -194,7 +204,7 @@ KWS = [(6.7, 9.3, "被看见", 430, 330, 110, 1),
        (62.2, 66.3, "寂寞", 1120, 240, 120, 0),
        (66.6, 70.5, "独处", 1120, 240, 120, 1),
        (70.9, 74.5, "好卖", 300, 240, 120, 0),
-       (77.5, 81.1, "解药", 300, 240, 120, 0),
+       (77.5, 81.1, "解药", 720, 200, 120, 0),
        (85.9, 89.5, "01:00", 720, 170, 110, 0),
        (108.4, 112.3, "不是病", 1120, 220, 110, 0),
        (116.9, 120.8, "没有错", 720, 170, 96, 0),
@@ -472,7 +482,7 @@ FAR.key(133.4, S(burst_fn(200, 65)), 1.0, a=0.0)
 # ---- BUB：直播弹幕 / 金币雨 / 消息气泡
 DANMU = ["来了来了", "主播晚安", "谢谢老板的礼物", "666", "爱了爱了", "有人陪我聊聊吗", "一个人好无聊", "又失眠了",
          "刷个小心心", "今天也好累", "主播念念我的名字", "陪我到天亮", "睡不着+1", "有人吗"]
-DM_SLOTS = 6
+DM_SLOTS = 5
 def danmaku(n, t):
     per = n // DM_SLOTS; out = []
     for sl in range(DM_SLOTS):
@@ -484,41 +494,45 @@ def danmaku(n, t):
         if best is None:
             q = np.zeros((m, 3), np.float32); q[:, 0] = W + 300; q[:, 1] = 120; out.append(q); continue
         kk, age = best; txt = DANMU[kk % len(DANMU)]
-        lane = [80, 128, 176, 104, 152, 200][sl]; x = W + 60 - age * 300
-        p = text_pts_dense(txt, "L", 30, 2) + [x + 120, lane]
-        q = spread(p, m, 0.1); q[:, 2] = np.where((q[:, 0] > -200), 0.75, 0.0) * (m / max(len(p), 1)) ** 0 * 0.6
+        lane = [78, 132, 186, 105, 159][sl]; x = W + 60 - age * 230
+        p = text_pts_dense(txt, "L", 36, 2) + [x + 140, lane]
+        q = spread(p, m, 0.1); q[:, 2] = np.where((q[:, 0] > -260), 0.55, 0.0)
         out.append(q)
     return np.concatenate(out)
 BUB.key(2.2, A(danmaku), 0.8, a=0.75, swirl=40)
 BUB.key(11.9, S(burst_fn(260, 71)), 1.0, a=0.0)
-_YEN = text_pts_dense("¥", "L", 44, 2)
+_YEN = text_pts_dense("¥", "L", 58, 2)
 def coin_rain(n, t):
-    K = 14; per = n // K; out = []; g = np.random.default_rng(91)
-    xs = g.uniform(80, 1360, K); sp = g.uniform(110, 190, K); ph = g.uniform(0, 1, K); rot = g.uniform(1.5, 4.0, K)
+    K = 10; per = n // K; out = []; g = np.random.default_rng(91)
+    xs = np.linspace(110, 1330, K) + g.uniform(-40, 40, K); g.shuffle(xs)
+    sp = g.uniform(90, 150, K); ph = g.uniform(0, 1, K); rot = g.uniform(1.2, 2.6, K)
     for i in range(K):
         m = per if i < K - 1 else n - per * (K - 1)
-        q_ = ((t - 27.2) * sp[i] / 820 + ph[i]) % 1.0; y = -60 + q_ * 820; ang = rot[i] * t + i
-        c = abs(math.cos(ang)) * 0.9 + 0.1
-        e = circle(xs[i], y, 30, 0, 2 * math.pi, 40); e[:, 0] = xs[i] + (e[:, 0] - xs[i]) * c
-        ring = sample_polys([e], m // 2, 3.0)[:, :2]
+        q_ = ((t - 27.2) * sp[i] / 860 + ph[i]) % 1.0; y = -70 + q_ * 860; ang = rot[i] * t + i
+        c = abs(math.cos(ang)) * 0.88 + 0.12
+        rims = []
+        for R in (44, 37):
+            e = circle(xs[i], y, R, 0, 2 * math.pi, 90); e[:, 0] = xs[i] + (e[:, 0] - xs[i]) * c; rims.append(e)
+        edge = np.array([[xs[i] + 44 * c, y], [xs[i] + 44 * c + 7 * (1 - c), y]], np.float32)   # 侧面厚度
+        ring = poly_pts(rims + [edge], 1.1)
         yen = _YEN * [c, 1] + [xs[i], y]
-        q = spread(np.concatenate([ring[: m // 2], yen]), m, 0.1)
-        q[:, 2] = math.sin(math.pi * q_) ** 0.7 * 0.8; out.append(q)
+        q = spread(np.concatenate([ring, yen]), m, 0.1)
+        q[:, 2] = math.sin(math.pi * q_) ** 0.6 * 0.7; out.append(q)
     return np.concatenate(out)
 BUB.key(27.2, A(coin_rain), 1.2, a=0.6, col=WARM, swirl=60)
 BUB.key(41.3, S(burst_fn(260, 72)), 1.0, a=0.0)
 NOTE = ["在吗", "晚安", "想你了", "宝宝早", "我一直在", "今天怎么样", "陪你聊聊", "别睡太晚", "抱抱", "你最特别"]
 def note_bubbles(n, t):
-    K = 8; per = n // K; out = []; g = np.random.default_rng(93)
-    xs = np.array([150, 1290, 300, 1140, 110, 1330, 420, 1020], float); ph = g.uniform(0, 1, K)
+    K = 6; per = n // K; out = []; g = np.random.default_rng(93)
+    xs = np.array([190, 1250, 330, 1110, 170, 1270], float); ph = np.arange(K) / K + g.uniform(-0.04, 0.04, K)
     for i in range(K):
         m = per if i < K - 1 else n - per * (K - 1)
-        q_ = ((t - 70.8) / 6.5 + ph[i]) % 1.0; y = GY - 40 - q_ * 600; x = xs[i] + 18 * math.sin(t * 0.8 + i)
-        txt = NOTE[(i + int((t - 70.8) / 6.5 + ph[i]) * 3) % len(NOTE)]
-        tw = 30 * len(txt) + 40
-        body = sample_polys([rrect(x, y, tw, 56, 20), np.array([[x - tw / 2 + 20, y + 26], [x - tw / 2 + 8, y + 44], [x - tw / 2 + 38, y + 28]], np.float32)], m // 2, 3.0)[:, :2]
-        q = spread(np.concatenate([body[: m // 2], text_pts_dense(txt, "L", 28, 2) + [x, y]]), m, 0.1)
-        q[:, 2] = math.sin(math.pi * q_) ** 0.8 * 0.85; out.append(q)
+        q_ = ((t - 70.8) / 7.5 + ph[i]) % 1.0; y = GY - 50 - q_ * 580; x = xs[i] + 16 * math.sin(t * 0.7 + i)
+        txt = NOTE[(i + int((t - 70.8) / 7.5 + ph[i]) * 3) % len(NOTE)]
+        tw = 36 * len(txt) + 54
+        body = poly_pts([rrect(x, y, tw, 66, 24), np.array([[x - tw / 2 + 24, y + 31], [x - tw / 2 + 10, y + 52], [x - tw / 2 + 44, y + 33]], np.float32)], 1.2)
+        q = spread(np.concatenate([body, text_pts_dense(txt, "L", 34, 2) + [x, y]]), m, 0.1)
+        q[:, 2] = math.sin(math.pi * q_) ** 0.7 * 0.6; out.append(q)
     return np.concatenate(out)
 BUB.key(70.8, A(note_bubbles), 1.4, a=0.7, swirl=80)
 BUB.key(85.8, S(burst_fn(240, 73)), 1.0, a=0.0)
@@ -798,7 +812,7 @@ def _gpu_static():
     _G["BG"] = T(BG).view(3, 1, 1); _G["SPOT"] = T(SPOT[..., 0])[None]; _G["SUB"] = T(SUBBAND[..., 0])[None]
     _G["SPOTC"] = T(np.array([60, 56, 50], np.float32)).view(3, 1, 1)
     _G["SEPM"] = T(np.array([1.08, 0.94, 0.72], np.float32)).view(3, 1, 1); _G["SEPA"] = T(np.array([7, 5, 2], np.float32)).view(3, 1, 1)
-    _G["GAL"] = Galaxy(); _G["spr"] = {}
+    _G["GAL"] = Galaxy(n_arm=0, n_core=0, n_field=STAR_N); _G["spr"] = {}
     return _G
 
 def blit_t(canvas, spr, cx, cy, alpha):
@@ -817,7 +831,7 @@ def actor_particles(t, cam):
     """所有前景演员 + 拖尾（多个时间偏移的加权叠加）"""
     z = cam[0]; Ps, Ws, Cs = [], [], []
     for ac in ACTORS:
-        for (dt, wgt) in TRAIL:
+        for (dt, wgt) in getattr(ac, "trail", TRAIL):
             st = ac.state(t - dt)
             if st is None: continue
             P, al, co = st
@@ -881,13 +895,13 @@ def render_gpu(t, as_tensor=False):
         f = fade(t, t0, t1, 0.3, 0.3)
         if f > 0: canvas = blit_t(canvas, rich_sprite(s, SUB_SIZE), 720, SUB_Y + 6 * (1 - f), f)
     f = fade(t, 17.3, 20.4, 0.6, 0.5)
-    if f > 0: canvas = blit_t(canvas, rich_sprite("第三期 · 给空心的人", 34, (210, 205, 196)), 720, 548, f)
+    if f > 0: canvas = blit_t(canvas, rich_sprite("第三期", 34, (210, 205, 196)), 720, 548, f)
     f = fade(t, 56.0, 57.7, 0.12, 0.4)
     if f > 0:
         k = float(eout((t - 56.0) / 0.45)); sz = int(140 + 70 * (1 - k))
         canvas = blit_t(canvas, rich_sprite("〔谁在陪你？〕", sz), 720, 450, f)
     f = fade(t, 153.9, 157.4, 0.5, 0.5)
-    if f > 0: canvas = blit_t(canvas, rich_sprite("评论区聊聊  ·  下期：焦虑与自由", 26, (200, 196, 188)), 720, 1064, f)
+    if f > 0: canvas = blit_t(canvas, rich_sprite("评论区聊聊", 26, (200, 196, 188)), 720, 1064, f)
     out = canvas.clamp(0, 255).to(torch.uint8).permute(1, 2, 0).contiguous()
     return out if as_tensor else out.cpu().numpy()
 
