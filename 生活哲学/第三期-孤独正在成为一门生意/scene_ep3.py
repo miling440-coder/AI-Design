@@ -153,7 +153,10 @@ def text_polys_pts(text, cx, cy, sz):
 HERO = Actor("hero", 620, 1); OBJ = Actor("obj", 2800, 2); OBJ2 = Actor("obj2", 1400, 3)
 CROWD = Actor("crowd", 3600, 4); TXT = Actor("txt", 4600, 5); KW = Actor("kw", 3200, 7)
 MIR = Actor("mir", 620, 8)     # 倒影 / 另一个自己
-ACTORS = [CROWD, OBJ, OBJ2, MIR, KW, TXT, HERO]
+SET = Actor("set", 3000, 9)    # 场景环境（窗、灯、书架、树…）
+FAR = Actor("far", 1800, 10)   # 远景天际线 / 山
+BUB = Actor("bub", 2000, 11)   # 漂浮物（弹幕、金币、消息气泡）
+ACTORS = [FAR, SET, BUB, CROWD, OBJ, OBJ2, MIR, KW, TXT, HERO]
 
 def crowd_people(n, specs):
     per = n // len(specs); out = []
@@ -170,7 +173,19 @@ def hand_xy(x, y, h=HH, flip=False):
     return (x + (0.43 * h if not flip else -0.43 * h), y - 0.47 * h)
 
 # ---- 关键词点阵（与字幕同步出现 / 炸散）
-KWS = [(9.4, 11.7, "¥6", 1110, 300, 130, 1),
+KWS = [(6.7, 9.3, "被看见", 430, 330, 110, 1),
+       (9.4, 11.7, "¥6", 1110, 300, 130, 1),
+       (14.4, 16.4, "价格", 720, 170, 120, 1),
+       (24.9, 27.1, "屏幕", 720, -150, 240, 0),
+       (27.2, 30.2, "按小时", 720, 140, 100, 0),
+       (30.3, 33.6, "按月", 720, 140, 110, 0),
+       (33.8, 37.4, "永远在线", 720, 140, 96, 0),
+       (41.3, 45.2, "什么都买得到", 720, 250, 80, 0),
+       (81.4, 85.6, "待一会儿", 1110, 230, 96, 1),
+       (89.8, 92.3, "安静", 720, 170, 130, 1),
+       (93.6, 97.6, "只差一件事", 720, 250, 90, 0),
+       (144.9, 147.6, "还会再来", 1120, 200, 96, 0),
+       (147.8, 153.3, "你的", 1120, 200, 140, 1),
        (20.9, 24.8, "1 亿 +", 1120, 150, 96, 0),
        (37.6, 41.1, "续费", 720, 200, 120, 1),
        (45.4, 49.5, "真人", 1100, 300, 110, 0),
@@ -180,7 +195,7 @@ KWS = [(9.4, 11.7, "¥6", 1110, 300, 130, 1),
        (66.6, 70.5, "独处", 1120, 240, 120, 1),
        (70.9, 74.5, "好卖", 300, 240, 120, 0),
        (77.5, 81.1, "解药", 300, 240, 120, 0),
-       (85.9, 89.5, "01:00", 1080, 290, 110, 0),
+       (85.9, 89.5, "01:00", 720, 170, 110, 0),
        (108.4, 112.3, "不是病", 1120, 220, 110, 0),
        (116.9, 120.8, "没有错", 720, 170, 96, 0),
        (120.9, 125.0, "所有的安静", 720, 170, 88, 0),
@@ -192,6 +207,7 @@ KWS = [(9.4, 11.7, "¥6", 1110, 300, 130, 1),
        (141.7, 144.8, "我陪我", 720, 220, 104, 1)]
 def _kw_fn(txt, x, y, sz): return lambda n, t: text_shape(txt, x, y, sz, n, "L", 4)
 def _kw_burst(seed): return lambda n, t, prev: burst(prev, 240, seed)
+KWS.sort()
 for i, (t0, t1, txt, x, y, sz, wm) in enumerate(KWS):
     KW.key(t0, S(_kw_fn(txt, x, y, sz)), 0.9, a=0.9, col=WARM if wm else FG, stag=0.35, swirl=110)
     KW.key(t1 - 0.25, S(_kw_burst(40 + i)), 0.8, a=0.0, stag=0.25)
@@ -328,6 +344,185 @@ OBJ2.key(49.8, hidden(OBJ2), 0.5, a=0.0)
 for ac, sd in ((OBJ, 21), (CROWD, 22), (HERO, 23)):
     ac.key(56.0, S(burst_fn(520, sd, HX, 450)), 0.9, a=0.0, stag=0.2, swirl=80)
 
+# ================================================================ 场景环境 / 远景 / 漂浮物（让画面不空）
+def moon_polys(cx, cy, r):
+    return [circle(cx, cy, r, -1.9, 1.9, 40), circle(cx + r * 0.45, cy, r * 0.82, -1.6, 1.6, 36)[::-1]]
+def window_polys(cx, cy, w=220, h=260, moon=True):
+    ps = [rect(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2), np.array([[cx, cy - h / 2], [cx, cy + h / 2]], np.float32),
+          np.array([[cx - w / 2, cy], [cx + w / 2, cy]], np.float32), np.array([[cx - w / 2 - 18, cy + h / 2 + 8], [cx + w / 2 + 18, cy + h / 2 + 8]], np.float32)]
+    # 窗帘
+    for sgn in (-1, 1):
+        x0 = cx + sgn * (w / 2 + 6); ps.append(np.array([[x0 + sgn * 6 * math.sin(k * 0.9), cy - h / 2 - 20 + k * (h + 30) / 12] for k in range(13)], np.float32))
+    if moon: ps += moon_polys(cx + w * 0.22, cy - h * 0.24, 22)
+    return ps
+def lamp_polys(x):
+    return lines([[x, GY], [x, GY - 230]], [[x - 26, GY], [x + 26, GY]], [[x - 40, GY - 230], [x + 40, GY - 230], [x + 26, GY - 290], [x - 26, GY - 290], [x - 40, GY - 230]])
+def nightstand(x):
+    return lines([[x - 50, GY], [x - 50, GY - 80], [x + 50, GY - 80], [x + 50, GY]], [[x - 50, GY - 40], [x + 50, GY - 40]])
+def pendant_polys(cx, cord=330):
+    ps = lines([[cx, 0], [cx, cord]])
+    ps.append(circle(cx, cord + 46, 46, math.pi, 2 * math.pi, 30)); ps += lines([[cx - 46, cord + 46], [cx + 46, cord + 46]])
+    for k in (-1, 0, 1):   # 光锥（虚线）
+        p0 = np.array([cx + k * 30, cord + 60]); p1 = np.array([cx + k * 120, cord + 200])
+        for j in range(6): ps.append(np.stack([p0 + (p1 - p0) * (j / 6), p0 + (p1 - p0) * (j / 6 + 0.08)]).astype(np.float32))
+    return ps
+def bookshelf_polys(x0, x1, top):
+    ps = [rect(x0, top, x1, GY)]; g = np.random.default_rng(int(x0))
+    sh = np.linspace(top, GY, 5)
+    for y in sh[1:-1]: ps.append(np.array([[x0, y], [x1, y]], np.float32))
+    for a, b in zip(sh[:-1], sh[1:]):
+        x = x0 + 8
+        while x < x1 - 16:
+            w = float(g.uniform(8, 18)); hgt = float(g.uniform(0.55, 0.9)) * (b - a)
+            ps.append(rect(x, b - hgt, x + w, b)); x += w + float(g.uniform(1, 6))
+    return ps
+def streetlamp_polys(x, flip=False):
+    d = -1 if flip else 1
+    ps = lines([[x, GY], [x, GY - 330]], [[x, GY - 330], [x + d * 26, GY - 352], [x + d * 70, GY - 352]], [[x - 18, GY], [x + 18, GY]])
+    ps += lines([[x + d * 52, GY - 352], [x + d * 88, GY - 352], [x + d * 80, GY - 340], [x + d * 60, GY - 340], [x + d * 52, GY - 352]])
+    for k in (-1, 0, 1):
+        p0 = np.array([x + d * 70 + k * 8, GY - 336]); p1 = np.array([x + d * 70 + k * 90, GY - 10])
+        for j in range(8): ps.append(np.stack([p0 + (p1 - p0) * (j / 8), p0 + (p1 - p0) * (j / 8 + 0.06)]).astype(np.float32))
+    return ps
+def skyline_poly(x0, x1, seed, hmin=60, hmax=230, base=GY):
+    g = np.random.default_rng(seed); pts = [[x0, base]]; x = x0
+    while x < x1:
+        w = float(g.uniform(30, 90)); h = float(g.uniform(hmin, hmax)); pts += [[x, base - h], [x + w, base - h]]
+        if g.random() < 0.2: pts += [[x + w * 0.5, base - h], [x + w * 0.5, base - h - 40], [x + w * 0.5, base - h]]
+        x += w
+    pts.append([x, base]); return [np.array(pts, np.float32)]
+def hills_polys(off=0.0):
+    x = np.linspace(-200, 1640, 120)
+    a = GY - 90 - 60 * np.sin(x / 260 + 0.6 + off) - 30 * np.sin(x / 97 + off * 2)
+    b = GY - 40 - 40 * np.sin(x / 180 + 2.2 + off * 1.5)
+    return [np.stack([x, a], 1).astype(np.float32), np.stack([x, b], 1).astype(np.float32)]
+def tree_polys(cx, base, u, size=1.0):
+    ps = []
+    def br(p, ang, L, d):
+        if d > 6: return
+        grow = cl(u * 7 - d)
+        if grow <= 0: return
+        q = p + np.array([math.sin(ang), -math.cos(ang)]) * L * grow
+        ps.append(np.stack([p, q]).astype(np.float32))
+        if grow >= 1:
+            br(q, ang - 0.42 - 0.05 * d, L * 0.74, d + 1); br(q, ang + 0.36 + 0.04 * d, L * 0.70, d + 1)
+    br(np.array([cx, base], float), 0.0, 92 * size, 0)
+    return ps
+def ripple_rings(t, cx, n_r=4, rmax=520, period=3.2):
+    ps = []
+    for k in range(n_r):
+        q = ((t / period) + k / n_r) % 1.0; r = 40 + q * rmax
+        e = circle(cx, GY, r, 0, 2 * math.pi, 90); e[:, 1] = GY + (e[:, 1] - GY) * 0.12 + 6
+        ps.append((e, (1 - q) ** 1.2))
+    return ps
+
+# ---- SET 时间轴
+SET.key(0.0, S(lambda n, t: polys_n(window_polys(240, 330) + lamp_polys(1060) + nightstand(1060 - 110 * 0), n, 5)), 1.8, a=0.55, swirl=100)
+SET.key(3.9, S(lambda n, t: polys_n(window_polys(170, 300, 200, 240) + lamp_polys(660), n, 5)), 1.2, a=0.5, swirl=80)
+SET.key(11.9, S(burst_fn(320, 51)), 1.0, a=0.0)
+SET.key(41.3, A(lambda n, t: polys_n(pendant_polys(360 - tbl_x(t) + 80) + pendant_polys(1080 + tbl_x(t) - 80) +
+                                    [rect(640, 260, 800, 470), np.array([[720, 260], [720, 470]], np.float32)], n, 5)), 1.3, a=0.5, swirl=100)
+SET.key(49.8, S(burst_fn(260, 52)), 1.0, a=0.0)
+SET.key(57.8, S(lambda n, t: polys_n(bookshelf_polys(960, 1320, 360) + window_polys(250, 330, 180, 220, False), n, 5)), 1.6, a=0.5, swirl=120)
+SET.key(62.1, S(lambda n, t: polys_n(streetlamp_polys(170) + streetlamp_polys(1270, True), n, 5)), 1.2, a=0.55, swirl=100)
+def moon_ripples(n, t):
+    m = sample_polys(moon_polys(1120, 200, 60), n // 3, 3.0)
+    rs = ripple_rings(t, HX); out = [m]; per = (n - len(m)) // len(rs)
+    for i, (e, w) in enumerate(rs):
+        k = per if i < len(rs) - 1 else n - len(m) - per * (len(rs) - 1)
+        a = sample_polys([e], k, 3.0); a[:, 2] *= w; out.append(a)
+    return np.concatenate(out)
+SET.key(66.5, A(moon_ripples), 1.5, a=0.6, col=WARM, swirl=80)
+SET.key(70.8, S(burst_fn(260, 53)), 1.0, a=0.0)
+SET.key(85.8, S(lambda n, t: polys_n(window_polys(1120, 330, 220, 260) + nightstand(1000), n, 5)), 1.2, a=0.5, swirl=100)
+def stage(n, t):
+    e = circle(HX, GY, 330, 0, 2 * math.pi, 120); e[:, 1] = GY + (e[:, 1] - GY) * 0.10
+    e2 = circle(HX, GY, 420 + 10 * math.sin(t * 2), 0, 2 * math.pi, 140); e2[:, 1] = GY + (e2[:, 1] - GY) * 0.12
+    return polys_n([e, e2], n, 4)
+SET.key(93.6, A(stage), 1.6, a=0.45, col=WARM, swirl=120)
+SET.key(108.2, A(lambda n, t: polys_n(hills_polys(0.02 * (t - 108)) + moon_polys(250, 210, 46), n, 5)), 1.8, a=0.45, swirl=120)
+def lamps_moving(n, t):
+    ps = []
+    for k in range(5):
+        x = ((k * 420 - (t - 129.2) * 160) % 2100) - 300
+        ps += streetlamp_polys(x)
+    return polys_n(ps, n, 5)
+SET.key(129.2, A(lamps_moving), 1.2, a=0.5, swirl=80)
+def tree_grow(n, t):
+    u = 0.15 + 0.85 * float(cl((t - 133.5) / 11.0))
+    return polys_n(tree_polys(150, GY, u, 0.85) + [circle(150, GY, 6, k=12)], n, 4)
+SET.key(133.5, A(tree_grow), 1.0, a=0.6, col=WARM, swirl=80)
+SET.key(144.9, S(lambda n, t: polys_n(hills_polys(0.3) + tree_polys(1180, GY, 1.0, 1.0), n, 5)), 1.8, a=0.5, swirl=100)
+SET.key(147.7, S(lambda n, t: polys_n(hills_polys(0.3) + tree_polys(1180, GY, 1.0, 1.0), n, 5)), 2.0, a=0.6, col=WARM, stag=0.6, swirl=5)
+
+# ---- FAR：远处天际线（很淡）
+SKY = skyline_poly(-300, 1740, 77, 50, 200)
+def skyline_s(a=0.0): return lambda n, t: polys_n([p + [a, 0] for p in SKY], n, 5)
+FAR.key(27.2, S(skyline_s()), 1.8, a=0.22, swirl=100)
+FAR.key(41.3, S(burst_fn(200, 61)), 1.0, a=0.0)
+FAR.key(49.8, S(skyline_s()), 1.5, a=0.25, swirl=100)
+FAR.key(56.0, S(burst_fn(400, 62, HX, 450)), 0.9, a=0.0)
+FAR.key(62.1, S(skyline_s()), 1.5, a=0.25, swirl=100)
+FAR.key(66.5, S(burst_fn(200, 63)), 1.0, a=0.0)
+FAR.key(70.8, S(skyline_s()), 1.5, a=0.16, swirl=100)
+FAR.key(85.8, S(burst_fn(200, 64)), 1.0, a=0.0)
+FAR.key(129.2, A(lambda n, t: polys_n([p + [-(t - 129.2) * 30, 0] for p in skyline_poly(-300, 2400, 78, 40, 180)], n, 5)), 1.5, a=0.22, swirl=80)
+FAR.key(133.4, S(burst_fn(200, 65)), 1.0, a=0.0)
+
+# ---- BUB：直播弹幕 / 金币雨 / 消息气泡
+DANMU = ["来了来了", "主播晚安", "谢谢老板的礼物", "666", "爱了爱了", "有人陪我聊聊吗", "一个人好无聊", "又失眠了",
+         "刷个小心心", "今天也好累", "主播念念我的名字", "陪我到天亮", "睡不着+1", "有人吗"]
+DM_SLOTS = 6
+def danmaku(n, t):
+    per = n // DM_SLOTS; out = []
+    for sl in range(DM_SLOTS):
+        m = per if sl < DM_SLOTS - 1 else n - per * (DM_SLOTS - 1)
+        k = int((t - 2.0) / 0.55); best = None
+        for kk in range(k, k - 14, -1):           # 该槽位上最近一条弹幕
+            if kk < 0 or kk % DM_SLOTS != sl: continue
+            age = t - 2.0 - kk * 0.55; best = (kk, age); break
+        if best is None:
+            q = np.zeros((m, 3), np.float32); q[:, 0] = W + 300; q[:, 1] = 120; out.append(q); continue
+        kk, age = best; txt = DANMU[kk % len(DANMU)]
+        lane = [80, 128, 176, 104, 152, 200][sl]; x = W + 60 - age * 300
+        p = text_pts_dense(txt, "L", 30, 2) + [x + 120, lane]
+        q = spread(p, m, 0.1); q[:, 2] = np.where((q[:, 0] > -200), 0.75, 0.0) * (m / max(len(p), 1)) ** 0 * 0.6
+        out.append(q)
+    return np.concatenate(out)
+BUB.key(2.2, A(danmaku), 0.8, a=0.75, swirl=40)
+BUB.key(11.9, S(burst_fn(260, 71)), 1.0, a=0.0)
+_YEN = text_pts_dense("¥", "L", 44, 2)
+def coin_rain(n, t):
+    K = 14; per = n // K; out = []; g = np.random.default_rng(91)
+    xs = g.uniform(80, 1360, K); sp = g.uniform(110, 190, K); ph = g.uniform(0, 1, K); rot = g.uniform(1.5, 4.0, K)
+    for i in range(K):
+        m = per if i < K - 1 else n - per * (K - 1)
+        q_ = ((t - 27.2) * sp[i] / 820 + ph[i]) % 1.0; y = -60 + q_ * 820; ang = rot[i] * t + i
+        c = abs(math.cos(ang)) * 0.9 + 0.1
+        e = circle(xs[i], y, 30, 0, 2 * math.pi, 40); e[:, 0] = xs[i] + (e[:, 0] - xs[i]) * c
+        ring = sample_polys([e], m // 2, 3.0)[:, :2]
+        yen = _YEN * [c, 1] + [xs[i], y]
+        q = spread(np.concatenate([ring[: m // 2], yen]), m, 0.1)
+        q[:, 2] = math.sin(math.pi * q_) ** 0.7 * 0.8; out.append(q)
+    return np.concatenate(out)
+BUB.key(27.2, A(coin_rain), 1.2, a=0.6, col=WARM, swirl=60)
+BUB.key(41.3, S(burst_fn(260, 72)), 1.0, a=0.0)
+NOTE = ["在吗", "晚安", "想你了", "宝宝早", "我一直在", "今天怎么样", "陪你聊聊", "别睡太晚", "抱抱", "你最特别"]
+def note_bubbles(n, t):
+    K = 8; per = n // K; out = []; g = np.random.default_rng(93)
+    xs = np.array([150, 1290, 300, 1140, 110, 1330, 420, 1020], float); ph = g.uniform(0, 1, K)
+    for i in range(K):
+        m = per if i < K - 1 else n - per * (K - 1)
+        q_ = ((t - 70.8) / 6.5 + ph[i]) % 1.0; y = GY - 40 - q_ * 600; x = xs[i] + 18 * math.sin(t * 0.8 + i)
+        txt = NOTE[(i + int((t - 70.8) / 6.5 + ph[i]) * 3) % len(NOTE)]
+        tw = 30 * len(txt) + 40
+        body = sample_polys([rrect(x, y, tw, 56, 20), np.array([[x - tw / 2 + 20, y + 26], [x - tw / 2 + 8, y + 44], [x - tw / 2 + 38, y + 28]], np.float32)], m // 2, 3.0)[:, :2]
+        q = spread(np.concatenate([body[: m // 2], text_pts_dense(txt, "L", 28, 2) + [x, y]]), m, 0.1)
+        q[:, 2] = math.sin(math.pi * q_) ** 0.8 * 0.85; out.append(q)
+    return np.concatenate(out)
+BUB.key(70.8, A(note_bubbles), 1.4, a=0.7, swirl=80)
+BUB.key(85.8, S(burst_fn(240, 73)), 1.0, a=0.0)
+
 # ================================================================ ACT 2  阿伦特：寂寞与独处
 DX = 700
 def desk_like(x):
@@ -386,7 +581,7 @@ HERO.key(85.8, S(lambda n, t: person("sit", HX, GY, HH, n)), 1.2, a=1.0, swirl=4
 OBJ.key(85.8, A(lambda n, t: polys_n(clock_polys(330, 330, 90, t * 2.2, t * 0.18), n, 5)), 1.2, a=0.6, swirl=100)
 # 90.7 屏幕熄灭；92.4 全部收成一点
 OBJ2.key(90.7, S(lambda n, t, prev: burst(prev, 160, 35)), 0.6, a=0.0, stag=0.15)
-for ac in (HERO, OBJ, OBJ2, MIR, CROWD):
+for ac in (HERO, OBJ, OBJ2, MIR, CROWD, SET):
     ac.key(92.4, S(lambda n, t: point(n, HX, 540, 2.0)), 1.0, a=0.6, stag=0.3, swirl=90)
 
 # ================================================================ ACT 3  把安静拿回来
@@ -443,7 +638,7 @@ HERO.key(144.9, S(lambda n, t: person("sit", HX, GY, HH, n)), 1.4, swirl=60)
 MIR.key(145.2, S(lambda n, t: refl(person("sit", HX, GY, HH, n))), 1.6, a=0.30, col=FG, swirl=60, stag=0.6)
 HERO.key(147.7, S(lambda n, t: person("lookup", HX, GY, HH, n)), 1.6, col=WARM, stag=0.6, swirl=10)
 MIR.key(147.7, S(lambda n, t: refl(person("lookup", HX, GY, HH, n))), 1.8, a=0.45, col=WARM, stag=0.6, swirl=10)
-for ac in (HERO, OBJ, OBJ2, TXT, CROWD, MIR, KW):
+for ac in (HERO, OBJ, OBJ2, TXT, CROWD, MIR, KW, SET, FAR, BUB):
     ac.key(157.2, S(lambda n, t: point(n, HX, 540, 2.0)), 1.6, a=0.04, stag=0.3, swirl=50)
 
 for a in ACTORS: a.prep()
@@ -686,13 +881,13 @@ def render_gpu(t, as_tensor=False):
         f = fade(t, t0, t1, 0.3, 0.3)
         if f > 0: canvas = blit_t(canvas, rich_sprite(s, SUB_SIZE), 720, SUB_Y + 6 * (1 - f), f)
     f = fade(t, 17.3, 20.4, 0.6, 0.5)
-    if f > 0: canvas = blit_t(canvas, rich_sprite("第三期", 34, (210, 205, 196)), 720, 548, f)
+    if f > 0: canvas = blit_t(canvas, rich_sprite("第三期 · 给空心的人", 34, (210, 205, 196)), 720, 548, f)
     f = fade(t, 56.0, 57.7, 0.12, 0.4)
     if f > 0:
         k = float(eout((t - 56.0) / 0.45)); sz = int(140 + 70 * (1 - k))
         canvas = blit_t(canvas, rich_sprite("〔谁在陪你？〕", sz), 720, 450, f)
     f = fade(t, 153.9, 157.4, 0.5, 0.5)
-    if f > 0: canvas = blit_t(canvas, rich_sprite("评论区聊聊 ", 26, (200, 196, 188)), 720, 1064, f)
+    if f > 0: canvas = blit_t(canvas, rich_sprite("评论区聊聊  ·  下期：焦虑与自由", 26, (200, 196, 188)), 720, 1064, f)
     out = canvas.clamp(0, 255).to(torch.uint8).permute(1, 2, 0).contiguous()
     return out if as_tensor else out.cpu().numpy()
 
