@@ -24,12 +24,21 @@ SUBJECT_GLOW_GAIN = 0.22
 GROUND_GLOW_SIGMA = 1.2
 GROUND_GLOW_GAIN = 0.05
 # 银河
-GAL_LIGHT = 520.0          # 星野亮度
-GAL_GLOW = 0.30            # 小光晕
-GAL_HAZE = 0.25            # 柔光（银河已移除，只给星点一点氛围）
+GAL_LIGHT = 230.0          # 星野亮度（退后一层，只做氛围）
+GAL_GLOW = 0.12            # 小光晕
+GAL_HAZE = 0.06            # 柔光
 GAL_HAZE_SIGMA = 22.0
 # 背景：去掉巨型旋臂银河，只保留向左缓慢流动的三层视差星野
-STAR_N = 13000             # 星点数量
+STAR_N = 9000              # 星点数量
+# 景深：环境线稿（远景/场景）单独成层，虚一点、暗一点，把视线让给人物和文字
+BG_LAYER_GAIN = 0.55
+BG_LAYER_SIGMA = 1.1
+# 凝字：粒子汇聚后浮现完整发光字
+GLYPH_FILL = 1.10          # 实体字亮度（粒子让位后由实体字撑起亮度，保持原先的高亮）
+GLYPH_GLOW = 0.42          # 字外光晕
+GLYPH_CORE_WHITE = 0.35    # 笔画本体向暖白靠拢的比例
+GLYPH_BOLD = 1.0           # 笔画加粗（0 = 字体原粗细）
+GLYPH_SHEEN = 0.55         # 定格后扫过一次的高光
 # 拖尾（运动模糊）：时间偏移与权重
 TRAIL = [(0.0, 0.46), (0.033, 0.24), (0.066, 0.17), (0.10, 0.13)]
 # 字幕：比第二期更小、更靠下，把画面让给粒子
@@ -142,7 +151,7 @@ def text_pts_dense(text, w, sz, spacing):
     bb = d0.textbbox((0, 0), text, font=f); tw, th = bb[2] - bb[0] + 20, bb[3] - bb[1] + 20
     im = Image.new("L", (tw, th), 0); ImageDraw.Draw(im).text((10 - bb[0], 10 - bb[1]), text, font=f, fill=255)
     a = cv2.erode((np.array(im) > 128).astype(np.uint8), np.ones((2, 2), np.uint8))
-    g = max(1.7, sz / 80.0) if sz >= 40 else 1.5   # 填充网格更细，小字也能看清
+    g = max(1.35, sz / 100.0) if sz >= 40 else 1.3   # 填充网格更细，粒子字接近实心
     gy, gx = np.mgrid[0:th:g, 0:tw:g]; gx = gx + (np.round(gy / g) % 2) * g / 2
     gx = gx.ravel(); gy = gy.ravel(); ok = (gx < tw - 1) & (gy < th - 1)
     gx, gy = gx[ok], gy[ok]; inside = a[gy.astype(int), gx.astype(int)] > 0
@@ -157,15 +166,19 @@ def text_polys_pts(text, cx, cy, sz):
 
 # ------------------------------------------------------------ actors
 HERO = Actor("hero", 1000, 1); OBJ = Actor("obj", 6000, 2); OBJ2 = Actor("obj2", 3000, 3)
-CROWD = Actor("crowd", 6000, 4); TXT = Actor("txt", 14000, 5); KW = Actor("kw", 10000, 7)
+CROWD = Actor("crowd", 6000, 4); TXT = Actor("txt", 16000, 5); KW = Actor("kw", 13000, 7)
 MIR = Actor("mir", 1000, 8)    # 倒影 / 另一个自己
 SET = Actor("set", 8000, 9)    # 场景环境（窗、灯、书架、树…）
 FAR = Actor("far", 4000, 10)   # 远景天际线 / 山
 BUB = Actor("bub", 14000, 11)  # 漂浮物（弹幕、金币、消息气泡）
 # 粒子变密后整体会变亮，按演员压一点增益；字类演员略压，保证笔画清楚不糊成一片
-for _ac, _g in ((TXT, 0.62), (KW, 0.62), (BUB, 0.7), (OBJ, 0.8), (SET, 0.8), (FAR, 0.85), (CROWD, 0.85)): _ac.br *= _g
+for _ac, _g in ((TXT, 0.5), (KW, 0.5), (BUB, 0.5), (OBJ, 0.8), (SET, 0.8), (FAR, 0.85), (CROWD, 0.85)): _ac.br *= _g
 # 会快速移动的漂浮物不做拖尾，否则字会出现重影
 BUB.trail = [(0.0, 1.0)]
+# 价签绕圈很快，拖尾缩短，避免重影堆叠
+OBJ.trail = [(0.0, 0.72), (0.033, 0.28)]; OBJ2.trail = [(0.0, 1.0)]   # OBJ2 多是细线小物件（屏幕、爱心），不拖尾才清楚
+# 螺旋词在飞的时候是小字，拖尾缩短，避免重影糊字
+TXT.trail = [(0.0, 0.75), (0.033, 0.25)]
 ACTORS = [FAR, SET, BUB, CROWD, OBJ, OBJ2, MIR, KW, TXT, HERO]
 
 def crowd_people(n, specs):
@@ -191,7 +204,7 @@ KWS = [(6.7, 9.3, "被看见", 430, 330, 110, 1),
        (30.3, 33.6, "按月", 720, 140, 110, 0),
        (33.8, 37.4, "永远在线", 720, 140, 96, 0),
        (41.3, 45.2, "什么都买得到", 720, 250, 80, 0),
-       (81.4, 85.6, "待一会儿", 1110, 230, 96, 1),
+       (81.4, 85.6, "待一会儿", 720, 190, 96, 1),
        (89.8, 92.3, "安静", 720, 170, 130, 1),
        (93.6, 97.6, "只差一件事", 720, 250, 90, 0),
        (144.9, 147.6, "还会再来", 1120, 200, 96, 0),
@@ -203,7 +216,7 @@ KWS = [(6.7, 9.3, "被看见", 430, 330, 110, 1),
        (57.9, 61.9, "Hannah Arendt", 1040, 260, 64, 1),
        (62.2, 66.3, "寂寞", 1120, 240, 120, 0),
        (66.6, 70.5, "独处", 1120, 240, 120, 1),
-       (70.9, 74.5, "好卖", 300, 240, 120, 0),
+       (70.9, 74.5, "好卖", 720, 200, 120, 0),
        (77.5, 81.1, "解药", 720, 200, 120, 0),
        (85.9, 89.5, "01:00", 720, 170, 110, 0),
        (108.4, 112.3, "不是病", 1120, 220, 110, 0),
@@ -218,9 +231,13 @@ KWS = [(6.7, 9.3, "被看见", 430, 330, 110, 1),
 def _kw_fn(txt, x, y, sz): return lambda n, t: text_shape(txt, x, y, sz, n, "L", 4)
 def _kw_burst(seed): return lambda n, t, prev: burst(prev, 240, seed)
 KWS.sort()
+GLYPHS = []   # (入场开始, 入场时长, 散场开始, 文字, x, y, 字号, 颜色, 入场风格, 散场风格)
+KW_IN = ["write", "gather", "write", "rise"]
 for i, (t0, t1, txt, x, y, sz, wm) in enumerate(KWS):
-    KW.key(t0, S(_kw_fn(txt, x, y, sz)), 0.9, a=0.9, col=WARM if wm else FG, stag=0.35, swirl=110)
-    KW.key(t1 - 0.25, S(_kw_burst(40 + i)), 0.8, a=0.0, stag=0.25)
+    sin_, sout = KW_IN[i % 4], ("ash" if wm else "wind")
+    KW.key(t0, S(_kw_fn(txt, x, y, sz)), 1.0, a=0.9, col=WARM if wm else FG, stag=0.55, swirl=110); KW.keys[-1]["style"] = sin_
+    KW.key(t1 - 0.45, S(_kw_burst(40 + i)), 1.0, a=0.0, stag=0.6); KW.keys[-1]["style"] = sout
+    GLYPHS.append((t0, 1.0, t1 - 0.45, txt, x, y, sz, WARM if wm else FG, sin_, sout, bool(wm)))
 
 # ================================================================ ACT 1  现象
 # 0–3.9 凌晨一点，一个人坐在地平线上看手机
@@ -294,9 +311,10 @@ for ac, sd in ((OBJ, 2), (OBJ2, 3), (CROWD, 4)):
 HERO.key(12.4, A(lambda n, t: (lambda u: np.column_stack([scale_pts(person("sit", 0, 0, HH, n)[:, :2], 420 + (HX - 420) * u, GY - 250 * u, 1 - 0.95 * u),
                                                             np.full(n, 1.0 - 0.9 * u)]))(eio(cl((t - SP_SPIN) / 1.9)))), 1.0, swirl=30)
 # 16.5 冲击：标题由粒子拼出
-TXT.key(16.5, S(lambda n, t: text_shape("孤独，正在成为一门生意", HX, 440, 80, n, "L", 3)), 1.1, a=1.0, swirl=160, stag=0.4)
+TXT.key(16.5, S(lambda n, t: text_shape("孤独，正在成为一门生意", HX, 440, 80, n, "L", 3)), 1.4, a=1.0, swirl=160, stag=0.5); TXT.keys[-1]["style"] = "gather"
+GLYPHS.append((16.5, 1.4, 20.3, "孤独，正在成为一门生意", HX, 440, 80, FG, "gather", "wind", False))
 HERO.key(16.5, S(lambda n, t, prev: burst(prev, 500, 5, HX, 470)), 1.0, a=0.0)
-TXT.key(20.5, S(lambda n, t, prev: burst(prev, 380, 6)), 1.0, a=0.0, stag=0.35)
+TXT.key(20.3, S(lambda n, t, prev: burst(prev, 380, 6)), 1.2, a=0.0, stag=0.6); TXT.keys[-1]["style"] = "wind"
 
 # 20.7–27.2 城市的窗：一亿多个一人户
 CITY = []; CITY_LIT = []
@@ -315,23 +333,32 @@ OBJ.key(24.6, S(lambda n, t: polys_n(CITY_ALL, n, 6)), 2.2, a=0.8, stag=0.5, swi
 
 # 27.2–41.3 价签：陪伴被明码标价，绕着人转
 TAGS = [("陪聊", "¥30 / 小时"), ("哄睡", "¥19.9 / 月"), ("AI 恋人", "¥68 / 月"), ("租个朋友", "¥200 / 天")]
-def tag_ring(n, t, k, rx=440, ry=160, spd=0.16, close=0.0):
-    ps = []
+def tag_phase(t):
+    """价签公转角：37.5 秒后逐渐加速。对速度积分，角度连续，不会跳变出第二套价签"""
+    r = float(cl((t - 37.5) / 3.0)); extra = 0.9 * (3.0 * r * r / 2 + max(0.0, t - 40.5))
+    return 0.16 * t + extra
+def tag_close(t): return 0.28 * float(eio((t - 37.5) / 3.5))
+def tag_items(t, k):
+    out = []
     for i in range(k):
-        a = spd * t + i * 2 * math.pi / max(k, 3) + 0.4
-        r = 1 - close; x = HX + rx * r * math.cos(a); y = 470 + ry * r * math.sin(a) + 10 * math.sin(t * 1.3 + i)
-        ps.append((x, y))
+        a = tag_phase(t) + i * 2 * math.pi / max(k, 3) + 0.4
+        r = 1 - tag_close(t); x = HX + 440 * r * math.cos(a); y = 470 + 160 * r * math.sin(a) + 10 * math.sin(t * 1.3 + i)
+        out.append((x, y, i))
+    return out
+def tag_ring(n, t, k):
     out = []; per = n // max(k, 1)
-    for i, (x, y) in enumerate(ps):
+    for (x, y, i) in tag_items(t, k):
         m = per if i < k - 1 else n - per * (k - 1)
-        body = sample_polys(tag_polys(x, y), m // 2, 3.0)[:, :2]
+        body = poly_pts(tag_polys(x, y), 1.4)
         txt = np.concatenate([text_polys_pts(TAGS[i][0], x + 14, y - 24, 38), text_polys_pts(TAGS[i][1], x + 14, y + 26, 28)])
-        out.append(spread(np.concatenate([body[: m // 2], txt]), m, 0.15))
+        out.append(spread(np.concatenate([body, txt]), m, 0.15))
     return np.concatenate(out)
-OBJ.key(27.2, A(lambda n, t: tag_ring(n, t, 2)), 1.3, a=0.9, swirl=140)
-OBJ.key(30.3, A(lambda n, t: tag_ring(n, t, 3)), 1.0, a=0.9, swirl=80)
-OBJ.key(33.8, A(lambda n, t: tag_ring(n, t, 4)), 1.0, a=0.9, swirl=80)
-OBJ.key(37.5, A(lambda n, t: tag_ring(n, t, 4, spd=0.16 + 0.9 * float(eio((t - 37.5) / 3.0)), close=0.28 * float(eio((t - 37.5) / 3.5)))), 1.0, a=1.0, col=WARM, swirl=40)
+# 粒子只做闪烁质感（亮度压低），清晰的边框和文字由 draw_ui 实线叠加
+OBJ.key(27.2, A(lambda n, t: tag_ring(n, t, 2)), 1.3, a=0.45, swirl=140)
+OBJ.key(30.3, A(lambda n, t: tag_ring(n, t, 3)), 1.0, a=0.45, swirl=80)
+OBJ.key(33.8, A(lambda n, t: tag_ring(n, t, 4)), 1.0, a=0.45, swirl=80)
+OBJ.key(37.5, A(lambda n, t: tag_ring(n, t, 4)), 1.0, a=0.5, col=WARM, swirl=10, stag=0.1)
+TAG_T = [(27.2, 2), (30.3, 3), (33.8, 4)]
 CROWD.key(27.2, S(lambda n, t, prev: burst(prev, 260, 9)), 1.0, a=0.0)
 HERO.key(27.2, S(lambda n, t: person("stand", HX, GY, HH, n)), 1.2, swirl=90)
 HERO.key(37.6, S(lambda n, t: person("sad", HX, GY, HH, n)), 1.4, swirl=20)
@@ -483,58 +510,84 @@ FAR.key(133.4, S(burst_fn(200, 65)), 1.0, a=0.0)
 DANMU = ["来了来了", "主播晚安", "谢谢老板的礼物", "666", "爱了爱了", "有人陪我聊聊吗", "一个人好无聊", "又失眠了",
          "刷个小心心", "今天也好累", "主播念念我的名字", "陪我到天亮", "睡不着+1", "有人吗"]
 DM_SLOTS = 5
+def danmu_items(t):
+    """[(槽位, 文字, 中心x, y)]：每个槽位当前那条弹幕"""
+    out = []; k = int((t - 2.0) / 0.55)
+    for sl in range(DM_SLOTS):
+        for kk in range(k, k - 14, -1):
+            if kk < 0 or kk % DM_SLOTS != sl: continue
+            age = t - 2.0 - kk * 0.55
+            out.append((sl, DANMU[kk % len(DANMU)], W + 200 - age * 230, [78, 132, 186, 105, 159][sl])); break
+    return out
 def danmaku(n, t):
-    per = n // DM_SLOTS; out = []
+    per = n // DM_SLOTS; out = []; cur = {sl: (txt, x, y) for (sl, txt, x, y) in danmu_items(t)}
     for sl in range(DM_SLOTS):
         m = per if sl < DM_SLOTS - 1 else n - per * (DM_SLOTS - 1)
-        k = int((t - 2.0) / 0.55); best = None
-        for kk in range(k, k - 14, -1):           # 该槽位上最近一条弹幕
-            if kk < 0 or kk % DM_SLOTS != sl: continue
-            age = t - 2.0 - kk * 0.55; best = (kk, age); break
-        if best is None:
+        if sl not in cur:
             q = np.zeros((m, 3), np.float32); q[:, 0] = W + 300; q[:, 1] = 120; out.append(q); continue
-        kk, age = best; txt = DANMU[kk % len(DANMU)]
-        lane = [78, 132, 186, 105, 159][sl]; x = W + 60 - age * 230
-        p = text_pts_dense(txt, "L", 36, 2) + [x + 140, lane]
-        q = spread(p, m, 0.1); q[:, 2] = np.where((q[:, 0] > -260), 0.55, 0.0)
+        txt, x, y = cur[sl]
+        q = spread(text_pts_dense(txt, "L", 36, 2) + [x, y], m, 0.1); q[:, 2] = np.where((q[:, 0] > -260), 0.42, 0.0)
         out.append(q)
     return np.concatenate(out)
-BUB.key(2.2, A(danmaku), 0.8, a=0.75, swirl=40)
+BUB.key(2.2, A(danmaku), 0.8, a=0.35, swirl=40)
 BUB.key(11.9, S(burst_fn(260, 71)), 1.0, a=0.0)
 _YEN = text_pts_dense("¥", "L", 58, 2)
+_CG = np.random.default_rng(91)
+COIN_X = np.linspace(110, 1330, 10) + _CG.uniform(-40, 40, 10); _CG.shuffle(COIN_X)
+COIN_SP = _CG.uniform(90, 150, 10); COIN_PH = _CG.uniform(0, 1, 10); COIN_ROT = _CG.uniform(1.2, 2.6, 10)
+def coin_items(t):
+    """[(x, y, 横向缩放c, 生命周期亮度)]"""
+    out = []
+    for i in range(10):
+        q_ = ((t - 27.2) * COIN_SP[i] / 860 + COIN_PH[i]) % 1.0
+        c = abs(math.cos(COIN_ROT[i] * t + i)) * 0.88 + 0.12
+        out.append((COIN_X[i], -70 + q_ * 860, c, math.sin(math.pi * q_) ** 0.6))
+    return out
+def coin_clear(t, x, y):
+    """金币靠近价签时变淡，别挡住价签上的字"""
+    if not (27.2 <= t < 41.6): return 1.0
+    k = max(k_ for (t0, k_) in TAG_T if t >= t0 - 0.01) if t >= 27.2 else 2
+    d = min(math.hypot((x - tx) / 1.6, y - ty) for (tx, ty, _) in tag_items(t, k))
+    f = float(cl((d - 70) / 60))
+    for g in GLYPHS:   # 也别挡住关键词
+        if g[0] - 0.2 <= t <= g[2] + 1.0:
+            tw = len(g[3]) * g[6] * 0.95
+            dx = max(0.0, abs(x - g[4]) - tw / 2); dy = max(0.0, abs(y - g[5]) - g[6] * 0.6)
+            f = min(f, float(cl((math.hypot(dx, dy) - 30) / 50)))
+    return f
 def coin_rain(n, t):
-    K = 10; per = n // K; out = []; g = np.random.default_rng(91)
-    xs = np.linspace(110, 1330, K) + g.uniform(-40, 40, K); g.shuffle(xs)
-    sp = g.uniform(90, 150, K); ph = g.uniform(0, 1, K); rot = g.uniform(1.2, 2.6, K)
-    for i in range(K):
+    K = 10; per = n // K; out = []
+    for i, (x, y, c, life) in enumerate(coin_items(t)):
         m = per if i < K - 1 else n - per * (K - 1)
-        q_ = ((t - 27.2) * sp[i] / 860 + ph[i]) % 1.0; y = -70 + q_ * 860; ang = rot[i] * t + i
-        c = abs(math.cos(ang)) * 0.88 + 0.12
         rims = []
         for R in (44, 37):
-            e = circle(xs[i], y, R, 0, 2 * math.pi, 90); e[:, 0] = xs[i] + (e[:, 0] - xs[i]) * c; rims.append(e)
-        edge = np.array([[xs[i] + 44 * c, y], [xs[i] + 44 * c + 7 * (1 - c), y]], np.float32)   # 侧面厚度
-        ring = poly_pts(rims + [edge], 1.1)
-        yen = _YEN * [c, 1] + [xs[i], y]
-        q = spread(np.concatenate([ring, yen]), m, 0.1)
-        q[:, 2] = math.sin(math.pi * q_) ** 0.6 * 0.7; out.append(q)
+            e = circle(x, y, R, 0, 2 * math.pi, 90); e[:, 0] = x + (e[:, 0] - x) * c; rims.append(e)
+        ring = poly_pts(rims, 1.1); yen = _YEN * [c, 1] + [x, y]
+        q = spread(np.concatenate([ring, yen]), m, 0.1); q[:, 2] = life * 0.55 * coin_clear(t, x, y); out.append(q)
     return np.concatenate(out)
-BUB.key(27.2, A(coin_rain), 1.2, a=0.6, col=WARM, swirl=60)
+BUB.key(27.2, A(coin_rain), 1.2, a=0.35, col=WARM, swirl=60)
 BUB.key(41.3, S(burst_fn(260, 72)), 1.0, a=0.0)
 NOTE = ["在吗", "晚安", "想你了", "宝宝早", "我一直在", "今天怎么样", "陪你聊聊", "别睡太晚", "抱抱", "你最特别"]
+BUB_X = np.array([190, 1250, 330, 1110, 170, 1270], float)
+BUB_PH = np.arange(6) / 6 + np.random.default_rng(93).uniform(-0.04, 0.04, 6)
+def bubble_items(t):
+    """[(x, y, 宽, 文字, 生命周期亮度)]"""
+    out = []
+    for i in range(6):
+        q_ = ((t - 70.8) / 7.5 + BUB_PH[i]) % 1.0; y = GY - 50 - q_ * 580; x = BUB_X[i] + 16 * math.sin(t * 0.7 + i)
+        txt = NOTE[(i + int((t - 70.8) / 7.5 + BUB_PH[i]) * 3) % len(NOTE)]
+        out.append((x, y, 36 * len(txt) + 54, txt, math.sin(math.pi * q_) ** 0.7))
+    return out
+def bubble_polys(x, y, tw):
+    return [rrect(x, y, tw, 66, 24), np.array([[x - tw / 2 + 24, y + 31], [x - tw / 2 + 10, y + 52], [x - tw / 2 + 44, y + 33]], np.float32)]
 def note_bubbles(n, t):
-    K = 6; per = n // K; out = []; g = np.random.default_rng(93)
-    xs = np.array([190, 1250, 330, 1110, 170, 1270], float); ph = np.arange(K) / K + g.uniform(-0.04, 0.04, K)
-    for i in range(K):
+    K = 6; per = n // K; out = []
+    for i, (x, y, tw, txt, life) in enumerate(bubble_items(t)):
         m = per if i < K - 1 else n - per * (K - 1)
-        q_ = ((t - 70.8) / 7.5 + ph[i]) % 1.0; y = GY - 50 - q_ * 580; x = xs[i] + 16 * math.sin(t * 0.7 + i)
-        txt = NOTE[(i + int((t - 70.8) / 7.5 + ph[i]) * 3) % len(NOTE)]
-        tw = 36 * len(txt) + 54
-        body = poly_pts([rrect(x, y, tw, 66, 24), np.array([[x - tw / 2 + 24, y + 31], [x - tw / 2 + 10, y + 52], [x - tw / 2 + 44, y + 33]], np.float32)], 1.2)
-        q = spread(np.concatenate([body, text_pts_dense(txt, "L", 34, 2) + [x, y]]), m, 0.1)
-        q[:, 2] = math.sin(math.pi * q_) ** 0.7 * 0.6; out.append(q)
+        q = spread(np.concatenate([poly_pts(bubble_polys(x, y, tw), 1.2), text_pts_dense(txt, "L", 34, 2) + [x, y]]), m, 0.1)
+        q[:, 2] = life * 0.48; out.append(q)
     return np.concatenate(out)
-BUB.key(70.8, A(note_bubbles), 1.4, a=0.7, swirl=80)
+BUB.key(70.8, A(note_bubbles), 1.4, a=0.35, swirl=80)
 BUB.key(85.8, S(burst_fn(240, 73)), 1.0, a=0.0)
 
 # ================================================================ ACT 2  阿伦特：寂寞与独处
@@ -575,10 +628,15 @@ HERO.key(66.5, S(lambda n, t: person("sit", HX, GY, HH, n)), 1.3, swirl=40)
 MIR.key(66.8, S(lambda n, t: refl(person("sit", HX, GY, HH, n))), 1.6, a=0.42, col=WARM, swirl=40, stag=0.6)
 OBJ.key(66.6, S(lambda n, t: dust_ground(n, 5, -100, 1540)), 1.2, a=0.22, swirl=60)
 # 70.8 寂寞好卖：屏幕成群围过来
+# 屏幕公转角：对速度积分（0.5 → 0.8 → 0.15 rad/s），换挡时角度连续，不会出现两套屏幕
+_ST = np.arange(0, 100, 0.01)
+_SV = 0.5 + 0.3 * eio((_ST - 77.2) / 1.0) - 0.65 * eio((_ST - 81.4) / 1.5)
+_SPH = np.cumsum(_SV) * 0.01
+def screen_phase(t): return float(np.interp(t, _ST, _SPH))
 def screens(n, t, k, r0, r1, t0, dur, spd=0.5):
     u = float(eio((t - t0) / dur)); rr = r0 + (r1 - r0) * u; ps = []
     for i in range(k):
-        a = spd * t + i * 2 * math.pi / k; rad = rr * (0.85 + 0.15 * math.sin(i * 2.3))
+        a = screen_phase(t) + i * 2 * math.pi / k; rad = rr * (0.85 + 0.15 * math.sin(i * 2.3))
         x = HX + rad * math.cos(a) * 1.25; y = 560 + rad * math.sin(a) * 0.62
         sz = 0.8 + 0.3 * math.sin(i * 1.7)
         ps += phone_polys(x, y, 40 * sz, 70 * sz)
@@ -603,20 +661,23 @@ for ac in (HERO, OBJ, OBJ2, MIR, CROWD, SET):
 HERO.key(93.55, S(lambda n, t: person("stand", 560, GY, HH, n)), 1.4, swirl=140)
 MIR.key(93.55, S(lambda n, t: person("stand", 880, GY, HH, n, flip=True)), 1.6, a=0.55, col=WARM, swirl=140)
 for ac in (OBJ, OBJ2, CROWD): ac.key(93.55, hidden(ac), 0.8, a=0.0)
-TXT.key(97.8, S(lambda n, t: text_shape("独处，是和自己在一起。", HX, 390, 82, n, "L", 3)), 1.3, a=1.0, col=WARM, stag=0.4, swirl=120)
+TXT.key(97.8, S(lambda n, t: text_shape("独处，是和自己在一起。", HX, 390, 82, n, "L", 3)), 1.6, a=1.0, col=WARM, stag=0.6, swirl=120); TXT.keys[-1]["style"] = "write"
+GLYPHS.append((97.8, 1.6, 102.2, "独处，是和自己在一起。", HX, 390, 82, WARM, "write", "ash", True))
 HERO.key(98.4, S(lambda n, t: person("reach", 560, GY, HH, n)), 1.2, swirl=20)
-TXT.key(102.6, S(lambda n, t: text_shape("寂寞，是连自己也弄丢了。", HX, 390, 78, n, "L", 3)), 1.3, a=1.0, col=FG, stag=0.45, swirl=120)
+TXT.key(102.6, S(lambda n, t: text_shape("寂寞，是连自己也弄丢了。", HX, 390, 78, n, "L", 3)), 1.6, a=1.0, col=FG, stag=0.6, swirl=120); TXT.keys[-1]["style"] = "write"
+GLYPHS.append((102.6, 1.6, 107.4, "寂寞，是连自己也弄丢了。", HX, 390, 78, FG, "write", "wind", False))
 MIR.key(102.8, S(lambda n, t, prev: burst(prev, 340, 41, 880, 600)), 2.2, a=0.0, stag=0.7, swirl=160)
 HERO.key(103.2, S(lambda n, t: person("sad", 560, GY, HH, n)), 1.2, swirl=20)
-TXT.key(107.6, S(lambda n, t, prev: burst(prev, 300, 14)), 1.0, a=0.0)
+TXT.key(107.4, S(lambda n, t, prev: burst(prev, 300, 14)), 1.2, a=0.0, stag=0.6); TXT.keys[-1]["style"] = "wind"
 # 108.2 坐在银河下
 HERO.key(108.2, S(lambda n, t: person("lookup", HX, GY, HH, n)), 1.4, swirl=60)
 MIR.key(108.4, S(lambda n, t: refl(person("lookup", HX, GY, HH, n))), 1.6, a=0.30, col=FG, swirl=60, stag=0.6)
 OBJ.key(108.2, S(lambda n, t: dust_ground(n, 7, -100, 1540)), 1.3, a=0.22, swirl=60)
-TXT.key(112.6, S(lambda n, t: text_shape("能力", 1130, 240, 170, n, "L", 4)), 1.2, a=1.0, col=WARM, swirl=120)
+TXT.key(112.6, S(lambda n, t: text_shape("能力", 1130, 240, 170, n, "L", 4)), 1.3, a=1.0, col=WARM, swirl=120, stag=0.5); TXT.keys[-1]["style"] = "gather"
+GLYPHS.append((112.6, 1.3, 116.2, "能力", 1130, 240, 170, WARM, "gather", "ash", True))
 HERO.key(114.8, S(lambda n, t: person("lookup", HX, GY, HH, n)), 1.0, col=WARM, stag=0.7, swirl=5)
 MIR.key(114.8, S(lambda n, t: refl(person("lookup", HX, GY, HH, n))), 1.0, a=0.42, col=WARM, stag=0.7, swirl=5)
-TXT.key(116.5, S(lambda n, t, prev: burst(prev, 220, 15)), 1.0, a=0.0)
+TXT.key(116.2, S(lambda n, t, prev: burst(prev, 220, 15)), 1.2, a=0.0, stag=0.6); TXT.keys[-1]["style"] = "ash"
 # 116.8 买陪伴没有错；120.9 只是别让它替你回答所有的安静
 CROWD.key(116.8, A(lambda n, t: polys_n(phone_polys(330, 330, 90, 150) + [heart_poly(330, 335, 1.8 * (1 + 0.12 * abs(math.sin(t * 6)) ** 4))], n, 4)), 1.0, a=0.5, col=WARM, swirl=80)
 CROWD.key(120.9, A(lambda n, t: polys_n(person_polys("sit", 1110, 420, 90) +
@@ -654,6 +715,80 @@ HERO.key(147.7, S(lambda n, t: person("lookup", HX, GY, HH, n)), 1.6, col=WARM, 
 MIR.key(147.7, S(lambda n, t: refl(person("lookup", HX, GY, HH, n))), 1.8, a=0.45, col=WARM, stag=0.6, swirl=10)
 for ac in (HERO, OBJ, OBJ2, TXT, CROWD, MIR, KW, SET, FAR, BUB):
     ac.key(157.2, S(lambda n, t: point(n, HX, 540, 2.0)), 1.6, a=0.04, stag=0.3, swirl=50)
+
+
+# ================================================================ 粒子文字的入场 / 散场风格
+#  write  ：自左向右"书写"，粒子沿流动的墨迹曲线落笔
+#  gather ：每个粒子绕目标点旋入，像星尘被吸进字里
+#  rise   ：自下而上升起，像水汽凝结成字
+#  wind   ：自左向右被风吹散成沙，向右上飘走
+#  ash    ：化作暖色灰烬缓缓上升
+_orig_eval = Actor._eval
+def _noise2(p, t, sw):
+    a = p[:, 0] * 0.011 + p[:, 1] * 0.017 + sw * 1.7 + t * 1.3
+    b = p[:, 0] * 0.015 - p[:, 1] * 0.009 - sw * 1.1 + t * 1.1
+    return np.stack([np.sin(a) + 0.5 * np.sin(2.3 * b), np.cos(b) + 0.5 * np.cos(1.9 * a)], 1)
+def _norm(v):
+    lo, hi = float(v.min()), float(v.max()); return (v - lo) / max(hi - lo, 1e-3)
+def _styled_eval(self, t, i):
+    k = self.keys[i]; st = k.get("style")
+    if st is None: return _orig_eval(self, t, i)
+    prev = k["prevP"]
+    if i > 0:
+        pk = self.keys[i - 1]
+        if k["t"] >= pk["t"] + pk["dur"] and pk["shape"].anim: prev = pk["shape"].get(self.n, t)[pk["perm"]]
+    exiting = st in ("wind", "ash")
+    if exiting:
+        if "_tgt" not in k:
+            g = np.random.default_rng(int(k["t"] * 97) + self.n); P0 = k["prevP"].copy()
+            if st == "wind":
+                P0[:, 0] += g.uniform(180, 520, self.n); P0[:, 1] += -g.uniform(40, 220, self.n) + g.normal(0, 30, self.n)
+            else:
+                P0[:, 0] += g.normal(0, 60, self.n); P0[:, 1] -= g.uniform(160, 420, self.n)
+            k["_tgt"] = P0
+        cur = k["_tgt"]
+    else:
+        cur = k["shape"].get(self.n, t, k["prevP"])[k["perm"]]
+    # 连笔判断用的参照形状：入场用目标字形；散场用原来的字形（还没飞走的部分仍保持实线）
+    if exiting and i > 0:
+        pk = self.keys[i - 1]
+        if "inv" not in pk: pk["inv"] = np.argsort(pk["perm"])
+        self._solid = (k["prevP"], pk["inv"])
+    else:
+        if "inv" not in k: k["inv"] = np.argsort(k["perm"])
+        self._solid = (cur, k["inv"])
+    if "_dly" not in k:
+        ref = prev if exiting else cur; rnd = self.delay
+        if st in ("write", "wind"): d = _norm(ref[:, 0]) * 0.8 + rnd * 0.2
+        elif st == "rise": d = (1 - _norm(ref[:, 1])) * 0.75 + rnd * 0.25
+        else: d = rnd
+        k["_dly"] = d.astype(np.float32)
+    u = (t - k["t"]) / k["dur"]
+    if u >= 1 and not exiting:
+        return cur, np.full(self.n, k["a"], np.float32), np.broadcast_to(k["col"], (self.n, 3))
+    sg = k["stag"]; e = eio((u - k["_dly"] * sg) / (1 - sg)).astype(np.float32); E = e[:, None]
+    if st == "write":
+        P = prev + (cur - prev) * E
+        P[:, :2] += _noise2(cur, t, self.sw)[:, :] * (np.sin(np.pi * e) * 70)[:, None]
+    elif st == "gather":
+        th = (1 - e) ** 1.5 * 4.2 * np.sign(self.sw + 1e-3); c, s_ = np.cos(th), np.sin(th)
+        d = (prev[:, :2] - cur[:, :2]) * (1 - E) ** 1.2
+        P = cur.copy(); P[:, 0] += d[:, 0] * c - d[:, 1] * s_; P[:, 1] += d[:, 0] * s_ + d[:, 1] * c
+    elif st == "rise":
+        start = cur.copy(); start[:, 1] += 160 + 80 * np.abs(self.sw); start[:, 0] += self.sw * 20
+        mix = np.clip(1.6 * (1 - E), 0, 1); src = prev * (1 - mix) * 0 + (prev * 0.35 + start * 0.65)
+        P = src + (cur - src) * E; P[:, :2] += _noise2(cur, t, self.sw) * (np.sin(np.pi * e) * 26)[:, None]
+    else:  # wind / ash
+        ee = E ** 1.4
+        P = prev + (cur - prev) * ee
+        P[:, :2] += _noise2(prev, t * 1.6, self.sw) * (e * (90 if st == "wind" else 50))[:, None]
+    pa = k["prevA"] if np.ndim(k["prevA"]) else np.full(self.n, k["prevA"], np.float32)
+    al = pa + (k["a"] - pa) * (e ** 0.7 if exiting else e ** 2.2)   # 飞行中的粒子偏暗，落定才亮，画面不脏
+    pc = np.broadcast_to(k["prevC"], (self.n, 3)); tc = WARM if st == "ash" else k["col"]
+    if exiting and st == "ash": co = pc + (tc - pc) * E
+    else: co = pc + (k["col"] - pc) * E
+    return P.astype(np.float32), al.astype(np.float32), co
+Actor._eval = _styled_eval
 
 for a in ACTORS: a.prep()
 
@@ -716,7 +851,7 @@ METEORS = [(5.2, 1250, 70, -520, 230, 1.0), (23.5, 260, 110, 440, 170, 0.9), (68
 EMB_W = Embers(900, 31); EMB_C = Embers(700, 37, y0=H + 30, span=H + 80)
 def ember_level(t):
     warm = max(0.55 * fade(t, 114.8, 129.0, 1.5, 1.5), 1.0 * fade(t, 147.7, 157.4, 2.0, 1.5), 0.4 * fade(t, 1.9, 11.8, 1.0, 1.0))
-    cool = 0.22 * float(cl((158.0 - t) / 2.0))
+    cool = 0.10 * float(cl((158.0 - t) / 2.0))
     return warm, cool
 
 # ------------------------------------------------------------ 字幕
@@ -827,31 +962,268 @@ def blit_t(canvas, spr, cx, cy, alpha):
     canvas[:, ya:yb, xa:xb] = canvas[:, ya:yb, xa:xb] * (1 - a) + ss[:3] * 255 * a
     return canvas
 
-def actor_particles(t, cam):
-    """所有前景演员 + 拖尾（多个时间偏移的加权叠加）"""
+BG_ACTORS = (FAR, SET)
+# ------------------------------------------------------------ 连笔：粒子落位后连成实线
+# 每个形状的点本来就是沿笔画顺序采样的。粒子在飞时保持离散；当相邻两点都接近各自的目标、
+# 且它们在目标形状里本就是笔画上的邻居时，就在两点之间补满细密的点，连成一条平滑实线。
+# 能量守恒：被连起来的端点把亮度让给线段，所以线条亮度与原粒子一致，看不出一颗颗的点。
+SOLID_STEP = 0.55     # 补点间距（px），越小线越顺
+SOLID_THR = 2.4       # 相邻点距离 < 中位间距 × 该值，才认为是同一笔画
+def _eval_keep(self, t, i):
+    """与引擎 Actor._eval 相同，另外记下目标形状（用于判断笔画邻接）"""
+    k = self.keys[i]
+    cur = k["shape"].get(self.n, t, k["prevP"])[k["perm"]]
+    if "inv" not in k: k["inv"] = np.argsort(k["perm"])
+    self._solid = (cur, k["inv"])
+    prev = k["prevP"]
+    if i > 0:
+        pk = self.keys[i - 1]
+        if k["t"] >= pk["t"] + pk["dur"] and pk["shape"].anim:
+            prev = pk["shape"].get(self.n, t)[pk["perm"]]
+    u = (t - k["t"]) / k["dur"]
+    if u >= 1:
+        return cur, np.full(self.n, k["a"], np.float32), np.broadcast_to(k["col"], (self.n, 3))
+    st = k["stag"]; e = eio((u - self.delay * st) / (1 - st)).astype(np.float32)
+    v = cur[:, :2] - prev[:, :2]; L = np.hypot(v[:, 0], v[:, 1]) + 1e-3
+    perp = np.stack([-v[:, 1], v[:, 0]], 1) / L[:, None]
+    bend = (np.sin(np.pi * e) * self.sw * np.minimum(L, k["swirl"] * 3) * k["swirl"] / 200.0)[:, None]
+    P = prev + (cur - prev) * e[:, None]
+    P[:, :2] += perp * bend
+    pa = k["prevA"] if np.ndim(k["prevA"]) else np.full(self.n, k["prevA"], np.float32)
+    al = pa + (k["a"] - pa) * e
+    pc = np.broadcast_to(k["prevC"], (self.n, 3))
+    co = pc + (k["col"] - pc) * e[:, None]
+    return P, al, co
+_orig_eval = _eval_keep   # 风格化求值（_styled_eval）的兜底分支改用带记录的版本
+
+_SOFT = []            # 本帧的柔光孤点（世界坐标）
+SOFT_SIGMA = 4.5      # 柔光层模糊半径
+SOFT_GAIN = 1.25      # 柔光层亮度补偿（模糊后峰值会降低）
+def solidify(P, b, bl, co, cur, inv):
+    """P 世界坐标点，b 粒子亮度，bl 连线用亮度（不含闪烁），返回 (点, 亮度, 颜色)"""
+    Po = P[inv, :2]; To = cur[inv, :2]
+    dT = np.hypot(*(To[1:] - To[:-1]).T); dP = np.hypot(*(Po[1:] - Po[:-1]).T)
+    pos = dT[dT > 1e-3]
+    if len(pos) < 8:
+        st = np.hypot(*(P[:, :2] - cur[:, :2]).T) < 2.0
+        if st.any(): _SOFT.append((P[st, :2], b[st], np.asarray(co)[st]))
+        return P[~st, :2], b[~st], np.asarray(co)[~st]
+    med = float(np.median(pos)); thr = float(np.clip(med * SOLID_THR, 2.5, 12.0))
+    # 只有"笔画型"形状才连线：沿笔画采样的点间距几乎恒定；随机散布的云雾、浮尘间距杂乱，不连
+    stroke = np.mean(np.abs(pos - med) < 0.4 * med + 0.3) > 0.55
+    ok = (dT < thr) & (dP < thr * 1.25) & (dT > 1e-3) & stroke
+    seg = np.nonzero(ok)[0]
+    if len(seg) == 0:
+        st = np.hypot(*(P[:, :2] - cur[:, :2]).T) < 2.0
+        if st.any(): _SOFT.append((P[st, :2], b[st], np.asarray(co)[st]))
+        return P[~st, :2], b[~st], np.asarray(co)[~st]
+    bo = b[inv]; blo = bl[inv]; co_o = np.asarray(co)[inv]
+    hasR = np.zeros(len(P), bool); hasL = np.zeros(len(P), bool); hasR[seg] = True; hasL[seg + 1] = True
+    wpt = bo * (1 - 0.5 * hasL - 0.5 * hasR)
+    K = np.maximum(1, np.ceil(dP[seg] / SOLID_STEP)).astype(np.int64)
+    rs = np.repeat(seg, K); Kr = np.repeat(K, K)
+    jj = np.arange(len(rs)) - np.repeat(np.cumsum(K) - K, K)
+    f = ((jj + 0.5) / Kr)[:, None].astype(np.float32)
+    A_ = Po[rs]; B_ = Po[rs + 1]
+    lp = A_ + (B_ - A_) * f
+    lw = (0.5 * (blo[rs] + blo[rs + 1]) / Kr).astype(np.float32)
+    lc = co_o[rs] * (1 - f) + co_o[rs + 1] * f
+    keep = wpt > 1e-5
+    # 已落位却没有笔画邻居的孤点（星云、地面浮尘等）→ 交给柔光层，化成一片光雾而不是一颗颗点
+    iso = keep & ~hasL & ~hasR & (np.hypot(*(Po - To).T) < 2.0)
+    if iso.any():
+        _SOFT.append((Po[iso], wpt[iso], co_o[iso])); keep = keep & ~iso
+    return (np.concatenate([Po[keep], lp]), np.concatenate([wpt[keep], lw]), np.concatenate([co_o[keep], lc]))
+
+def glyph_state(g, t):
+    """一个凝字条目在 t 时刻的 (整体亮度, 显现方向, 显现进度)，与 draw_glyphs 共用"""
+    (t0, din, tout, txt, x, y, sz, col, sin_, sout, wm) = g
+    if t < t0 + din * 0.35 or t > tout + 1.2: return 0.0, None
+    u = (t - t0) / din
+    if sin_ == "write": a_in, rv = 1.0, (float(cl((u - 0.35) / 0.75)), "in")
+    else: a_in, rv = float(ease((u - 0.45) / 0.6)), None
+    if t > tout:
+        v = (t - tout) / 1.0
+        if sout == "wind": rv = (float(cl(v)), "out"); a_in = min(a_in, 1.0)
+        else: a_in = a_in * (1 - float(ease(v / 0.7)))
+    return a_in, rv
+def glyph_cover(P, cur, t):
+    """落在已浮现实体字里、且已落位的文字粒子，让位给实体字（否则粒子与字形会叠出毛边和双影）"""
+    f = np.ones(len(P), np.float32)
+    settled = np.hypot(P[:, 0] - cur[:, 0], P[:, 1] - cur[:, 1]) < 3.0
+    for g in GLYPHS:
+        a_in, rv = glyph_state(g, t)
+        if a_in <= 0.01: continue
+        txt, x, y, sz = g[3], g[4], g[5], g[6]; tw = glyph_sprite(txt, int(sz))[2]
+        inb = settled & (np.abs(P[:, 0] - x) < tw / 2 + 4) & (np.abs(P[:, 1] - y) < sz * 0.8)
+        if not inb.any(): continue
+        a = np.full(len(P), a_in, np.float32)
+        if rv is not None:
+            pr, d = rv; xr = (P[:, 0] - (x - tw / 2)) / max(tw, 1)
+            a = a * (cl((pr * 1.3 - xr) / 0.3) if d == "in" else cl((xr - (pr * 1.3 - 0.3)) / 0.3))
+        f = np.where(inb, f * (1 - a), f)
+    return f
+
+def actor_particles(t, cam, group=None):
+    """前景演员 + 拖尾（多个时间偏移的加权叠加）。group="bg" 只取环境层"""
     z = cam[0]; Ps, Ws, Cs = [], [], []
     for ac in ACTORS:
+        if (group == "bg") != (ac in BG_ACTORS): continue
         for (dt, wgt) in getattr(ac, "trail", TRAIL):
             st = ac.state(t - dt)
             if st is None: continue
             P, al, co = st
             b = P[:, 2] * al * ac.br * (0.86 + 0.14 * np.sin(ac.tw + t * 3.1)) * wgt
-            Ps.append(W2S(P[:, :2], cam)); Ws.append(b); Cs.append(co / 255.0)
+            bl = P[:, 2] * al * 0.95 * wgt
+            if ac is TXT or ac is KW:
+                gc_ = glyph_cover(P, ac._solid[0], t - dt); b = b * gc_; bl = bl * gc_
+            ns = len(_SOFT); q, w, c = solidify(P, b, bl, co, *ac._solid)
+            for j in range(ns, len(_SOFT)):
+                sp_, sw_, sc_ = _SOFT[j]; _SOFT[j] = (W2S(sp_, cam), sw_, np.asarray(sc_) / 255.0, group == "bg")
+            Ps.append(W2S(q, cam)); Ws.append(w); Cs.append(np.asarray(c) / 255.0)
     warm, cool = ember_level(t)
     for emb, lv, col in ((EMB_W, warm, (255, 200, 130)), (EMB_C, cool, (220, 224, 236))):
-        if lv > 0.005:
+        if lv > 0.005 and group != "bg":
             P, Wt, C = emb.points(t, lv * 2.2, col); Ps.append(P); Ws.append(Wt); Cs.append(C)
+    if not Ps: return None
     P = np.concatenate(Ps); Wt = np.concatenate(Ws) * (0.75 + 0.25 * min(1, z)); C = np.concatenate(Cs)
     return P, Wt, C
+
+# ------------------------------------------------------------ 凝字：粒子汇聚后浮现完整发光字
+_gs = {}
+def glyph_sprite(text, sz):
+    """与 text_pts_dense 同一坐标系（图像中心 = 粒子字中心），返回 (alpha, glow) 两张灰度图"""
+    k = (text, sz)
+    if k in _gs: return _gs[k]
+    f = font("L", sz); d0 = ImageDraw.Draw(Image.new("L", (8, 8)))
+    bb = d0.textbbox((0, 0), text, font=f); tw, th = bb[2] - bb[0] + 20, bb[3] - bb[1] + 20
+    pad = int(sz * 0.5) + 8
+    im = Image.new("L", (tw + 2 * pad, th + 2 * pad), 0)
+    ImageDraw.Draw(im).text((pad + 10 - bb[0], pad + 10 - bb[1]), text, font=f, fill=255)
+    a = np.array(im).astype(np.float32) / 255.0
+    if GLYPH_BOLD > 0 and sz >= 40:   # 大字略加粗：边缘仍保留抗锯齿
+        a = np.clip(cv2.GaussianBlur(a, (0, 0), GLYPH_BOLD * sz / 110.0) * 1.7, 0, 1)
+    gl = cv2.GaussianBlur(a, (0, 0), max(2.0, sz / 16.0)) * 0.9 + cv2.GaussianBlur(a, (0, 0), max(5.0, sz / 5.0)) * 0.6
+    _gs[k] = (a, gl, tw); return _gs[k]
+_gt = {}
+def blit_glyph(canvas, text, cx, cy, sz, col, alpha, reveal=None, sheen=None, line=0.0):
+    """加色混合（发光字）。reveal=(进度, 方向)：write 自左向右显现、wind 自左向右消散；sheen 为高光扫过的进度"""
+    torch = engine_torch()
+    if alpha <= 0.003 or sz < 6: return canvas
+    a, gl, tw = glyph_sprite(text, int(sz))
+    key = (text, int(sz))
+    if key not in _gt: _gt[key] = (T(a), T(gl))
+    A_, GL = _gt[key]; h, w = A_.shape
+    x0 = int(round(cx - w / 2)); y0 = int(round(cy - h / 2))
+    xa, ya = max(0, x0), max(0, y0); xb, yb = min(W, x0 + w), min(H, y0 + h)
+    if xa >= xb or ya >= yb: return canvas
+    sa = A_[ya - y0:yb - y0, xa - x0:xb - x0]; sg = GL[ya - y0:yb - y0, xa - x0:xb - x0]
+    xs = (torch.arange(xa, xb, device=sa.device, dtype=torch.float32) - (cx - tw / 2)) / max(tw, 1)   # 0..1 跨字宽
+    m = torch.ones_like(xs) * alpha
+    if reveal is not None:
+        p, mode = reveal
+        if mode == "in": m = m * torch.clamp((p * 1.3 - xs) / 0.3, 0, 1)
+        else: m = m * torch.clamp((xs - (p * 1.3 - 0.3)) / 0.3, 0, 1)
+    lit = sa * GLYPH_FILL + sg * GLYPH_GLOW
+    if sheen is not None and 0 < sheen < 1:
+        ys = torch.arange(ya, yb, device=sa.device, dtype=torch.float32)[:, None]
+        band = torch.exp(-(((xs[None, :] * tw + (ys - cy) * 0.5) / tw - (sheen * 1.6 - 0.3)) / 0.07) ** 2)
+        lit = lit * (1 + GLYPH_SHEEN * band)
+    # 笔画本体偏向暖白（像发光体的"热核"），外光晕保留原色：金色字显得通透，不会发黄发闷
+    c_ = np.asarray(col, np.float32); core_c = c_ + (np.array([255, 250, 240], np.float32) - c_) * GLYPH_CORE_WHITE
+    colt = T(c_).view(3, 1, 1); colc = T(core_c).view(3, 1, 1)
+    canvas[:, ya:yb, xa:xb] = canvas[:, ya:yb, xa:xb] + (colc * (sa * GLYPH_FILL)[None] + colt * (sg * GLYPH_GLOW)[None]) * \
+        ((lit / (sa * GLYPH_FILL + sg * GLYPH_GLOW + 1e-6)) * m[None, :])[None]
+    if line > 0:   # 暖色关键词下方的一道细金线
+        ly = int(cy + sz * 0.62); hw = int(tw * 0.32 * float(eout(line)))
+        if 0 <= ly < H - 2 and hw > 1:
+            lx0, lx1 = max(0, int(cx) - hw), min(W, int(cx) + hw)
+            xx_ = torch.arange(lx0, lx1, device=sa.device, dtype=torch.float32)
+            fall = torch.clamp(1 - torch.abs(xx_ - cx) / max(hw, 1), 0, 1) ** 0.6 * alpha * 150
+            canvas[:, ly:ly + 2, lx0:lx1] = canvas[:, ly:ly + 2, lx0:lx1] + colt / 255 * fall[None, None, :]
+    return canvas
+
+
+# ------------------------------------------------------------ 清晰叠加层：价签 / 弹幕 / 金币 / 气泡
+# 小号文字和细边框只靠粒子很难清楚（粒子会稀、会抖、会拖影）。这里用实线和实体字叠一层，
+# 粒子降为闪烁质感；进场时实线比粒子晚一步浮现，看起来仍是"粒子凝结成形"。
+UI_LINE = 0.85     # 实线亮度
+UI_TEXT = 0.95     # 实体小字亮度
+def _poly_cv(layer, polys, cam, col, a, th=1):
+    if a <= 0.01: return
+    c = tuple(float(v) * a for v in col)
+    for p in polys:
+        q = W2S(np.asarray(p, np.float32), cam); q = np.round(q * 4).astype(np.int32)
+        cv2.polylines(layer, [q.reshape(-1, 1, 2)], False, c, th, cv2.LINE_AA, shift=2)
+def draw_ui(canvas, t, cam):
+    torch = engine_torch(); z = cam[0]; texts = []
+    layer = np.zeros((H, W, 3), np.float32); used = False
+    # 价签 27.2–41.3
+    ft = fade(t, 27.9, 41.6, 0.8, 0.5)
+    if ft > 0:
+        k = max(k_ for (t0, k_) in TAG_T if t >= t0 - 0.01) if t >= 27.2 else 2
+        wc = float(cl((t - 37.5) / 1.2)); col = FG * (1 - wc) + WARM * wc
+        for (x, y, i) in tag_items(t, k):
+            born = [t0 for (t0, k_) in TAG_T if k_ > i][0]
+            a = ft * float(ease((t - born - 0.7) / 0.8))
+            if a <= 0.01: continue
+            _poly_cv(layer, tag_polys(x, y), cam, col * UI_LINE, a, 2); used = True
+            texts += [(TAGS[i][0], x + 14, y - 24, 38, col, a), (TAGS[i][1], x + 14, y + 26, 28, col, a * 0.9)]
+    # 弹幕 2.2–11.7
+    fd = fade(t, 2.6, 11.8, 0.6, 0.4)
+    if fd > 0:
+        for (sl, txt, x, y) in danmu_items(t): texts.append((txt, x, y, 36, FG, fd * 0.6))
+    # 金币 27.2–41.3
+    fc = fade(t, 27.8, 41.4, 0.8, 0.4)
+    if fc > 0:
+        for (x, y, c, life) in coin_items(t):
+            a = fc * life * 0.75 * coin_clear(t, x, y)
+            for R in (44, 37):
+                e = circle(x, y, R, 0, 2 * math.pi, 90); e[:, 0] = x + (e[:, 0] - x) * c
+                _poly_cv(layer, [e], cam, WARM * UI_LINE, a, 2)
+            used = True
+            if c > 0.45: texts.append(("¥", x, y, 58, WARM, a * float(cl((c - 0.45) / 0.35))))
+    # 消息气泡 70.8–85.6
+    fb = fade(t, 71.6, 85.7, 0.8, 0.4)
+    if fb > 0:
+        for (x, y, tw, txt, life) in bubble_items(t):
+            a = fb * life * 0.8
+            _poly_cv(layer, bubble_polys(x, y, tw), cam, FG * UI_LINE, a, 2); used = True
+            texts.append((txt, x, y, 34, FG, a))
+    if used:
+        L = T(layer).permute(2, 0, 1); canvas = canvas + L + gblur_t(L, 2.2) * 0.6
+    for (txt, x, y, sz, col, a) in texts:
+        sc = W2S([x, y], cam)
+        canvas = blit_glyph(canvas, txt, float(sc[0]), float(sc[1]), max(8, int(round(sz * z / 2) * 2)), col, a * UI_TEXT)
+    return canvas
+
+def draw_glyphs(canvas, t, cam):
+    z = cam[0]
+    for (t0, din, tout, txt, x, y, sz, col, sin_, sout, wm) in GLYPHS:
+        a_in, rv = glyph_state((t0, din, tout, txt, x, y, sz, col, sin_, sout, wm), t)
+        if a_in <= 0.003: continue
+        sc = W2S([x, y], cam); zs = max(8, int(round(sz * z / 2) * 2))
+        sheen = (t - (t0 + din + 0.3)) / 1.4
+        canvas = blit_glyph(canvas, txt, float(sc[0]), float(sc[1]), zs, col, a_in, rv, sheen,
+                            line=float(cl((t - t0 - din) / 0.8)) * (1 - float(cl((t - tout) / 0.4))) if wm else 0.0)
+    return canvas
 
 def render_gpu(t, as_tensor=False):
     torch = engine_torch(); G = _gpu_static()
     cam = camera(t); z = cam[0]
     # ---- 前景粒子
+    _SOFT.clear()
     P, Wt, C = actor_particles(t, cam)
     lit = splat_t(P, Wt, C) * PARTICLE_LIGHT
     core = lit * CORE_SHARP_SHARE + gblur_t(lit, CORE_SIGMA) * (1 - CORE_SHARP_SHARE)
     glow = gblur_t(lit, SUBJECT_GLOW_SIGMA) * SUBJECT_GLOW_GAIN
+    bgp = actor_particles(t, cam, "bg")
+    if bgp is not None:   # 环境层：轻微失焦 + 压暗，形成景深
+        core = core + gblur_t(splat_t(*bgp) * PARTICLE_LIGHT, BG_LAYER_SIGMA) * BG_LAYER_GAIN
+    if _SOFT:
+        sp_ = np.concatenate([q[0] for q in _SOFT]); sc_ = np.concatenate([q[2] for q in _SOFT])
+        sw_ = np.concatenate([q[1] * (BG_LAYER_GAIN if q[3] else 1.0) for q in _SOFT])
+        core = core + gblur_t(splat_t(sp_.astype(np.float32), sw_.astype(np.float32), sc_.astype(np.float32)) * PARTICLE_LIGHT, SOFT_SIGMA) * SOFT_GAIN
     # ---- 银河
     gv, phase, field = galaxy_state(t)
     waves = []
@@ -886,11 +1258,15 @@ def render_gpu(t, as_tensor=False):
         for _ in range(int(10 * g) + 2):
             y0 = int(rg.integers(200, 800)); hh = int(rg.integers(4, 26))
             canvas[:, y0:y0 + hh] = torch.roll(canvas[:, y0:y0 + hh], int(rg.normal(0, 90 * g)), 2)
-    canvas = canvas * G["VIG"] * G["SUB"] + G["GR"][int(t * 6) % 6] * 0.35
+    canvas = draw_ui(canvas, t, cam)
+    canvas = draw_glyphs(canvas, t, cam)
+    canvas = canvas * G["VIG"] * G["SUB"] + G["GR"][int(t * 6) % 6] * 0.28
     # ---- 文字
     for (t0, t1, s) in HOOK:
         f = fade(t, t0, t1, 0.25, 0.25)
-        if f > 0: canvas = blit_t(canvas, rich_sprite(s, 84, (252, 249, 242)), 720, 200 - 10 * (1 - f), f)
+        if t0 - 0.05 <= t <= t1 + 0.6:
+            rv = (float(cl((t - t0) / 0.9)), "in") if t < t1 else (float(cl((t - t1) / 0.6)), "out")
+            canvas = blit_glyph(canvas, s, 720, 200, 84, (252, 249, 242), 1.0, rv, (t - t0 - 0.9) / 1.2)
     for (t0, t1, s) in SUBS:
         f = fade(t, t0, t1, 0.3, 0.3)
         if f > 0: canvas = blit_t(canvas, rich_sprite(s, SUB_SIZE), 720, SUB_Y + 6 * (1 - f), f)
