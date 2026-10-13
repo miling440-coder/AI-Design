@@ -1,0 +1,22 @@
+《露营是最小成本的出逃》轻动画版 v2 · 运行说明
+
+一、安装（之前装过就跳过）
+  ffmpeg（加入 PATH）
+  pip install numpy opencv-python-headless pillow scipy
+  pip install torch --index-url https://download.pytorch.org/whl/cu121
+  （已不再需要 edge-tts / pyttsx3）
+
+二、同一文件夹放：engine.py  scene_camp.py  bgm.mp3  font.otf（font.otf 沿用你原来那份）
+
+三、运行
+  测速：        python scene_camp.py bench
+  看预览图：    python scene_camp.py pv 27 30 34.6 37 70 110
+  试渲回家段：  python scene_camp.py seg 640 1160 test_home.mp4    （无声，约 21–39 秒）
+  一键出片：    python scene_camp.py full      → camp_escape_4x3.mp4
+  只重做声音：  python scene_camp.py audio video_tmp.mp4
+
+四、可选开关（PowerShell：$env:EP_SCALE="0.5"；mac/Linux：export EP_SCALE=0.5）
+  EP_SCALE=0.5      半分辨率快速预览
+  EP_GRAIN=0.006    想要一点点胶片颗粒
+  EP_BAR=60         加回上下电影遮幅
+  EP_BGM_OFFSET=80  手动指定 BGM 从第几秒开始
